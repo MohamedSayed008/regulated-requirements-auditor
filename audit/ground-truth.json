@@ -28,7 +28,8 @@
       "file": "sample-app/src/eviction.ts",
       "acceptableRequirementIds": ["LAW26-2007/ART-25/2", "LAW26-2007/ART-25"],
       "expectedSeverity": "critical",
-      "description": "EVICTION_NOTICE_MONTHS is 3; Article 25(2) requires 12 months' notice."
+      "description": "EVICTION_NOTICE_MONTHS is 3; Article 25(2) requires 12 months' notice.",
+      "matchKeywords": ["month", "period", "notice period", "3"]
     },
     {
       "id": "V4-eviction-service-method",
@@ -36,7 +37,8 @@
       "acceptableRequirementIds": ["LAW26-2007/ART-25/2", "LAW26-2007/ART-25"],
       "expectedSeverity": "medium",
       "description": "The eviction notice is not required to be served via notary public or registered mail, which Article 25(2) mandates.",
-      "note": "Omission-type violation; harder to detect. Tests recall on missing requirements."
+      "note": "Omission-type violation; harder to detect. Tests recall on missing requirements.",
+      "matchKeywords": ["service", "notary", "mail", "method"]
     },
     {
       "id": "V5-ejari-registration",

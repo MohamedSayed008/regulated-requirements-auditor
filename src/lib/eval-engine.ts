@@ -114,25 +114,30 @@ function gradeRefusal(answer: { text: string; citedUnitIds: string[] }): CaseRes
 function computeAuditScore(): AuditScore {
   const violations = groundTruth.violations;
   const findings = latestRun.findings;
-  const files = new Set(groundTruth.violations.map(v => v.file));
-  const cleanFiles = new Set(groundTruth.cleanFiles);
 
   const detected = new Set<string>();
   let truePositives = 0;
   let falsePositives = 0;
 
+  const matchesViolation = (f: (typeof findings)[number], v: (typeof violations)[number]) => {
+    if (v.file !== f.filePath || !v.acceptableRequirementIds.includes(f.requirementId))
+      return false;
+    // When two violations share a file and requirement id, a keyword in the
+    // finding text tells them apart.
+    const keywords = (v as { matchKeywords?: string[] }).matchKeywords;
+    if (!keywords || keywords.length === 0) return true;
+    const text = `${f.summary} ${f.evidence} ${f.recommendedAction}`.toLowerCase();
+    return keywords.some(k => text.includes(k.toLowerCase()));
+  };
+
   for (const f of findings) {
-    const match = violations.find(
-      v => v.file === f.filePath && v.acceptableRequirementIds.includes(f.requirementId)
-    );
+    const match = violations.find(v => matchesViolation(f, v));
     if (match) {
       truePositives += 1;
       detected.add(match.id);
-    } else if (cleanFiles.has(f.filePath) || !files.has(f.filePath)) {
-      falsePositives += 1;
     } else {
-      // finding on a violation file but wrong requirement id: not a clean match,
-      // count as a soft false positive.
+      // finding on a clean/unknown file, or on a violation file but not matching
+      // any seeded violation: count as a false positive.
       falsePositives += 1;
     }
   }
