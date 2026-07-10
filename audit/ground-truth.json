@@ -1,0 +1,50 @@
+{
+  "note": "Seeded compliance violations in sample-app. Used ONLY by the eval suite to measure audit precision and recall. The auditing agent must never see this file. acceptableRequirementIds lists the unit ids that count as a correct match (rent-slab violations may cite any DEC43-2013/ART-1 clause).",
+  "target": "sample-app",
+  "violations": [
+    {
+      "id": "V1-rent-slabs",
+      "file": "sample-app/src/rent.ts",
+      "acceptableRequirementIds": [
+        "DEC43-2013/ART-1",
+        "DEC43-2013/ART-1/1",
+        "DEC43-2013/ART-1/2",
+        "DEC43-2013/ART-1/3",
+        "DEC43-2013/ART-1/4",
+        "DEC43-2013/ART-1/5"
+      ],
+      "expectedSeverity": "high",
+      "description": "maxIncreaseFraction uses wrong slab thresholds and caps at 25%, exceeding the decree's 20% ceiling."
+    },
+    {
+      "id": "V2-amendment-notice",
+      "file": "sample-app/src/notice.ts",
+      "acceptableRequirementIds": ["LAW26-2007/ART-14"],
+      "expectedSeverity": "high",
+      "description": "AMENDMENT_NOTICE_DAYS is 30; Article 14 requires no less than 90 days."
+    },
+    {
+      "id": "V3-eviction-notice-period",
+      "file": "sample-app/src/eviction.ts",
+      "acceptableRequirementIds": ["LAW26-2007/ART-25/2", "LAW26-2007/ART-25"],
+      "expectedSeverity": "critical",
+      "description": "EVICTION_NOTICE_MONTHS is 3; Article 25(2) requires 12 months' notice."
+    },
+    {
+      "id": "V4-eviction-service-method",
+      "file": "sample-app/src/eviction.ts",
+      "acceptableRequirementIds": ["LAW26-2007/ART-25/2", "LAW26-2007/ART-25"],
+      "expectedSeverity": "medium",
+      "description": "The eviction notice is not required to be served via notary public or registered mail, which Article 25(2) mandates.",
+      "note": "Omission-type violation; harder to detect. Tests recall on missing requirements."
+    },
+    {
+      "id": "V5-ejari-registration",
+      "file": "sample-app/src/registration.ts",
+      "acceptableRequirementIds": ["LAW26-2007/ART-4/2", "LAW26-2007/ART-4/1"],
+      "expectedSeverity": "high",
+      "description": "activateLease and isEnforceable treat a lease as valid without an Ejari registration number, contrary to Article 4's registration requirement."
+    }
+  ],
+  "cleanFiles": ["sample-app/src/deposit.ts", "sample-app/src/renewal.ts"]
+}
