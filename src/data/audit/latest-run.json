@@ -1,0 +1,138 @@
+{
+  "ranAt": "2026-07-10T21:56:18.683Z",
+  "model": "claude-opus-4-8",
+  "target": "sample-app",
+  "requirementsChecked": 24,
+  "filesScanned": [
+    "sample-app/src/deposit.ts",
+    "sample-app/src/eviction.ts",
+    "sample-app/src/notice.ts",
+    "sample-app/src/registration.ts",
+    "sample-app/src/renewal.ts",
+    "sample-app/src/rent.ts"
+  ],
+  "findings": [
+    {
+      "requirementId": "LAW26-2007/ART-25/2",
+      "severity": "critical",
+      "filePath": "sample-app/src/eviction.ts",
+      "lineStart": 16,
+      "lineEnd": 16,
+      "codeExcerpt": "export const EVICTION_NOTICE_MONTHS = 3;",
+      "summary": "Post-expiry eviction notice period is 3 months instead of the mandatory 12 months.",
+      "evidence": "Article 25(2) requires the Landlord to notify the Tenant of the eviction reasons at least twelve (12) months before the date of eviction. This constant sets the notice period to 3 months, and evictionEffectiveDate() adds only EVICTION_NOTICE_MONTHS to the service date, permitting eviction far sooner than the law allows.",
+      "recommendedAction": "Set EVICTION_NOTICE_MONTHS to 12 to match the twelve-month minimum notice required by Article 25(2).",
+      "id": "F1",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "LAW26-2007/ART-25/2",
+      "severity": "high",
+      "filePath": "sample-app/src/eviction.ts",
+      "lineStart": 23,
+      "lineEnd": 27,
+      "codeExcerpt": "export function evictionEffectiveDate(noticeServedOn: Date): Date {\n  const effective = new Date(noticeServedOn);\n  effective.setMonth(effective.getMonth() + EVICTION_NOTICE_MONTHS);\n  return effective;\n}",
+      "summary": "No enforcement or recording of the mandatory service method (notary public or registered mail).",
+      "evidence": "Article 25(2) requires the notice to be served through a Notary Public or by registered mail. The function accepts only a Date and neither records nor validates the service method, so a legally deficient notice can be treated as valid.",
+      "recommendedAction": "Require and validate the service method (notary public or registered mail) before treating an eviction notice as effective.",
+      "id": "F2",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "LAW26-2007/ART-14",
+      "severity": "high",
+      "filePath": "sample-app/src/notice.ts",
+      "lineStart": 12,
+      "lineEnd": 12,
+      "codeExcerpt": "export const AMENDMENT_NOTICE_DAYS = 30;",
+      "summary": "Amendment-at-renewal notice period is 30 days instead of the required 90 days.",
+      "evidence": "Article 14 requires a party wishing to amend lease terms at renewal to notify the other party no less than ninety (90) days before expiry. This constant is 30, and it feeds amendmentDeadline() and isAmendmentNoticeTimely(), so a notice given only 30 days out would wrongly be accepted as timely.",
+      "recommendedAction": "Set AMENDMENT_NOTICE_DAYS to 90 to match the ninety-day minimum in Article 14.",
+      "id": "F3",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "LAW26-2007/ART-4/2",
+      "severity": "high",
+      "filePath": "sample-app/src/registration.ts",
+      "lineStart": 22,
+      "lineEnd": 29,
+      "codeExcerpt": "export function activateLease(lease: Lease): Lease {\n  return { ...lease, ejariNumber: lease.ejariNumber };\n}\n\nexport function isEnforceable(lease: Lease): boolean {\n  // Only checks the parties, not registration.\n  return Boolean(lease.landlordId && lease.tenantId);\n}",
+      "summary": "Leases are activated and treated as enforceable without RERA/Ejari registration.",
+      "evidence": "Article 4(2) requires all lease contracts to be registered with RERA (Ejari). activateLease() copies any existing ejariNumber but never requires one, and isEnforceable() checks only landlordId and tenantId, so an unregistered lease with no ejariNumber is treated as valid and enforceable.",
+      "recommendedAction": "Require a non-empty ejariNumber before activating or treating a lease as enforceable.",
+      "id": "F4",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "DEC43-2013/ART-1/1",
+      "severity": "high",
+      "filePath": "sample-app/src/rent.ts",
+      "lineStart": 21,
+      "lineEnd": 29,
+      "codeExcerpt": "export function maxIncreaseFraction(review: RentReview): number {\n  const shortfall =\n    (review.marketAverageRent - review.currentAnnualRent) / review.marketAverageRent;\n  if (shortfall <= 0.05) return 0;\n  if (shortfall <= 0.15) return 0.05;\n  if (shortfall <= 0.25) return 0.1;\n  if (shortfall <= 0.35) return 0.15;\n  return 0.25;",
+      "summary": "Rent-increase slab bands and caps do not match Decree 43/2013.",
+      "evidence": "Article 1(a) mandates 0% increase where rent is up to 10% below the average rental value, but this returns 0 only up to a 5% shortfall and then allows a 5% increase at a shortfall of 6-10%, which is below the 10% zero-increase threshold. This is an unlawful increase for units within 10% of market.",
+      "recommendedAction": "Return 0 for any shortfall up to and including 10% (0.10) as required by Article 1(a).",
+      "id": "F5",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "DEC43-2013/ART-1/2",
+      "severity": "high",
+      "filePath": "sample-app/src/rent.ts",
+      "lineStart": 25,
+      "lineEnd": 25,
+      "codeExcerpt": "  if (shortfall <= 0.15) return 0.05;",
+      "summary": "5% band applies over the wrong shortfall range.",
+      "evidence": "Article 1(b) permits a 5% increase only where the rent is 11%-20% below the average. This code applies 5% for shortfalls from just above 5% up to 15%, mismatching the lawful 11%-20% band.",
+      "recommendedAction": "Apply 5% only when shortfall is greater than 10% and up to 20% (0.20).",
+      "id": "F6",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "DEC43-2013/ART-1/3",
+      "severity": "high",
+      "filePath": "sample-app/src/rent.ts",
+      "lineStart": 26,
+      "lineEnd": 26,
+      "codeExcerpt": "  if (shortfall <= 0.25) return 0.1;",
+      "summary": "10% band applies over the wrong shortfall range.",
+      "evidence": "Article 1(c) permits a 10% increase where the rent is 21%-30% below the average. This code applies 10% for shortfalls up to 25%, mismatching the lawful 21%-30% band.",
+      "recommendedAction": "Apply 10% only when shortfall is greater than 20% and up to 30% (0.30).",
+      "id": "F7",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "DEC43-2013/ART-1/4",
+      "severity": "high",
+      "filePath": "sample-app/src/rent.ts",
+      "lineStart": 27,
+      "lineEnd": 27,
+      "codeExcerpt": "  if (shortfall <= 0.35) return 0.15;",
+      "summary": "15% band applies over the wrong shortfall range.",
+      "evidence": "Article 1(d) permits a 15% increase where the rent is 31%-40% below the average. This code applies 15% for shortfalls up to 35%, mismatching the lawful 31%-40% band.",
+      "recommendedAction": "Apply 15% only when shortfall is greater than 30% and up to 40% (0.40).",
+      "id": "F8",
+      "status": "proposed"
+    },
+    {
+      "requirementId": "DEC43-2013/ART-1/5",
+      "severity": "critical",
+      "filePath": "sample-app/src/rent.ts",
+      "lineStart": 28,
+      "lineEnd": 28,
+      "codeExcerpt": "  return 0.25;",
+      "summary": "Maximum increase capped at 25% instead of the lawful 20%.",
+      "evidence": "Article 1(e) sets the maximum increase at 20% where the rent is more than 40% below the average. This returns 0.25 (25%), permitting an unlawful rent increase above the statutory cap.",
+      "recommendedAction": "Return 0.20 (20%) as the maximum increase when shortfall exceeds 40%.",
+      "id": "F9",
+      "status": "proposed"
+    }
+  ],
+  "usage": {
+    "inputTokens": 8173,
+    "outputTokens": 2719,
+    "estimatedCostUsd": 0.1088
+  }
+}

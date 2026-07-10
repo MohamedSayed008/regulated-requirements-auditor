@@ -1,6 +1,7 @@
 'use client';
 
 import { type FormEvent, useRef, useState } from 'react';
+import { Box, Button, Input, Link, Stack, Text } from '@chakra-ui/react';
 
 type Segment =
   { kind: 'text'; text: string } | { kind: 'citation'; unitId: string; citedText: string };
@@ -94,67 +95,105 @@ export default function AskClient() {
   }
 
   return (
-    <section aria-label="Ask a question">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
-        <input
-          type="text"
-          value={question}
-          onChange={e => setQuestion(e.target.value)}
-          placeholder="e.g. How much notice is needed before a rent increase?"
-          maxLength={500}
-          aria-label="Your question about Dubai tenancy law"
-          className="flex-1 rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-teal-600 focus:outline-none"
-        />
-        <button
-          type="submit"
-          disabled={status === 'streaming' || question.trim().length < 8}
-          className="rounded-lg bg-teal-700 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-neutral-800 disabled:text-neutral-500"
-        >
-          {status === 'streaming' ? 'Answering' : 'Ask'}
-        </button>
+    <Box as="section" aria-label="Ask a question">
+      <form onSubmit={handleSubmit}>
+        <Stack direction={{ base: 'column', sm: 'row' }} gap="3">
+          <Input
+            value={question}
+            onChange={e => setQuestion(e.target.value)}
+            placeholder="e.g. How much notice is needed before a rent increase?"
+            maxLength={500}
+            aria-label="Your question about Dubai tenancy law"
+            bg="bg.panel"
+            borderColor="border.default"
+            color="fg.default"
+            _placeholder={{ color: 'fg.subtle' }}
+            _focus={{ borderColor: 'accent.solid' }}
+            size="lg"
+          />
+          <Button
+            type="submit"
+            disabled={status === 'streaming' || question.trim().length < 8}
+            bg="accent.solid"
+            color="white"
+            _hover={{ bg: 'teal.600' }}
+            size="lg"
+            px="6"
+          >
+            {status === 'streaming' ? 'Answering' : 'Ask'}
+          </Button>
+        </Stack>
       </form>
 
       {status === 'streaming' && segments.length === 0 && (
-        <p className="mt-6 animate-pulse text-sm text-neutral-500">
+        <Text mt="6" fontSize="sm" color="fg.subtle" animation="pulse">
           Reading the corpus and grounding the answer
-        </p>
+        </Text>
       )}
 
       {status === 'error' && (
-        <p
+        <Box
           role="alert"
-          className="mt-6 rounded-lg border border-red-900 bg-red-950 px-4 py-3 text-sm text-red-300"
+          mt="6"
+          borderWidth="1px"
+          borderColor="red.900"
+          bg="red.950"
+          rounded="lg"
+          px="4"
+          py="3"
         >
-          {ERROR_COPY[errorKey] ?? ERROR_COPY.default}
-        </p>
+          <Text fontSize="sm" color="red.300">
+            {ERROR_COPY[errorKey] ?? ERROR_COPY.default}
+          </Text>
+        </Box>
       )}
 
       {segments.length > 0 && (
-        <p className="mt-6 text-xs text-neutral-500">
+        <Text mt="6" fontSize="xs" color="fg.subtle">
           AI-generated answer. It may contain mistakes: verify every claim against the cited
           requirement units before relying on it.
-        </p>
+        </Text>
       )}
       {segments.length > 0 && (
-        <div className="mt-2 rounded-xl border border-neutral-800 bg-neutral-900 p-5 text-sm leading-relaxed">
+        <Box
+          mt="2"
+          borderWidth="1px"
+          borderColor="border.default"
+          bg="bg.panel"
+          rounded="xl"
+          p="5"
+          fontSize="sm"
+          lineHeight="tall"
+        >
           {segments.map((segment, i) =>
             segment.kind === 'text' ? (
-              <span key={i} className="whitespace-pre-line">
+              <Text as="span" key={i} whiteSpace="pre-line">
                 {segment.text}
-              </span>
+              </Text>
             ) : (
-              <a
+              <Link
                 key={i}
                 href={`/requirements#${segment.unitId}`}
                 title={segment.citedText}
-                className="mx-1 inline-block rounded border border-teal-800 bg-teal-950 px-1.5 py-0.5 align-baseline font-mono text-xs text-teal-300 hover:bg-teal-900"
+                mx="1"
+                display="inline-block"
+                borderWidth="1px"
+                borderColor="accent.solid"
+                bg="accent.muted"
+                px="1.5"
+                py="0.5"
+                rounded="sm"
+                fontFamily="heading"
+                fontSize="xs"
+                color="accent.fg"
+                _hover={{ bg: 'teal.900' }}
               >
                 {segment.unitId}
-              </a>
+              </Link>
             )
           )}
-        </div>
+        </Box>
       )}
-    </section>
+    </Box>
   );
 }

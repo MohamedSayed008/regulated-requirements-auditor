@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Badge, Box, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react';
 import {
   CORPUS_CURRENCY,
   CORPUS_DISCLAIMER,
@@ -7,6 +8,7 @@ import {
   corpusDocumentSchema,
   parseCorpus,
 } from '@/lib/corpus';
+import { Page } from '@/components/ui/shell';
 import documentsJson from '@/data/corpus/documents.json';
 import law26Json from '@/data/corpus/law-26-2007.json';
 import decree43Json from '@/data/corpus/decree-43-2013.json';
@@ -24,111 +26,170 @@ const unitsBySource = new Map<string, RequirementUnit[]>([
 ]);
 
 export default function RequirementsPage() {
-  const total = [...unitsBySource.values()].reduce((sum, units) => sum + units.length, 0);
-  const testable = [...unitsBySource.values()].flat().filter(unit => unit.testable).length;
+  const all = [...unitsBySource.values()].flat();
+  const total = all.length;
+  const testable = all.filter(u => u.testable).length;
 
   return (
-    <main className="mx-auto min-h-screen max-w-4xl bg-neutral-950 px-6 py-16 text-neutral-100">
-      <header className="mb-12">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-400">The corpus</p>
-        <h1 className="mt-2 font-mono text-3xl font-bold">Requirements</h1>
-        <p className="mt-4 max-w-2xl text-neutral-400">
+    <Page>
+      <Stack gap="4" mb="10">
+        <Text
+          fontSize="sm"
+          fontWeight="semibold"
+          letterSpacing="0.2em"
+          textTransform="uppercase"
+          color="accent.fg"
+        >
+          The corpus
+        </Text>
+        <Heading fontFamily="heading" fontSize="3xl">
+          Requirements
+        </Heading>
+        <Text color="fg.muted" maxW="2xl">
           Dubai tenancy law parsed into {total} citable requirement units, {testable} of them
           testable against code. Every answer and every audit finding in this demo points back to
           one of the units below.
-        </p>
-        <div className="mt-6 space-y-1 rounded-lg border border-neutral-800 bg-neutral-900 p-4 text-xs text-neutral-500">
-          <p>{CORPUS_DISCLAIMER.en}</p>
-          <p dir="rtl" lang="ar">
+        </Text>
+        <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
+          <Text fontSize="xs" color="fg.subtle">
+            {CORPUS_DISCLAIMER.en}
+          </Text>
+          <Text fontSize="xs" color="fg.subtle" dir="rtl" lang="ar" mt="1">
             {CORPUS_DISCLAIMER.ar}
-          </p>
-        </div>
-        <div className="mt-3 rounded-lg border border-neutral-800 bg-neutral-900 p-4 text-xs text-neutral-500">
-          <p>{CORPUS_CURRENCY.note}</p>
-        </div>
-      </header>
+          </Text>
+        </Box>
+        <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
+          <Text fontSize="xs" color="fg.subtle">
+            {CORPUS_CURRENCY.note}
+          </Text>
+        </Box>
+      </Stack>
 
       {documents.map(doc => (
         <DocumentSection key={doc.slug} doc={doc} units={unitsBySource.get(doc.slug) ?? []} />
       ))}
-    </main>
+    </Page>
   );
 }
 
 function DocumentSection({ doc, units }: { doc: CorpusDocument; units: RequirementUnit[] }) {
   return (
-    <section aria-labelledby={doc.slug} className="mb-14">
-      <h2 id={doc.slug} className="border-b border-neutral-800 pb-3 text-xl font-semibold">
+    <Box as="section" aria-labelledby={doc.slug} mb="14">
+      <Heading
+        id={doc.slug}
+        as="h2"
+        fontSize="xl"
+        borderBottomWidth="1px"
+        borderColor="border.default"
+        pb="3"
+      >
         {doc.titleEn}
-      </h2>
-      <p className="mt-2 text-sm text-neutral-500">
-        <span dir="rtl" lang="ar">
+      </Heading>
+      <Text fontSize="sm" color="fg.subtle" mt="2">
+        <Text as="span" dir="rtl" lang="ar">
           {doc.titleAr}
-        </span>
-        {doc.amendedBy && <span> · as amended by {doc.amendedBy}</span>} ·{' '}
-        <a
-          href={doc.officialSourceEn}
-          className="text-teal-400 underline-offset-2 hover:underline"
-          rel="noopener noreferrer"
-        >
+        </Text>
+        {doc.amendedBy ? ` · as amended by ${doc.amendedBy}` : ''} ·{' '}
+        <Link href={doc.officialSourceEn} color="accent.fg" rel="noopener noreferrer">
           official source
-        </a>
-      </p>
-      <ul className="mt-6 space-y-4">
+        </Link>
+      </Text>
+      <Stack gap="4" mt="6">
         {units.map(unit => (
           <UnitCard key={unit.id} unit={unit} />
         ))}
-      </ul>
-    </section>
+      </Stack>
+    </Box>
   );
 }
 
 function UnitCard({ unit }: { unit: RequirementUnit }) {
   return (
-    <li
+    <Box
       id={unit.id}
-      className="scroll-mt-24 rounded-xl border border-neutral-800 bg-neutral-900 p-5"
+      scrollMarginTop="24"
+      borderWidth="1px"
+      borderColor="border.default"
+      bg="bg.panel"
+      rounded="xl"
+      p="5"
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <code className="rounded bg-neutral-800 px-2 py-0.5 font-mono text-xs text-teal-300">
+      <HStack gap="2" flexWrap="wrap">
+        <Box
+          as="code"
+          bg="bg.subtle"
+          px="2"
+          py="0.5"
+          rounded="sm"
+          fontFamily="heading"
+          fontSize="xs"
+          color="accent.fg"
+        >
           {unit.id}
-        </code>
-        <span className="text-sm font-medium text-neutral-300">{unit.articleRef}</span>
+        </Box>
+        <Text fontSize="sm" fontWeight="medium" color="fg.default">
+          {unit.articleRef}
+        </Text>
         {unit.testable && (
-          <span className="rounded-full border border-teal-700 bg-teal-950 px-2 py-0.5 text-xs font-semibold text-teal-400">
+          <Badge colorPalette="teal" variant="subtle">
             testable
-          </span>
+          </Badge>
         )}
         {unit.amendedBy && (
-          <span className="rounded-full border border-amber-700 bg-amber-950 px-2 py-0.5 text-xs font-semibold text-amber-400">
+          <Badge colorPalette="orange" variant="subtle">
             amended by Law 33/2008
-          </span>
+          </Badge>
         )}
-      </div>
-      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-neutral-300">
+      </HStack>
+      <Text mt="3" fontSize="sm" lineHeight="tall" color="fg.default" whiteSpace="pre-line">
         {unit.textEn}
-      </p>
-      <p
+      </Text>
+      <Text
+        mt="3"
+        fontSize="sm"
+        lineHeight="tall"
+        color="fg.muted"
+        whiteSpace="pre-line"
         dir="rtl"
         lang="ar"
-        className="mt-3 whitespace-pre-line border-s-2 border-neutral-800 ps-4 text-sm leading-relaxed text-neutral-400"
+        borderInlineStartWidth="2px"
+        borderColor="border.default"
+        ps="4"
       >
         {unit.textAr}
-      </p>
+      </Text>
       {unit.editorialNote && (
-        <p className="mt-3 rounded-lg border border-amber-900 bg-amber-950/40 px-3 py-2 text-xs text-amber-300">
-          Editorial note: {unit.editorialNote}
-        </p>
+        <Box
+          mt="3"
+          borderWidth="1px"
+          borderColor="orange.900"
+          bg="orange.950"
+          rounded="lg"
+          px="3"
+          py="2"
+        >
+          <Text fontSize="xs" color="orange.300">
+            Editorial note: {unit.editorialNote}
+          </Text>
+        </Box>
       )}
       {unit.tags.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <HStack gap="1.5" mt="3" flexWrap="wrap">
           {unit.tags.map(tag => (
-            <span key={tag} className="rounded bg-neutral-800 px-2 py-0.5 text-xs text-neutral-500">
+            <Box
+              key={tag}
+              bg="bg.subtle"
+              px="2"
+              py="0.5"
+              rounded="sm"
+              fontSize="xs"
+              color="fg.subtle"
+            >
               {tag}
-            </span>
+            </Box>
           ))}
-        </div>
+        </HStack>
       )}
-    </li>
+    </Box>
   );
 }
