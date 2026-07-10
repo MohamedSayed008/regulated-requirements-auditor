@@ -1,3 +1,4 @@
+import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
 import { parseCorpus, type RequirementUnit } from '@/lib/corpus';
 import law26Json from '@/data/corpus/law-26-2007.json';
@@ -71,3 +72,47 @@ Rules:
 - Be concise: give the direct answer first in one or two sentences, then only the detail that is needed.
 - This is a public demo, not legal advice. The Arabic text of the law is the authentic version and prevails over the English translation; mention this only when the distinction matters to the answer.
 - Never use em dashes. Use commas, colons, or periods.`;
+
+export interface AnswerResult {
+  text: string;
+  citedUnitIds: string[];
+  inputTokens: number;
+  outputTokens: number;
+}
+
+/** Non-streaming ask, used by the eval harness. Same corpus and prompt. */
+export async function answerQuestion(
+  question: string,
+  client: Anthropic = new Anthropic()
+): Promise<AnswerResult> {
+  const response = await client.messages.create({
+    model: ASK_MODEL,
+    max_tokens: MAX_ANSWER_TOKENS,
+    system: SYSTEM_PROMPT,
+    messages: [
+      {
+        role: 'user',
+        content: [...buildCorpusDocuments(), { type: 'text', text: question }],
+      },
+    ],
+  });
+
+  let text = '';
+  const citedUnitIds = new Set<string>();
+  for (const block of response.content) {
+    if (block.type !== 'text') continue;
+    text += block.text;
+    for (const citation of block.citations ?? []) {
+      const index = 'document_index' in citation ? citation.document_index : -1;
+      const unitId = unitIdAt(index);
+      if (unitId) citedUnitIds.add(unitId);
+    }
+  }
+
+  return {
+    text,
+    citedUnitIds: [...citedUnitIds],
+    inputTokens: response.usage.input_tokens,
+    outputTokens: response.usage.output_tokens,
+  };
+}

@@ -56,9 +56,11 @@ function codeBlock(files: SnapshotFile[]): string {
 }
 
 /** Runs one audit pass and returns a validated, cacheable run. */
-export async function runAudit(client: Anthropic = new Anthropic()): Promise<AuditRun> {
+export async function runAudit(
+  client: Anthropic = new Anthropic(),
+  files: SnapshotFile[] = AUDIT_SNAPSHOT
+): Promise<AuditRun> {
   const units = testableRequirements();
-  const files = AUDIT_SNAPSHOT;
 
   const response = await client.messages.create({
     model: AUDIT_MODEL,
