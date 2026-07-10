@@ -13,12 +13,20 @@ export default function Home() {
       <p className="text-sm text-neutral-600">
         No citation, no answer. No human approval, no finding.
       </p>
-      <a
-        href="/requirements"
-        className="rounded-lg border border-teal-800 bg-teal-950 px-4 py-2 text-sm font-semibold text-teal-300 transition-colors hover:bg-teal-900"
-      >
-        Browse the corpus: Dubai tenancy law
-      </a>
+      <div className="flex flex-wrap justify-center gap-3">
+        <a
+          href="/ask"
+          className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-600"
+        >
+          Ask with citations
+        </a>
+        <a
+          href="/requirements"
+          className="rounded-lg border border-teal-800 bg-teal-950 px-4 py-2 text-sm font-semibold text-teal-300 transition-colors hover:bg-teal-900"
+        >
+          Browse the corpus
+        </a>
+      </div>
     </main>
   );
 }

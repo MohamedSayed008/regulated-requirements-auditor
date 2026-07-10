@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import {
+  CORPUS_CURRENCY,
   CORPUS_DISCLAIMER,
   type CorpusDocument,
   type RequirementUnit,
@@ -41,6 +42,9 @@ export default function RequirementsPage() {
           <p dir="rtl" lang="ar">
             {CORPUS_DISCLAIMER.ar}
           </p>
+        </div>
+        <div className="mt-3 rounded-lg border border-neutral-800 bg-neutral-900 p-4 text-xs text-neutral-500">
+          <p>{CORPUS_CURRENCY.note}</p>
         </div>
       </header>
 
@@ -111,6 +115,11 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
       >
         {unit.textAr}
       </p>
+      {unit.editorialNote && (
+        <p className="mt-3 rounded-lg border border-amber-900 bg-amber-950/40 px-3 py-2 text-xs text-amber-300">
+          Editorial note: {unit.editorialNote}
+        </p>
+      )}
       {unit.tags.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5">
           {unit.tags.map(tag => (

@@ -16,7 +16,8 @@
     "textAr": "في تطبيق أحكام هذا القانون، تكون للكلمات والعبارات التالية المعاني الواردة إزاء كل منها ما لم يدل سياق النص على خلاف ذلك:\nالإمارة: إمارة دبي.\nاللجنة: اللجنة القضائية الخاصة للفصل في المنازعات بين المؤجرين والمستأجرين.\nالمؤسسة: مؤسسة التنظيم العقاري.\nالعقار: المال غير المنقول وما يتصل أو يُلحق به والمؤجَّر لأغراض السكن أو ممارسة نشاط تجاري أو حرفة أو مهنة أو أي نشاط مشروع آخر.\nعقد الإيجار: العقد الذي يلتزم المؤجر بمقتضاه بتمكين المستأجر من الانتفاع بالعقار لغرض معين مدة معينة لقاء بدل معين.\nالمؤجِّر: الشخص الطبيعي أو الاعتباري الذي يملك قانوناً أو اتفاقاً حق التصرف في العقار وكذلك من تنتقل إليه ملكية العقار أثناء مدة الإيجار أو من ينوب عنه أو يمثله قانوناً، ويشمل ذلك المستأجر المصرَّح له من المؤجِّر بالتأجير من الباطن.\nالمستأجر: الشخص الطبيعي أو الاعتباري الذي ينتفع بالعقار بموجب عقد إيجار وأي شخص تنتقل إليه الإجارة بصورة قانونية من المستأجر.\nالمستأجر من الباطن: الشخص الطبيعي أو الاعتباري الذي ينتفع بالعقار أو أي جزء منه بموجب عقد إيجار مبرم مع المستأجر.\nبدل الإيجار: المقابل المعين الذي يلتزم المستأجر بأدائه بموجب عقد الإيجار.\nالإخطار: الإخطار الخطي المرسَل من أي من طرفي عقد الإيجار للطرف الآخر عن طريق الكاتب العدل أو بالبريد المسجل أو بالتسليم باليد أو بأية وسيلة من وسائل التقنية المعتمدة قانوناً.",
     "tags": ["definitions"],
     "testable": false,
-    "amendedBy": "LAW33-2008"
+    "amendedBy": "LAW33-2008",
+    "editorialNote": "In the official Arabic source the definitions appear as a two-column table; the colon separators here are editorial reconstruction of that layout."
   },
   {
     "id": "LAW26-2007/ART-3",
@@ -165,10 +166,11 @@
     "id": "LAW26-2007/ART-16",
     "source": "LAW26-2007",
     "articleRef": "Article 16",
-    "textEn": "Unless otherwise agreed by the parties, the Landlord will, during the term of the Lease Contract, be responsible for the Real Property's maintenance works and for repairing any defect or damage that may affect the Tenant's intended use of the Real Property.",
+    "textEn": "Unless otherwise agreed by the parties, the Landlord will, during the term of the Lease Contract, be responsible for the Real Property’ maintenance works and for repairing any defect or damage that may affect the Tenant's intended use of the Real Property.",
     "textAr": "يكون المؤجِّر مسؤولاً أثناء مدة الإيجار عن أعمال صيانة العقار وعن إصلاح أي عطل أو خلل يؤثر في استيفاء المستأجر للمنفعة المقصودة، ما لم يتفق الطرفان على خلاف ذلك.",
     "tags": ["maintenance", "landlord-obligations"],
-    "testable": false
+    "testable": false,
+    "editorialNote": "The official English page contains a typo here: \"the Real Property’ maintenance works\". Reproduced verbatim; read as \"the Real Property’s maintenance works\"."
   },
   {
     "id": "LAW26-2007/ART-17",
@@ -213,7 +215,8 @@
     "textEn": "Upon the expiry of the term of the Lease Contract, the Tenant will must surrender possession of the Real Property to the Landlord in the same condition in which the Tenant received it at the time of entering into the Lease Contract except for ordinary wear and tear or for damage due to reasons beyond the Tenant's control. In the event of dispute between the two parties, the matter must be referred to the Tribunal to issue an award in this regard.",
     "textAr": "يكون المستأجر ملزماً عند انتهاء الإجارة بتسليم العقار للمؤجِّر بالحالة التي تسلمه عليها وقت التعاقد إلاّ ما نقص نتيجة الاستعمال العادي له أو لسبب خارج عن إرادته، وفي حالة اختلاف الطرفين على ذلك، يرفع الأمر للّجنة لإصدار قرارها في هذا الشأن.",
     "tags": ["handover", "tenant-obligations"],
-    "testable": false
+    "testable": false,
+    "editorialNote": "The official English text reads \"the Tenant will must surrender\", a typo in the official translation, reproduced verbatim."
   },
   {
     "id": "LAW26-2007/ART-22",
@@ -270,7 +273,8 @@
     "textAr": "إذا قضت اللجنة للمؤجر باستعادة العقار لاستعماله الشخصي أو لاستعمال أي من أقاربه حتى الدرجة الأولى إعمالاً لحكم الفقرة (ج) من البند (2) من المادة (25) من هذا القانون، فلا يجوز له تأجيره للغير إلاّ بعد مضي سنتين على الأقل بالنسبة للعقارات السكنية وثلاث سنوات بالنسبة للعقارات غير السكنية وذلك من تاريخ استعادة المؤجر للعقار، ما لم تقضِ اللجنة بمدّةٍ أقل لأسبابٍ تُقدّرها، وبخلاف ذلك يكون للمستأجر الطلب من اللجنة الحكم له بالتعويض العادل.",
     "tags": ["eviction", "re-letting-ban", "compensation"],
     "testable": true,
-    "amendedBy": "LAW33-2008"
+    "amendedBy": "LAW33-2008",
+    "editorialNote": "The authentic Arabic text includes a clause allowing the Tribunal to order a shorter period (ما لم تقضِ اللجنة بمدة أقل لأسباب تقدرها) which the official English translation omits. The Arabic text prevails."
   },
   {
     "id": "LAW26-2007/ART-27",
