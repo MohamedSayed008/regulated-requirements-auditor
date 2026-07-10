@@ -1,0 +1,74 @@
+[
+  {
+    "id": "DEC43-2013/ART-1/1",
+    "source": "DEC43-2013",
+    "articleRef": "Article 1(a)",
+    "textEn": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\na. no Rent increase, where the Rent of the Real Property unit is up to ten percent (10%) less than the average rental value of similar units;",
+    "textAr": "تتحدد نسبة الزيادة القصوى في بدل إيجار العقارات في إمارة دبي عند تجديد عقود إيجار العقارات، على النحو التالي:\nأ- بدون أية زيادة في القيمة الإيجارية للوحدة العقارية إذا كان بدل إيجارها يقل عن 10٪ من متوسط أجر المثل.",
+    "tags": ["rent-increase", "rent-cap", "contract-renewal"],
+    "testable": true
+  },
+  {
+    "id": "DEC43-2013/ART-1/2",
+    "source": "DEC43-2013",
+    "articleRef": "Article 1(b)",
+    "textEn": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\nb. five percent (5%) of the Rent of the Real Property unit, where the Rent is eleven percent (11%) to twenty percent (20%) less than the average rental value of similar units;",
+    "textAr": "تتحدد نسبة الزيادة القصوى في بدل إيجار العقارات في إمارة دبي عند تجديد عقود إيجار العقارات، على النحو التالي:\nب- 5٪ من القيمة الإيجارية للوحدة العقارية إذا كان بدل إيجارها يقل بنسبة تتراوح بين 11٪ وحتى 20٪ من متوسط أجر المثل.",
+    "tags": ["rent-increase", "rent-cap", "contract-renewal"],
+    "testable": true
+  },
+  {
+    "id": "DEC43-2013/ART-1/3",
+    "source": "DEC43-2013",
+    "articleRef": "Article 1(c)",
+    "textEn": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\nc. ten percent (10%) of the Rent of the Real Property unit, where the Rent is twenty-one percent (21%) to thirty percent (30%) less than the average rental value of similar units;",
+    "textAr": "تتحدد نسبة الزيادة القصوى في بدل إيجار العقارات في إمارة دبي عند تجديد عقود إيجار العقارات، على النحو التالي:\nج- 10٪ من القيمة الإيجارية للوحدة العقارية إذا كان بدل إيجارها يقل بنسبة تتراوح بين 21٪ وحتى 30٪ من متوسط أجر المثل.",
+    "tags": ["rent-increase", "rent-cap", "contract-renewal"],
+    "testable": true
+  },
+  {
+    "id": "DEC43-2013/ART-1/4",
+    "source": "DEC43-2013",
+    "articleRef": "Article 1(d)",
+    "textEn": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\nd. fifteen percent (15%) of the Rent of the Real Property unit, where the Rent is thirty-one percent (31%) to forty percent (40%) less than the average rental value of similar units; or",
+    "textAr": "تتحدد نسبة الزيادة القصوى في بدل إيجار العقارات في إمارة دبي عند تجديد عقود إيجار العقارات، على النحو التالي:\nد- 15٪ من القيمة الإيجارية للوحدة العقارية إذا كان بدل إيجارها يقل بنسبة تتراوح بين 31٪ وحتى 40٪ من متوسط أجر المثل.",
+    "tags": ["rent-increase", "rent-cap", "contract-renewal"],
+    "testable": true
+  },
+  {
+    "id": "DEC43-2013/ART-1/5",
+    "source": "DEC43-2013",
+    "articleRef": "Article 1(e)",
+    "textEn": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\ne. twenty percent (20%) of the Rent of the Real Property Unit, where the Rent is more than forty percent (40%) less than the average rental value of similar units.",
+    "textAr": "تتحدد نسبة الزيادة القصوى في بدل إيجار العقارات في إمارة دبي عند تجديد عقود إيجار العقارات، على النحو التالي:\nهـ- 20٪ من القيمة الإيجارية للوحدة العقارية إذا كان بدل إيجارها يقل بنسبة تزيد على 40٪ من متوسط أجر المثل.",
+    "tags": ["rent-increase", "rent-cap", "contract-renewal"],
+    "testable": true
+  },
+  {
+    "id": "DEC43-2013/ART-2",
+    "source": "DEC43-2013",
+    "articleRef": "Article 2",
+    "textEn": "This Decree will apply to Landlords, whether private or public entities, in the Emirate of Dubai, including those in Special Development zones and free zones such as the Dubai International Financial Centre.",
+    "textAr": "يسري هذا المرسوم على المُؤجّرين من الجهات العامة والخاصة في إمارة دبي، بما في ذلك مناطق التطوير الخاصة والمناطق الحرة، بما فيها مركز دبي المالي العالمي.",
+    "tags": ["scope", "free-zones"],
+    "testable": false
+  },
+  {
+    "id": "DEC43-2013/ART-3",
+    "source": "DEC43-2013",
+    "articleRef": "Article 3",
+    "textEn": "For the purposes of application of Article (1) of this Decree, the average rental value of similar units will be determined in accordance with the \"Rent Index of the Emirate of Dubai\" approved by the Real Estate Regulatory Agency.",
+    "textAr": "لغايات تطبيق المادة (1) من هذا المرسوم، يتحدد متوسط أجر المثل وفقاً لـ \"مؤشر تحديد بدل الإيجارات في إمارة دبي\" المعتمد لدى مؤسسة التنظيم العقاري.",
+    "tags": ["rent-index", "rent-valuation", "rera"],
+    "testable": true
+  },
+  {
+    "id": "DEC43-2013/ART-4",
+    "source": "DEC43-2013",
+    "articleRef": "Article 4",
+    "textEn": "This Decree comes into force on the day on which it is issued, and will be published in the Official Gazette.",
+    "textAr": "يُعمل بهذا المرسوم من تاريخ صدوره. ويُنشر في الجريدة الرسمية.",
+    "tags": ["commencement", "publication"],
+    "testable": false
+  }
+]

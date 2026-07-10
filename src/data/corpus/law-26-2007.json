@@ -1,0 +1,386 @@
+[
+  {
+    "id": "LAW26-2007/ART-1",
+    "source": "LAW26-2007",
+    "articleRef": "Article 1",
+    "textEn": "This Law will be cited as \"Law No. (26) of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai\".",
+    "textAr": "يسمى هذا القانون \"قانون تنظيم العلاقة بين مؤجِّري ومستأجري العقارات في إمارة دبي رقم (26) لسنة 2007\".",
+    "tags": ["citation"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-2",
+    "source": "LAW26-2007",
+    "articleRef": "Article 2",
+    "textEn": "In implementing the provisions of this Law, the following words and expressions will have the meaning indicated opposite each of them unless the context implies otherwise:\nEmirate: The Emirate of Dubai.\nTribunal: The Special Tribunal to Determine Disputes between Landlords and Tenants.\nRERA: The Real Estate Regulatory Agency.\nReal Property: Immovable property, and everything attached or annexed to it, which is leased out for residential purposes or for practising any commercial activity, trade, profession, or other lawful activity.\nLease Contract: A contract pursuant to which a Landlord is bound to allow a Tenant to use Real Property for a specific purpose, over a specific term, and in return for specific consideration.\nLandlord: A natural or legal person who is entitled by law or agreement to dispose of Real Property. This includes any person to whom the ownership of the Real Property is transferred during the term of lease, agent or legal representative of the Landlord, or Tenant who is permitted by the Landlord to sublet the Real Property.\nTenant: A natural or legal person who is entitled to use Real Property pursuant to a Lease Contract, or any person to whom the lease is legally transferred from the Tenant.\nSubtenant: A natural or legal person who is entitled to use Real Property or any part thereof pursuant to a Lease Contract entered into with the Tenant.\nRent: The specific consideration which a Tenant is bound to pay pursuant to a Lease Contract.\nNotice: A written notification sent by either party to a Lease Contract to the other party through a Notary Public; or delivered by registered mail, by hand, or by any other technological means approved by law.",
+    "textAr": "في تطبيق أحكام هذا القانون، تكون للكلمات والعبارات التالية المعاني الواردة إزاء كل منها ما لم يدل سياق النص على خلاف ذلك:\nالإمارة: إمارة دبي.\nاللجنة: اللجنة القضائية الخاصة للفصل في المنازعات بين المؤجرين والمستأجرين.\nالمؤسسة: مؤسسة التنظيم العقاري.\nالعقار: المال غير المنقول وما يتصل أو يُلحق به والمؤجَّر لأغراض السكن أو ممارسة نشاط تجاري أو حرفة أو مهنة أو أي نشاط مشروع آخر.\nعقد الإيجار: العقد الذي يلتزم المؤجر بمقتضاه بتمكين المستأجر من الانتفاع بالعقار لغرض معين مدة معينة لقاء بدل معين.\nالمؤجِّر: الشخص الطبيعي أو الاعتباري الذي يملك قانوناً أو اتفاقاً حق التصرف في العقار وكذلك من تنتقل إليه ملكية العقار أثناء مدة الإيجار أو من ينوب عنه أو يمثله قانوناً، ويشمل ذلك المستأجر المصرَّح له من المؤجِّر بالتأجير من الباطن.\nالمستأجر: الشخص الطبيعي أو الاعتباري الذي ينتفع بالعقار بموجب عقد إيجار وأي شخص تنتقل إليه الإجارة بصورة قانونية من المستأجر.\nالمستأجر من الباطن: الشخص الطبيعي أو الاعتباري الذي ينتفع بالعقار أو أي جزء منه بموجب عقد إيجار مبرم مع المستأجر.\nبدل الإيجار: المقابل المعين الذي يلتزم المستأجر بأدائه بموجب عقد الإيجار.\nالإخطار: الإخطار الخطي المرسَل من أي من طرفي عقد الإيجار للطرف الآخر عن طريق الكاتب العدل أو بالبريد المسجل أو بالتسليم باليد أو بأية وسيلة من وسائل التقنية المعتمدة قانوناً.",
+    "tags": ["definitions"],
+    "testable": false,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-3",
+    "source": "LAW26-2007",
+    "articleRef": "Article 3",
+    "textEn": "The provisions of this Law will apply to land and Real Property leased out in the Emirate, excluding Real Property provided free of Rent by natural or legal persons as accommodation for their employees.",
+    "textAr": "تسري أحكام هذا القانون على الأراضي والعقارات المؤجرة في الإمارة، ويستثنى منها العقارات التي يقدمها الأشخاص الطبيعيون أو الاعتباريون لسكن العاملين لديهم دون تقاضي بدل إيجار عنها.",
+    "tags": ["scope", "exclusions"],
+    "testable": false,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-4/1",
+    "source": "LAW26-2007",
+    "articleRef": "Article 4(1)",
+    "textEn": "1. The contractual relationship between a Landlord and a Tenant will be regulated by a Lease Contract which includes a description of the leased Real Property that leaves no room for uncertainty; the purpose of the lease; the term of the Lease Contract; the Rent and its payment method; and the name of the Real Property owner if the Landlord is not the owner.",
+    "textAr": "1. تنظم العلاقة الإيجارية بين مؤجر العقار ومستأجره بموجب عقد إيجار يشتمل على وصف للعقار المؤجر وصفاً نافياً للجهالة والغرض من تأجيره ومدة وبدل الإيجار وكيفية أدائه واسم مالكه إن لم يكن هو المؤجر.",
+    "tags": ["contract-formation", "contract-contents"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-4/2",
+    "source": "LAW26-2007",
+    "articleRef": "Article 4(2)",
+    "textEn": "2. All Lease Contracts related to Real Property which is governed by the provisions of this Law, and any amendments thereto, will be registered with RERA.",
+    "textAr": "2. تسجل لدى المؤسسة كافة عقود الإيجار المتعلقة بالعقارات الخاضعة لأحكام هذا القانون وأية تعديلات تطرأ على تلك العقود.",
+    "tags": ["ejari", "registration", "rera"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-5",
+    "source": "LAW26-2007",
+    "articleRef": "Article 5",
+    "textEn": "The term of a Lease Contract must be specified. Where the term is not specified in the Lease Contract or where it is impossible to prove the alleged term, the Lease Contract will be deemed valid for the period specified for payment of the Rent.",
+    "textAr": "يجب أن تكون مدة الإيجار معينة، وإذا لم يتم تعيينها في عقد الإيجار أو تعذر إثبات المدة المدعاة، اعتُبر عقد الإيجار منعقداً للفترة المعيَّنة لدفع بدل الإيجار.",
+    "tags": ["contract-term", "defaults"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-6",
+    "source": "LAW26-2007",
+    "articleRef": "Article 6",
+    "textEn": "Where the term of a Lease Contract expires, but the Tenant continues to occupy the Real Property without any objection by the Landlord, the Lease Contract will be renewed for the same term or for a term of one year, whichever is shorter, and under the same terms as the previous Lease Contract.",
+    "textAr": "إذا انتهت مدة عقد الإيجار واستمر المستأجر شاغلاً للعقار دون اعتراض من المؤجِّر، يجدد العقد لمدة أخرى مماثلة أو لمدة سنة أيهما أقل وبذات شروط العقد الأخرى.",
+    "tags": ["contract-renewal", "holdover"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-7",
+    "source": "LAW26-2007",
+    "articleRef": "Article 7",
+    "textEn": "Where a Lease Contract is valid, it may not be unilaterally terminated during its term by the Landlord or the Tenant. It can only be terminated by mutual consent or in accordance with the provisions of this Law.",
+    "textAr": "إذا كان عقد الإيجار صحيحاً فلا يجوز فسخه أثناء سريان مدته بالإرادة المنفردة للمؤجِّر أو المستأجر إلاّ بالتراضي أو وفقاً لأحكام هذا القانون.",
+    "tags": ["termination", "contract-term"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-8",
+    "source": "LAW26-2007",
+    "articleRef": "Article 8",
+    "textEn": "The term of a sub-lease contract entered into between the Tenant and Sub-tenant will expire upon the expiry of the term of the Lease Contract entered into between the Landlord and Tenant, unless the Landlord expressly agrees to extend the term of the sub-lease contract.",
+    "textAr": "تَنقضي مدة عقد الإيجار من الباطن المبرم بين المستأجر والمستأجر من الباطن بانقضاء مدة عقد الإيجار المبرم بين المؤجِّر والمستأجر ما لم يوافق المؤجِّر صراحة على تمديد مدة عقد الإيجار من الباطن.",
+    "tags": ["subletting", "contract-term"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-9/1",
+    "source": "LAW26-2007",
+    "articleRef": "Article 9(1)",
+    "textEn": "1. Landlords and Tenants must specify Rent in Lease Contracts. Where the parties fail to specify the Rent and it is impossible to prove the Rent agreed upon by them, the Rent will be the rental value of similar Real Property.",
+    "textAr": "1. على المؤجر والمستأجر تعيين بدل الإيجار في عقد الإيجار، وإذا أغفل الطرفان تعيينه أو تعذر إثبات ما اتفقا عليه فإن بدل الإيجار يكون هو بدل أجر المثل.",
+    "tags": ["rent", "contract-contents", "defaults"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-9/2",
+    "source": "LAW26-2007",
+    "articleRef": "Article 9(2)",
+    "textEn": "2. The Tribunal will determine the rental value of similar Real Property taking into account the criteria for determining the percentage of Rent increase prescribed by RERA; the prevailing economic situation in the Emirate; the condition of the Real Property; the prevailing rental value of similar Real Property in other similar Real Property markets within the same area; the provisions of any legislation in force in the Emirate regulating Real Property Rent, and any other factors which the Tribunal deems appropriate.",
+    "textAr": "2. تعين اللجنة أجر المثل آخذة في الاعتبار معايير تحديد نسبة زيادة بدلات الإيجارات التي تضعها المؤسسة والوضع الاقتصادي العام في الإمارة وحالة العقار وإيجار المثل السائد في السوق العقارية المماثلة له في نفس المنطقة وما تنص عليه أية تشريعات سارية في الإمارة في شأن إيجار العقارات وأية عوامل أخرى تراها اللجنة.",
+    "tags": ["rent-valuation", "jurisdiction", "rera"],
+    "testable": false,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-10",
+    "source": "LAW26-2007",
+    "articleRef": "Article 10",
+    "textEn": "RERA will have the authority to establish criteria relating to percentages of Rent increase in the Emirate in line with the requirements of the prevailing economic situation in the Emirate.",
+    "textAr": "تختص المؤسسة بوضع معايير تحديد نسبة زيادة بدلات الإيجار في الإمارة وذلك بما يتوافق ومقتضيات الوضع الاقتصادي العام فيها.",
+    "tags": ["rent-increase", "rera"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-11",
+    "source": "LAW26-2007",
+    "articleRef": "Article 11",
+    "textEn": "Unless otherwise agreed, the Rent will cover use of the Real Property amenities such as swimming pools, playgrounds, gymnasiums, health clubs, car parks, and other amenities.",
+    "textAr": "يشمل بدل الإيجار الانتفاع بمرافق العقار كأحواض السباحة وملاعب وصالات الرياضة والنادي الصحي ومواقف السيارات وغيرها، وذلك ما لم يتفق على خلاف ذلك.",
+    "tags": ["rent", "amenities"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-12",
+    "source": "LAW26-2007",
+    "articleRef": "Article 12",
+    "textEn": "The Tenant will pay the Landlord the Rent on the dates mutually agreed upon. Where there is no agreement or where it is impossible to verify the payment dates, the Rent must be annually paid in four (4) equal instalments to be paid in advance.",
+    "textAr": "يؤدي المستأجر بدل الإيجار للمؤجِّر في المواعيد المتفق عليها بينهما، فإذا لم يوجد اتفاق أو تعذر إثبات مواعيد الأداء، فإن أداء بدل الإيجار يكون بمعدل أربع دفعات متساوية القيمة سنوياً تؤدى مقدماً كل دفعة منها.",
+    "tags": ["rent", "payment-schedule", "defaults"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-13",
+    "source": "LAW26-2007",
+    "articleRef": "Article 13",
+    "textEn": "For the purposes of renewing a Lease Contract, the Landlord and Tenant may, prior to the expiry of the Lease Contract, amend any of its terms or reconsider increasing or reducing the Rent. If the Landlord and Tenant fail to reach an agreement in this regard, the Tribunal may determine the fair Rent, taking into account the criteria stipulated in Article (9) of this Law.",
+    "textAr": "لغايات تجديد عقد الإيجار، يجوز للمؤجر والمستأجر، قبل انتهاء مدة عقد الإيجار، تعديل أي من شروط العقد أو إعادة النظر في بدل الإيجار سواء بالزيادة أو النقصان، فإذا لم يصلا إلى اتفاق بشأن ذلك فللّجنة تحديد الأجر العادل آخذة في الاعتبار المعايير المنصوص عليها في المادة (9) من هذا القانون.",
+    "tags": ["contract-renewal", "rent-increase"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-14",
+    "source": "LAW26-2007",
+    "articleRef": "Article 14",
+    "textEn": "Unless otherwise agreed by the parties to a Lease Contract, where either party wishes to amend any of its terms pursuant to Article (13) of this Law, that party must notify the other party of this intent no less than ninety (90) days before the date on which the Lease Contract expires.",
+    "textAr": "في حال رغبة أي من طرفي عقد الإيجار تعديل أيٍ من شروطه وفقاً للمادة (13) من هذا القانون فعليه إخطار الطرف الآخر بذلك قبل مدة لا تقل عن تسعين يوماً من انتهاء العقد، وذلك ما لم يتفق الطرفان على خلاف ذلك.",
+    "tags": ["notice-period", "contract-renewal", "rent-increase"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-15",
+    "source": "LAW26-2007",
+    "articleRef": "Article 15",
+    "textEn": "A Landlord will be bound to hand over the Real Property in a good condition which allows the Tenant to fully use it as stated in the Lease Contract.\nNotwithstanding the foregoing, the parties may agree upon renting Real Property before completion of its construction, in which case the Tenant must complete the construction of the Real Property and make it suitable for its intended use. The agreement will determine the party liable to pay the costs of completion of the construction.",
+    "textAr": "يلتزم المؤجر بتسليم العقار بحالة صالحة للاستعمال وبشكل يمكن المستأجر من إستيفاء المنفعة المتعاقد عليها.\nومع ذلك، يجوز الاتفاق على استئجار عقار غير مكتمل الإنشاء على أن يقوم المستأجر بإكماله وجعله بحالة صالحة لاستيفاء المنفعة المقصودة، ويحدد الاتفاق الطرف الذي يتحمل تكاليف هذا الإكمال.",
+    "tags": ["handover", "landlord-obligations"],
+    "testable": false,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-16",
+    "source": "LAW26-2007",
+    "articleRef": "Article 16",
+    "textEn": "Unless otherwise agreed by the parties, the Landlord will, during the term of the Lease Contract, be responsible for the Real Property's maintenance works and for repairing any defect or damage that may affect the Tenant's intended use of the Real Property.",
+    "textAr": "يكون المؤجِّر مسؤولاً أثناء مدة الإيجار عن أعمال صيانة العقار وعن إصلاح أي عطل أو خلل يؤثر في استيفاء المستأجر للمنفعة المقصودة، ما لم يتفق الطرفان على خلاف ذلك.",
+    "tags": ["maintenance", "landlord-obligations"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-17",
+    "source": "LAW26-2007",
+    "articleRef": "Article 17",
+    "textEn": "The Landlord may not make to the Real Property or any of its amenities or annexes any changes that would preclude the Tenant from full use of the Real Property as intended. The Landlord will be responsible for such changes whether made by him or any other person authorised by the Landlord. Further, the Landlord will be responsible for any defect, damage, deficiency, and wear and tear occurring to the Real Property for reasons not attributable to the fault of the Tenant.",
+    "textAr": "لا يجوز لمؤجر العقار أن يحدث فيه أو في مرافقه أو ملحقاته أية تغييرات تخل باستيفاء المنفعة المقصودة، ويكون المؤجر مسؤولاً عن تلك التغييرات سواءً صدرت منه أو من أي شخص تلقى الحق عنه، وكذلك عن الأعطال والأضرار والنقص والتلف الذي يلحق بالعقار لسبب لا يد للمستأجر فيه.",
+    "tags": ["maintenance", "landlord-obligations"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-18",
+    "source": "LAW26-2007",
+    "articleRef": "Article 18",
+    "textEn": "The Landlord must provide the Tenant with the approvals required to be submitted to the competent official entities in the Emirate whenever the Tenant wishes to carry out decoration works or any other works that require such approvals, provided that such works do not affect the structure of the Real Property and that the Tenant has the official documents requesting such approvals.",
+    "textAr": "يجب على المؤجِّر منح المستأجر الموافقات اللازمة لتقديمها للجهات الرسمية المختصة في الإمارة متى رغِبَ في إجراء أعمال الديكور للعقار أو أية أعمال أخرى تتطلب هذه الموافقات، شريطة أن لا تؤثر هذه الأعمال على الهيكل الإنشائي للعقار، وأن يكون لدى المستأجر الوثائق الرسمية الدالة على طلب تلك الموافقات.",
+    "tags": ["approvals", "landlord-obligations"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-19",
+    "source": "LAW26-2007",
+    "articleRef": "Article 19",
+    "textEn": "The Tenant must pay the Rent on due dates and maintain the Real Property in such a manner as an ordinary person would maintain his own property. Without prejudice to the Tenant's obligation to carry out the restorations that have been agreed upon or which are customary for Tenants to undertake, the Tenant may not make any changes or carry out any restoration or maintenance works to the Real Property unless so permitted by the Landlord and after obtaining required licences from the competent official entities.",
+    "textAr": "يجب على المستأجر أن يسدد بدل الإيجار في مواعيد استحقاقه، وأن يحافظ على العقار محافظة الشخص العادي على ممتلكاته، ولا يجوز له إحداث أي تغيير أو إجراء ترميمات أو أعمال صيانة في العقار إلاّ بإذن من المؤجِّر وبعد استصدار التراخيص اللازمة لذلك من الجهات الرسمية المختصة، دون أن يخل ذلك بالتزام المستأجر بإجراء الترميمات التي تم الاتفاق عليها أو جرى العرف على تكليف المستأجر بها.",
+    "tags": ["tenant-obligations", "rent", "maintenance"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-20",
+    "source": "LAW26-2007",
+    "articleRef": "Article 20",
+    "textEn": "When entering into a Lease Contract, the Landlord may obtain from the Tenant a security deposit to ensure maintenance of the Real Property upon the expiry of the Lease Contract, provided that the Landlord undertakes to refund such deposit or remainder thereof to the Tenant upon the expiry of the Lease Contract.",
+    "textAr": "للمؤجر عند إبرام عقد الإيجار أن يستوفي من المستأجر تأميناً لضمان صيانة العقار عند انتهاء مدة العقد، على أن يلتزم المؤجر برد هذا التأمين أو ما تبقى منه للمستأجر عند انتهاء العقد.",
+    "tags": ["security-deposit"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-21",
+    "source": "LAW26-2007",
+    "articleRef": "Article 21",
+    "textEn": "Upon the expiry of the term of the Lease Contract, the Tenant will must surrender possession of the Real Property to the Landlord in the same condition in which the Tenant received it at the time of entering into the Lease Contract except for ordinary wear and tear or for damage due to reasons beyond the Tenant's control. In the event of dispute between the two parties, the matter must be referred to the Tribunal to issue an award in this regard.",
+    "textAr": "يكون المستأجر ملزماً عند انتهاء الإجارة بتسليم العقار للمؤجِّر بالحالة التي تسلمه عليها وقت التعاقد إلاّ ما نقص نتيجة الاستعمال العادي له أو لسبب خارج عن إرادته، وفي حالة اختلاف الطرفين على ذلك، يرفع الأمر للّجنة لإصدار قرارها في هذا الشأن.",
+    "tags": ["handover", "tenant-obligations"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-22",
+    "source": "LAW26-2007",
+    "articleRef": "Article 22",
+    "textEn": "Unless the Lease Contract states otherwise, the Tenant must pay all fees and taxes due to Government entities and departments for use of the Real Property as well as any fees or taxes prescribed for any sub-lease.",
+    "textAr": "ما لم يقض عقد الإيجار بخلاف ذلك، يلتزم المستأجر بسداد جميع الرسوم والضرائب المستحقة على الانتفاع بالعقار للجهات والدوائر الحكومية، وكذلك أية رسوم أو ضرائب مقررة على التأجير من الباطن.",
+    "tags": ["fees", "taxes", "tenant-obligations"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-23",
+    "source": "LAW26-2007",
+    "articleRef": "Article 23",
+    "textEn": "Unless otherwise agreed by the parties, upon vacating and surrendering possession of the Real Property, the Tenant may not remove any leasehold improvements made by the Tenant.",
+    "textAr": "لا يجوز للمستأجر عند الإخلاء وتسليم العقار إزالة أية تحسينات ثابتة كان قد أضافها، ما لم يتفق الطرفان على خلاف ذلك.",
+    "tags": ["improvements", "tenant-obligations"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-24",
+    "source": "LAW26-2007",
+    "articleRef": "Article 24",
+    "textEn": "Unless otherwise agreed by the parties to the Lease Contract, the Tenant may not assign the use of or sub-lease the Real Property to third parties unless written consent of the Landlord is obtained.",
+    "textAr": "ما لم يتفق الطرفان في عقد الإيجار على خلاف ذلك، لا يجوز للمستأجر التنازل عن الانتفاع بالعقار أو تأجيره من الباطن للغير إلا بموافقة المؤجِّر الخطية على ذلك.",
+    "tags": ["subletting", "consent"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-25/1",
+    "source": "LAW26-2007",
+    "articleRef": "Article 25(1)",
+    "textEn": "1. A Landlord may request eviction of the Tenant from the Real Property before expiry of the Lease Contract only in the following cases:\na. unless otherwise agreed by the parties, where the Tenant fails to pay the Rent or any part thereof within thirty (30) days from the date of service of a Notice on the Tenant by the Landlord requesting the payment;\nb. where the Tenant sublets the Real Property or any part thereof without obtaining the Landlord's written approval, in which case the eviction will apply to the Tenant and to the Subtenant, who will reserve the right to claim compensation from the Tenant;\nc. where the Tenant uses the Real Property or allows others to use it for any illegal purpose or for a purpose which conflicts with public order or morals;\nd. unless otherwise agreed by the parties, where the leased Real Property is used as business premises and the Tenant leaves it unoccupied without a valid reason for a period of thirty (30) consecutive days or ninety (90) non-consecutive days in a year;\ne. where the Tenant makes any change to the Real Property that endangers its safety in a manner that makes it impossible to restore the Real Property to its original state; or causes damage to the Real Property as a result of his deliberate act, or his gross negligence by failing to exercise due caution and care or allowing others to cause that damage;\nf. where the Tenant uses the Real Property for a purpose other than that for which it is leased, or otherwise uses the Real Property in a manner that violates the planning, construction, and land use regulations in force in the Emirate;\ng. where the Real Property is likely to collapse, provided that the Landlord proves this by a technical report issued by or certified by the Dubai Municipality;\nh. where the Tenant fails to comply with any of his obligations under this Law or any of the Lease Contract terms within thirty (30) days from the date on which a Notice requesting him to comply with that obligation or term is served upon him by the Landlord; or\ni. where the competent Government entities decide that the demolition and reconstruction of the Real Property are mandated in accordance with urban development requirements in the Emirate.\nFor the purposes of paragraph (1) of this Article, the Landlord will serve a Notice on the Tenant through a Notary Public or by registered mail.",
+    "textAr": "1. يكون للمؤجِّر طلب إخلاء المستأجر من العقار قبل انتهاء مدة الإجارة حصراً في أي من الحالات التالية:\nأ- إذا لم يقم المستأجر بسداد بدل الإيجار أو أي جزء منه خلال ثلاثين يوماً من تاريخ إخطار المؤجر له بالسداد، وذلك ما لم يتفق الطرفان على خلاف ذلك.\nب- إذا قام المستأجر بتأجير العقار من الباطن أو أي جزء منه دون الحصول على موافقة المؤجِّر الخطية على ذلك، وفي هذه الحالة يسري الإخلاء على المستأجر والمستأجر من الباطن مع حفظ حق هذا الأخير بالرجوع على المستأجر بالتعويض.\nج- إذا استعمل المستأجر العقار أو سمح لآخرين باستعماله لغاية غير مشروعة أو مخالفة للنظام العام أو الآداب العامة.\nد- إذا كان العقار المؤجر محلاً تجارياً، وتركه المستأجر دون إشغال ودون سبب مشروع لمدة ثلاثين يوماً متصلة أو تسعين يوماً متقطعة في السنة الواحدة، وذلك ما لم يتفق الطرفان على خلاف ذلك.\nهـ- إذا أحدث المستأجر تغييراً في العقار بحيث يؤثر على سلامته بشكل يتعذر معه إعادته إلى حالته الأصلية، أو ألحق بالعقار ضرراً نتيجة فعله المتعمد أو إهماله الجسيم في اتخاذ الحيطة والحذر أو سماحه للغير بإلحاق ذلك الضرر.\nو- إذا استعمل المستأجر العقار في غير الغرض المؤجّر لأجله أو استعمله على نحو يخالف أنظمة التخطيط والبناء واستعمالات الأراضي المعمول بها في الإمارة.\nز- إذا كان العقار آيلاً للسقوط، على أن يُثبت المؤجِّر ذلك بتقرير فني صادر من بلدية دبي أو معتمد من قبلها.\nح- إذا لم يراع المستأجر أي التزام فرضه عليه هذا القانون أو أي شرط من شروط عقد الإيجار، وذلك خلال ثلاثين يوماً من تاريخ إخطار المؤجِّر له بتنفيذ ذلك الالتزام أو الشرط.\nط- إذا اقتضت متطلبات التنمية والتطور العمراني في الإمارة هدم العقار وإعادة بنائه وذلك وفقاً لما تقرره الجهات الحكومية المختصة.\nولغايات البند (1) من هذه المادة، يتم إخطار المؤجر للمستأجر عن طريق الكاتب العدل أو البريد المسجل.",
+    "tags": ["eviction", "notice-period", "subletting", "rent"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-25/2",
+    "source": "LAW26-2007",
+    "articleRef": "Article 25(2)",
+    "textEn": "2. Upon expiry of the Lease Contract, the Landlord may seek eviction of the Tenant from the Real Property only if:\na. the Real Property owner wishes to demolish and reconstruct it or to add any new structures that would prevent the Tenant from using the Real Property, provided that the owner obtains the required permits from the competent entities; or\nb. the Real Property is in a condition that requires restoration or comprehensive maintenance that cannot be carried out while the Tenant occupies the Real Property, provided that this condition of the Real Property is verified by a technical report issued or certified by the Dubai Municipality;\nc. the Real Property owner wishes to retake possession of the Real Property for his own use or for use by any of his first-degree relatives, provided that the owner proves that he does not own any alternative Real Property that is suitable for this purpose; or\nd. the leased Real Property owner wishes to sell it.\nFor the purposes of paragraph (2) of this Article, the Landlord must notify the Tenant of the eviction reasons at least twelve (12) months before the date of eviction, and the notice must be served through a Notary Public or by registered mail.",
+    "textAr": "2. يكون للمؤجِّر طلب إخلاء المستأجر من العقار عند انتهاء عقد الإيجار حصراً في أي من الحالات التالية:\nأ- إذا رغب مالك العقار في هدمه لإعادة بنائه أو رغب بإضافة أية مبان جديدة تحول دون انتفاع المستأجر بالعقار المؤجر وذلك شريطة الحصول على التراخيص اللازمة من الجهات المختصة.\nب- إذا اقتضت حالة العقار ترميمه أو إجراء صيانة شاملة له وتعذر إجراء أعمال الترميم والصيانة بوجود المستأجر في العقار، على أن يتم التثبت من حالة العقار بتقرير فني صادر من بلدية دبي أو معتمد من قبلها.\nج- إذا رغب مالك العقار في استعادته لاستعماله الشخصي أو لاستعمال أي من أقاربه حتى الدرجة الأولى، شريطة إثبات عدم ملكيته للبديل المناسب لذلك الغرض.\nد- إذا رغب مالك العقار في بيع العقار المؤجر.\nولغايات البند (2) من هذه المادة، يجب أن يقوم المؤجِّر بإخطار المستأجر بأسباب إخلاء العقار قبل اثني عشر شهراً على الأقل من التاريخ المحدد للإخلاء، على أن يتم الإخطار عن طريق الكاتب العدل أو البريد المسجل.",
+    "tags": ["eviction", "notice-period"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-26",
+    "source": "LAW26-2007",
+    "articleRef": "Article 26",
+    "textEn": "Where the Tribunal rules in favour of the Landlord retaking possession of the Real Property for his own use or for use by any of his first-degree relatives, in accordance with sub-paragraph (2)(c) of Article (25) of this Law, the Landlord may not rent the Real Property to a third party before the lapse of at least two (2) years in case of residential Real Property, or three (3) years in case of non-residential Real Property, from the date of retaking possession of the same. Otherwise, the Tenant may request the Tribunal to award him fair compensation.",
+    "textAr": "إذا قضت اللجنة للمؤجر باستعادة العقار لاستعماله الشخصي أو لاستعمال أي من أقاربه حتى الدرجة الأولى إعمالاً لحكم الفقرة (ج) من البند (2) من المادة (25) من هذا القانون، فلا يجوز له تأجيره للغير إلاّ بعد مضي سنتين على الأقل بالنسبة للعقارات السكنية وثلاث سنوات بالنسبة للعقارات غير السكنية وذلك من تاريخ استعادة المؤجر للعقار، ما لم تقضِ اللجنة بمدّةٍ أقل لأسبابٍ تُقدّرها، وبخلاف ذلك يكون للمستأجر الطلب من اللجنة الحكم له بالتعويض العادل.",
+    "tags": ["eviction", "re-letting-ban", "compensation"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-27",
+    "source": "LAW26-2007",
+    "articleRef": "Article 27",
+    "textEn": "The Lease Contract does not expire upon the death of the Landlord or the Tenant. The contractual relationship continues with the heirs, unless the heirs of the Tenant wish to terminate such relationship, provided that termination comes into effect no less than thirty (30) days from the date of notifying the Landlord of such intent or the expiry date of the Lease Contract, whichever comes first.",
+    "textAr": "لا ينتهي عقد الإيجار بوفاة المؤجِّر أو المستأجر وتستمر العلاقة الإيجارية مع ورثة المتوفى منهما، إلاّ إذا رغب ورثة المستأجر إنهاء العلاقة الإيجارية، على أن لا يتم الإنهاء إلا بعد انقضاء مدة لا تقل عن ثلاثين يوماً من تاريخ إخطار المؤجر بتلك الرغبة أو انتهاء العقد أيهما أسبق.",
+    "tags": ["succession", "termination", "notice-period"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-28",
+    "source": "LAW26-2007",
+    "articleRef": "Article 28",
+    "textEn": "Transferring the ownership of Real Property to a new owner does not affect the Tenant's right to continue to occupy the Real Property by virtue of the Lease Contract entered into with the previous owner, provided that such Lease Contract has a fixed term.",
+    "textAr": "لا يؤثر انتقال ملكية العقار إلى مالك جديد على حق المستأجر بالاستمرار في إشغال هذا العقار وفقاً لعقد الإيجار المبرم مع المالك السابق، وذلك شريطة أن يكون هذا العقد ثابت التاريخ.",
+    "tags": ["ownership-transfer", "tenant-protection"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-29/1",
+    "source": "LAW26-2007",
+    "articleRef": "Article 29(1)",
+    "textEn": "1. A Tenant will have the right of first refusal to return to the Real Property where it is demolished and reconstructed, or renovated and restored, by the Landlord, in which case the Rent must be determined in accordance with the provisions of Article (9) of this Law.",
+    "textAr": "1. يكون للمستأجر الأولوية في العودة إلى العقار في حال قيام المؤجِّر بهدمه وإعادة بنائه أو في حال قيام المؤجِّر بتجديد العقار وترميمه، على أن يتم تحديد بدل الإيجار وفق الأحكام المشار إليها في المادة (9) من هذا القانون.",
+    "tags": ["right-of-first-refusal", "rent"],
+    "testable": false,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-29/2",
+    "source": "LAW26-2007",
+    "articleRef": "Article 29(2)",
+    "textEn": "2. The Tenant must exercise the right of first refusal referred to in the preceding paragraph within a period not exceeding thirty (30) days from the date on which the Tenant is notified of the same by the Landlord.",
+    "textAr": "2. على المستأجر ممارسة حق الأولوية المشار إليه في البند السابق خلال مدة لا تجاوز ثلاثين يوماً من تاريخ إخطار المؤجر له بذلك.",
+    "tags": ["right-of-first-refusal", "notice-period"],
+    "testable": true,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-30",
+    "source": "LAW26-2007",
+    "articleRef": "Article 30",
+    "textEn": "If the Tribunal issues an award terminating the Lease Contract and the Real Property is occupied by a Sub-tenant under a contract entered into with the Tenant and approved by the Landlord, the Sub-tenant may continue to occupy the Real Property under the terms of the sub-lease contract.",
+    "textAr": "إذا صدر قرار من اللجنة بفسخ عقد الإيجار وكان يشغل العقار مستأجر من الباطن بموجب عقد مبرم مع المستأجر وبموافقة المؤجِّر، فإن للمستأجر من الباطن أن يستمر في إشغال العقار وبشروط العقد المبرم معه.",
+    "tags": ["subletting", "termination"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-31",
+    "source": "LAW26-2007",
+    "articleRef": "Article 31",
+    "textEn": "Filing a claim to evict the Tenant does not exempt the Tenant from paying the Rent for the whole period during which the claim is considered, and until an award is rendered and executed.",
+    "textAr": "لا يعفي رفع دعوى الإخلاء المستأجر من أداء بدل الإيجار طيلة المدة التي يستغرقها نظر الدعوى وصدور الحكم فيها وتنفيذه.",
+    "tags": ["rent", "eviction"],
+    "testable": true
+  },
+  {
+    "id": "LAW26-2007/ART-32",
+    "source": "LAW26-2007",
+    "articleRef": "Article 32",
+    "textEn": "If the Landlord and Tenant agree in the Lease Contract or in any other subsequent agreement to refer any dispute arising between them out of the Lease Contract performance to arbitration, neither party may take any action that would affect the Real Property or the parties' rights and obligations as set out in the Lease Contract.\nThe Tribunal may, upon the request of the Landlord or the Tenant, issue any interim awards it deems appropriate to preserve such rights and legal position until the arbitration award is rendered.",
+    "textAr": "إذا اتفق المؤجِّر والمستأجر في عقد الإيجار أو في أي اتفاق لاحق على عرض ما قد ينشأ بينهما من نزاع في تنفيذه على التحكيم، فإنه لا يجوز لأيٍ منهما القيام بأي إجراء من شأنه التأثير على العقار أو على الحقوق والالتزامات المقررة للطرفين بموجب العقد.\nويكون للجنة بناءً على طلب المؤجِّر أو المستأجر أن تصدر ما تراه مناسباً من قرارات وقتية للحفاظ على تلك الحقوق والمراكز القانونية وذلك إلى حين صدور الحكم في التحكيم.",
+    "tags": ["arbitration", "jurisdiction"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-33",
+    "source": "LAW26-2007",
+    "articleRef": "Article 33",
+    "textEn": "Where a dispute arises and the Landlord and Tenant have not agreed on the arbitrators or if one or more of the agreed on arbitrators refrains from doing the work, resigns, is removed, or disqualified, or if an issue arises preventing the arbitrator from doing his work, and there was no agreement between the parties in this regard, the Tribunal, upon the request of either party, will appoint the arbitrator(s). The number of arbitrators appointed by the Tribunal must be equal to or complete the number of arbitrators agreed on.",
+    "textAr": "إذا وقع النزاع ولم يكن المؤجِّر والمستأجر قد اتفقا على المحكمين أو امتنع واحد أو أكثر من المحكمين المتفق عليهم عن العمل أو اعتزله أو عزل عنه أو حكم برده أو قام مانع من مباشرته له ولم يكن هناك اتفاق في هذا الشأن بين الطرفين عينت اللجنة بناءً على طلب أحد الطرفين المحكم أو المحكمين، ويجب أن يكون عدد من تعينهم اللجنة مساوياً للعدد المتفق عليه أو مكملاً له.",
+    "tags": ["arbitration", "jurisdiction"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-34",
+    "source": "LAW26-2007",
+    "articleRef": "Article 34",
+    "textEn": "The Landlord may not disconnect services from the Real Property or disturb the Tenant in his use of the Real Property in any manner. If this happens, the Tenant may have recourse to the police station under whose jurisdiction the Real Property falls to seek a remedy for the violation or to file a police report regarding the violation. He also may have recourse to the Tribunal by filing a claim for damages for any loss he may have suffered, supported by official reports that support the existence of such violation.",
+    "textAr": "يُحظر على المؤجِّر قطع الخدمات عن العقار أو التعرض للمستأجر بأية صورة من الصور للحيلولة دون انتفاعه بالعقار.\nويكون للمستأجر في هذه الحالة اللجوء إلى مركز الشرطة الذي يقع العقار في دائرة اختصاصه لطلب إزالة التعرض أو إثبات حالته، وكذلك اللجوء إلى اللجنة برفع دعوى معززة بالتقارير الرسمية المثبتة لوقوع التعرض وذلك لتعويضه عما يكون قد أصابه من ضرر.",
+    "tags": ["services", "tenant-protection"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-35",
+    "source": "LAW26-2007",
+    "articleRef": "Article 35",
+    "textEn": "The awards relating to vacating the Real Property will be executed through the Tribunal and pursuant to the rules and procedures issued in this respect. Apart from such awards, other awards issued by the Tribunal will be executed by the Execution Section of Dubai Courts.",
+    "textAr": "تنفذ قرارات تخليه العقار عن طريق اللجنة وبذات القواعد والإجراءات الصادرة بهذا الشأن.\nويتم تنفيذ ما عدا ذلك من قرارات تصدرها اللجنة عن طريق قسم التنفيذ بمحاكم دبي.",
+    "tags": ["enforcement", "jurisdiction"],
+    "testable": false
+  },
+  {
+    "id": "LAW26-2007/ART-36",
+    "source": "LAW26-2007",
+    "articleRef": "Article 36",
+    "textEn": "The Chairman of the Executive Council will issue the regulations, bylaws, and resolutions required for the implementation of the provisions of this Law.",
+    "textAr": "يصدر رئيس المجلس التنفيذي الأنظمة واللوائح والقرارات اللازمة لتنفيذ أحكام هذا القانون.",
+    "tags": ["implementation"],
+    "testable": false,
+    "amendedBy": "LAW33-2008"
+  },
+  {
+    "id": "LAW26-2007/ART-37",
+    "source": "LAW26-2007",
+    "articleRef": "Article 37",
+    "textEn": "This Law will be published in the Official Gazette and will come into force after sixty (60) days from the date of publication.",
+    "textAr": "ينشر هذا القانون في الجريدة الرسمية، ويعمل به بعد ستين يوماً من تاريخ نشره.",
+    "tags": ["commencement", "publication"],
+    "testable": false
+  }
+]
