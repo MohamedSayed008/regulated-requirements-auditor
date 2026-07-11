@@ -10,6 +10,7 @@ export const maxDuration = 120;
 
 const bodySchema = z.object({
   repoUrl: z.string().trim().min(1).max(300),
+  corpusId: z.string().optional(),
 });
 
 const FETCH_ERROR_STATUS: Record<string, number> = {
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   try {
     const target = `${fetched.owner}/${fetched.repo}`;
-    const run = await runAudit(new Anthropic(), fetched.files, target);
+    const run = await runAudit(new Anthropic(), fetched.files, target, parsed.data.corpusId);
     return json({ run, branch: fetched.branch }, 200);
   } catch (error: unknown) {
     if (error instanceof Anthropic.RateLimitError)

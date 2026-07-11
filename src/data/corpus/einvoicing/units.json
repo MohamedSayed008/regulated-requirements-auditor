@@ -1,0 +1,272 @@
+[
+  {
+    "id": "MOF-EINV/REQ-1",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-EINV",
+    "articleRef": "eInvoicing overview (definition of an eInvoice)",
+    "textEn": "An electronic invoice is a structured form of invoice data that is issued and exchanged electronically between a supplier and a buyer and reported electronically to the Federal Tax Authority. A PDF document, a Word file, a scanned copy, an image, or an invoice sent by email is not an electronic invoice.",
+    "tags": ["structured-data", "definition", "not-an-einvoice", "pdf-not-valid"],
+    "testable": true
+  },
+  {
+    "id": "MOF-EINV/REQ-2",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-EINV",
+    "articleRef": "5-corner DCTCE model",
+    "textEn": "The Electronic Invoicing System uses the Decentralized Continuous Transaction Control and Exchange (DCTCE) 5-corner model based on the Peppol PINT AE specification: the supplier (C1) sends the invoice through its Accredited Service Provider (C2), which transmits it to the buyer's Accredited Service Provider (C3) for delivery to the buyer (C4), while the tax data is reported to the Federal Tax Authority (C5).",
+    "tags": ["dctce", "five-corner-model", "peppol", "pint-ae", "fta-reporting"],
+    "testable": false
+  },
+  {
+    "id": "MD243-2025/REQ-1",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 1 (Definitions)",
+    "textEn": "An Electronic Invoice is an invoice issued, transmitted, and received in a structured electronic format that enables automatic and electronic processing in accordance with the Electronic Invoicing System.",
+    "tags": ["structured-data", "definition", "machine-readable", "format"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-2",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 6(2)",
+    "textEn": "The Issuer shall issue and transmit an Electronic Credit Note to the Recipient where the Business Transaction is cancelled, where the agreed consideration is reduced for any reason, where the consideration is returned in full or in part, or where an administrative or numerical error has occurred in relation to the Business Transaction.",
+    "tags": ["credit-note", "cancellation", "adjustment", "correction"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-3",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 5(1)",
+    "textEn": "The Issuer and the Recipient, as applicable, shall each appoint an Accredited Service Provider through which their obligations under the Electronic Invoicing System are fulfilled. Only providers on the Ministry's published list of Accredited Service Providers may be used.",
+    "tags": ["accredited-service-provider", "asp", "appointment", "both-parties"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-4",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 6(1) and 6(7)",
+    "textEn": "The Issuer shall issue and transmit an Electronic Invoice to the Recipient in respect of every Business Transaction, and shall fulfil this obligation through an Accredited Service Provider by exchanging the invoice within the Electronic Invoicing System rather than by any direct or out-of-band channel.",
+    "tags": ["issuance", "transmission", "asp", "every-transaction"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-5",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 6(4)",
+    "textEn": "Where the Issuer is a Registrant (a Person registered for VAT), the Electronic Invoice and Electronic Credit Note shall be issued and transmitted to the Recipient within the timeline prescribed by the VAT Law (the VAT time-of-supply rules).",
+    "tags": ["timing", "vat", "time-of-supply", "registrant"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-6",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 6(5)",
+    "textEn": "Where the VAT time-of-supply timeline does not apply, the Electronic Invoice or Electronic Credit Note must be issued and transmitted by the Issuer through the Electronic Invoicing System within 14 days from the Date of Business Transaction, being the earlier of the date the transaction occurred or the date payment was received.",
+    "tags": ["timing", "14-days", "date-of-business-transaction", "deadline"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-7",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 6(6)",
+    "textEn": "The Issuer and the Recipient must report Electronic Invoices and Electronic Credit Notes to the Federal Tax Authority within the timeline prescribed by the Minister.",
+    "tags": ["fta-reporting", "authority", "tax-data-document"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-8",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 7",
+    "textEn": "The Electronic Invoice and Electronic Credit Note shall contain all the data fields and particulars prescribed by the Ministry. An invoice missing any mandatory prescribed data field is not a valid eInvoice.",
+    "tags": ["mandatory-fields", "data-dictionary", "completeness", "validation"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-9",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 9 (Self-Billing)",
+    "textEn": "The Recipient may issue an Electronic Invoice or Electronic Credit Note on behalf of the Issuer for a supply of goods or services only where both the Recipient and the Issuer are Registrants, in accordance with the conditions prescribed in the VAT Executive Regulation or as otherwise determined by the Minister.",
+    "tags": ["self-billing", "registrant", "conditional", "buyer-issued"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-10",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 11 (Storage)",
+    "textEn": "Any Person subject to the Electronic Invoicing System shall store all Electronic Invoices, Electronic Credit Notes, and any associated data within the State (the UAE) for the retention period prescribed under the Tax Procedures Law, and such data must be accessible to the Federal Tax Authority.",
+    "tags": ["storage", "data-residency", "retention", "record-keeping", "uae"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-11",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 12 (System Failure)",
+    "textEn": "Every Issuer and Recipient shall notify the Federal Tax Authority of a System Failure within 2 Business Days from the date of its occurrence, using the mechanism and procedures determined by the Authority.",
+    "tags": ["system-failure", "notification", "2-business-days", "fta"],
+    "testable": true
+  },
+  {
+    "id": "MD243-2025/REQ-12",
+    "corpusId": "uae-einvoicing",
+    "source": "MD243-2025",
+    "articleRef": "Article 4 (Exclusions)",
+    "textEn": "Excluded Transactions that are not subject to the exchange and reporting requirement include: sovereign-capacity transactions by Government Entities not in competition with the private sector; international passenger transport by an Airline where an Electronic Ticket is issued; ancillary passenger services covered by an Electronic Miscellaneous Document; international transport of goods by an Airline covered by an Airway Bill (for 24 months from effectiveness); and financial services that are exempt or zero-rated under Article 42 of the VAT Executive Regulation.",
+    "tags": ["exclusions", "scope", "government", "airline", "financial-services"],
+    "testable": false
+  },
+  {
+    "id": "MOF-FIELDS-2026/REQ-1",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-FIELDS-2026",
+    "articleRef": "Seller details",
+    "textEn": "A valid eInvoice must carry the seller (supplier) details, including the seller's name, address, and Tax Registration Number where the seller is registered. The seller's participant identifier is its tax identification number (for a Person registered with the Federal Tax Authority, the first 10 digits of its TRN).",
+    "tags": ["mandatory-fields", "seller", "trn", "participant-identifier", "tin"],
+    "testable": true
+  },
+  {
+    "id": "MOF-FIELDS-2026/REQ-2",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-FIELDS-2026",
+    "articleRef": "Buyer details",
+    "textEn": "A valid eInvoice must carry the buyer details, including the buyer's name, address, and Tax Registration Number where the buyer is registered for tax, together with the buyer's Peppol participant identifier used for routing within the Electronic Invoicing System.",
+    "tags": ["mandatory-fields", "buyer", "trn", "participant-identifier"],
+    "testable": true
+  },
+  {
+    "id": "MOF-FIELDS-2026/REQ-3",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-FIELDS-2026",
+    "articleRef": "Invoice details (identification and date)",
+    "textEn": "A valid eInvoice must carry a unique invoice number that identifies the invoice and the invoice issue date.",
+    "tags": ["mandatory-fields", "invoice-number", "uniqueness", "issue-date"],
+    "testable": true
+  },
+  {
+    "id": "MOF-FIELDS-2026/REQ-4",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-FIELDS-2026",
+    "articleRef": "Invoice details (currency)",
+    "textEn": "A valid eInvoice must state the invoice currency code in which the invoice amounts are expressed. The total tax amount must additionally be provided in the accounting currency (AED).",
+    "tags": ["mandatory-fields", "currency", "aed", "tax-currency"],
+    "testable": true
+  },
+  {
+    "id": "MOF-FIELDS-2026/REQ-5",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-FIELDS-2026",
+    "articleRef": "Invoice line items",
+    "textEn": "A valid eInvoice must include line-level detail for each item supplied: item description, quantity, unit of measure, unit price, and the line net (line extension) amount, together with the line's tax category code and VAT rate.",
+    "tags": ["mandatory-fields", "line-items", "quantity", "unit-price", "description"],
+    "testable": true
+  },
+  {
+    "id": "MOF-FIELDS-2026/REQ-6",
+    "corpusId": "uae-einvoicing",
+    "source": "MOF-FIELDS-2026",
+    "articleRef": "Tax breakdown and document totals",
+    "textEn": "A valid eInvoice must include a VAT tax breakdown per tax category (tax category code, taxable amount, VAT rate, and VAT amount) with VAT amounts reported at line-item level in AED regardless of the invoice currency, and must include the document totals (sum of line net amounts, total VAT, and total payable amount).",
+    "tags": ["mandatory-fields", "tax-breakdown", "vat", "totals", "aed"],
+    "testable": true
+  },
+  {
+    "id": "MD244-2025/REQ-1",
+    "corpusId": "uae-einvoicing",
+    "source": "MD244-2025",
+    "articleRef": "Article 3(4) (Pilot Programme)",
+    "textEn": "The Pilot Programme for the Electronic Invoicing System, run through a Taxpayer Working Group whose members participate by written agreement, shall commence on 1 July 2026.",
+    "tags": ["timeline", "pilot", "2026", "taxpayer-working-group"],
+    "testable": false
+  },
+  {
+    "id": "MD244-2025/REQ-2",
+    "corpusId": "uae-einvoicing",
+    "source": "MD244-2025",
+    "articleRef": "Article 4 (Voluntary Implementation)",
+    "textEn": "Any Person may implement the Electronic Invoicing System on a voluntary basis as from 1 July 2026, provided they comply with all technical requirements established by the Ministry and the Authority.",
+    "tags": ["timeline", "voluntary", "2026"],
+    "testable": false
+  },
+  {
+    "id": "MD244-2025/REQ-3",
+    "corpusId": "uae-einvoicing",
+    "source": "MD244-2025",
+    "articleRef": "Article 5(1)(a) (as amended by MD 66 of 2026)",
+    "textEn": "A Person subject to the Electronic Invoicing System whose Revenue is equal to or exceeds AED 50,000,000 shall appoint an Accredited Service Provider by 30 October 2026 and shall implement the Electronic Invoicing System by 1 January 2027. Revenue is the gross income of the most recent Accounting Period.",
+    "tags": ["timeline", "wave-1", "revenue-threshold", "go-live", "aed-50m"],
+    "testable": false
+  },
+  {
+    "id": "MD244-2025/REQ-4",
+    "corpusId": "uae-einvoicing",
+    "source": "MD244-2025",
+    "articleRef": "Article 5(1)(b)",
+    "textEn": "A Person subject to the Electronic Invoicing System whose Revenue is less than AED 50,000,000 shall appoint an Accredited Service Provider by 31 March 2027 and shall implement the Electronic Invoicing System by 1 July 2027.",
+    "tags": ["timeline", "wave-2", "revenue-threshold", "go-live"],
+    "testable": false
+  },
+  {
+    "id": "MD244-2025/REQ-5",
+    "corpusId": "uae-einvoicing",
+    "source": "MD244-2025",
+    "articleRef": "Article 5(1)(c)",
+    "textEn": "A Government Entity shall appoint an Accredited Service Provider by 31 March 2027 and shall implement the Electronic Invoicing System by 1 October 2027.",
+    "tags": ["timeline", "government", "go-live"],
+    "testable": false
+  },
+  {
+    "id": "MD244-2025/REQ-6",
+    "corpusId": "uae-einvoicing",
+    "source": "MD244-2025",
+    "articleRef": "Article 5(2)",
+    "textEn": "Business-to-Consumer Transactions (transactions with a recipient who is a natural person not carrying on Business) are not subject to the Electronic Invoicing System, and a Person engaged exclusively in such transactions is not subject to the System, until a time determined by a decision issued by the Minister.",
+    "tags": ["scope", "b2c-excluded", "consumer"],
+    "testable": false
+  },
+  {
+    "id": "CD106-2025/REQ-1",
+    "corpusId": "uae-einvoicing",
+    "source": "CD106-2025",
+    "articleRef": "Annexed table, item 1",
+    "textEn": "Failure by the Issuer to implement the Electronic Invoicing System, including failure to appoint an Accredited Service Provider within the timeline prescribed by the Minister, incurs an administrative penalty of AED 5,000 for each month or part of a month of delay.",
+    "tags": ["penalty", "asp", "implementation", "monthly"],
+    "testable": false
+  },
+  {
+    "id": "CD106-2025/REQ-2",
+    "corpusId": "uae-einvoicing",
+    "source": "CD106-2025",
+    "articleRef": "Annexed table, item 2",
+    "textEn": "Failure by the Issuer to issue and transmit an Electronic Invoice to the Recipient through the Electronic Invoicing System within the timeline prescribed by the Minister incurs a penalty of AED 100 for each Electronic Invoice, up to a maximum of AED 5,000 per calendar month.",
+    "tags": ["penalty", "invoice", "per-invoice", "monthly-cap"],
+    "testable": false
+  },
+  {
+    "id": "CD106-2025/REQ-3",
+    "corpusId": "uae-einvoicing",
+    "source": "CD106-2025",
+    "articleRef": "Annexed table, item 3",
+    "textEn": "Failure by the Issuer to issue and transmit an Electronic Credit Note to the Recipient through the Electronic Invoicing System within the timeline prescribed by the Minister incurs a penalty of AED 100 for each Electronic Credit Note, up to a maximum of AED 5,000 per calendar month.",
+    "tags": ["penalty", "credit-note", "per-document", "monthly-cap"],
+    "testable": false
+  },
+  {
+    "id": "CD106-2025/REQ-4",
+    "corpusId": "uae-einvoicing",
+    "source": "CD106-2025",
+    "articleRef": "Annexed table, items 4 and 5",
+    "textEn": "Failure by the Issuer or the Recipient to notify the Federal Tax Authority of a System Failure within the timeline prescribed by the Minister incurs a penalty of AED 1,000 for each day of delay or part thereof.",
+    "tags": ["penalty", "system-failure", "notification", "daily"],
+    "testable": false
+  }
+]

@@ -5,6 +5,7 @@ import { Badge, Box, Button, Grid, HStack, Input, Stack, Text } from '@chakra-ui
 import { type AuditRun } from '@/lib/findings';
 import { SEVERITY_ORDER } from '@/lib/severity';
 import { FindingCard } from '@/components/FindingCard';
+import { type CorpusOption, CorpusToggle } from '@/components/CorpusToggle';
 
 type Status = 'idle' | 'running' | 'done' | 'error';
 
@@ -21,8 +22,15 @@ const ERROR_COPY: Record<string, string> = {
   default: 'Something went wrong. Please try again.',
 };
 
-export default function AuditRepoClient() {
+export default function AuditRepoClient({
+  corpusOptions,
+  defaultCorpusId,
+}: {
+  corpusOptions: CorpusOption[];
+  defaultCorpusId: string;
+}) {
   const [repoUrl, setRepoUrl] = useState('');
+  const [corpusId, setCorpusId] = useState(defaultCorpusId);
   const [run, setRun] = useState<AuditRun | null>(null);
   const [status, setStatus] = useState<Status>('idle');
   const [errorKey, setErrorKey] = useState('default');
@@ -38,7 +46,7 @@ export default function AuditRepoClient() {
       const response = await fetch('/api/audit-repo', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ repoUrl: url }),
+        body: JSON.stringify({ repoUrl: url, corpusId }),
       });
       const body = await response.json().catch(() => ({ error: 'default' }));
       if (!response.ok) {
@@ -60,6 +68,11 @@ export default function AuditRepoClient() {
 
   return (
     <Box>
+      {corpusOptions.length > 1 && (
+        <Box mb="4">
+          <CorpusToggle options={corpusOptions} value={corpusId} onChange={setCorpusId} />
+        </Box>
+      )}
       <form onSubmit={handleSubmit}>
         <Stack direction={{ base: 'column', sm: 'row' }} gap="3">
           <Input

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Heading, Stack, Text } from '@chakra-ui/react';
 import { Page } from '@/components/ui/shell';
+import { CORPUS_LIST, DEFAULT_CORPUS_ID } from '@/lib/corpora';
 import AuditRepoClient from '@/app/audit-repo/AuditRepoClient';
 
 export const metadata: Metadata = {
@@ -25,13 +26,17 @@ export default function AuditRepoPage() {
           Audit a public repo against the law
         </Heading>
         <Text color="fg.muted" maxW="2xl">
-          Paste a public GitHub repository URL. Mizan fetches a bounded set of its source files and
-          audits them against the testable Dubai tenancy requirements, raising findings tied to the
-          clause they violate. This is most meaningful for property or tenancy-management code; for
+          Paste a public GitHub repository URL and pick a corpus. Mizan fetches a bounded set of its
+          source files and audits them against that corpus, raising findings tied to the requirement
+          they violate. This is most meaningful when the code matches the corpus, tenancy or
+          property software for the tenancy law, invoicing or ERP software for eInvoicing; for
           unrelated code it will honestly report nothing applicable.
         </Text>
       </Stack>
-      <AuditRepoClient />
+      <AuditRepoClient
+        corpusOptions={CORPUS_LIST.map(c => ({ id: c.id, shortName: c.shortName }))}
+        defaultCorpusId={DEFAULT_CORPUS_ID}
+      />
       <Text mt="10" fontSize="xs" color="fg.subtle">
         Only public repositories, up to 12 source files. AI-generated findings, not legal advice.
       </Text>

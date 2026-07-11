@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
   ASK_MODEL,
-  CORPUS_UNITS,
   MAX_ANSWER_TOKENS,
-  SYSTEM_PROMPT,
   askRequestSchema,
   buildCorpusDocuments,
+  systemPromptFor,
   unitIdAt,
 } from '@/lib/ask';
+import { getCorpus } from '@/lib/corpora';
+
+const tenancy = getCorpus('dubai-tenancy');
+const CORPUS_UNITS = tenancy.units;
 
 describe('askRequestSchema', () => {
   it('accepts a normal question', () => {
@@ -40,7 +43,7 @@ describe('askRequestSchema', () => {
 });
 
 describe('buildCorpusDocuments', () => {
-  const docs = buildCorpusDocuments();
+  const docs = buildCorpusDocuments(tenancy);
 
   it('produces one document per requirement unit', () => {
     expect(docs.length).toBe(CORPUS_UNITS.length);
@@ -76,12 +79,12 @@ describe('buildCorpusDocuments', () => {
 
 describe('unitIdAt', () => {
   it('maps a citation document_index back to the unit id', () => {
-    expect(unitIdAt(0)).toBe(CORPUS_UNITS[0].id);
+    expect(unitIdAt(tenancy, 0)).toBe(CORPUS_UNITS[0].id);
   });
 
   it('returns null for out-of-range indexes', () => {
-    expect(unitIdAt(-1)).toBeNull();
-    expect(unitIdAt(CORPUS_UNITS.length)).toBeNull();
+    expect(unitIdAt(tenancy, -1)).toBeNull();
+    expect(unitIdAt(tenancy, CORPUS_UNITS.length)).toBeNull();
   });
 });
 
@@ -92,10 +95,11 @@ describe('model configuration', () => {
   });
 
   it('system prompt enforces grounding, refusal, bilingual answers, and the style rules', () => {
-    expect(SYSTEM_PROMPT).toMatch(/cite/i);
-    expect(SYSTEM_PROMPT).toMatch(/not covered|does not cover/i);
-    expect(SYSTEM_PROMPT).toMatch(/arabic/i);
-    expect(SYSTEM_PROMPT).toMatch(/not legal advice/i);
-    expect(SYSTEM_PROMPT).not.toContain('—');
+    const prompt = systemPromptFor(tenancy);
+    expect(prompt).toMatch(/cite/i);
+    expect(prompt).toMatch(/not covered|does not cover/i);
+    expect(prompt).toMatch(/arabic/i);
+    expect(prompt).toMatch(/not legal advice/i);
+    expect(prompt).not.toContain('—');
   });
 });

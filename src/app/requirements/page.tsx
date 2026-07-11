@@ -1,35 +1,15 @@
 import type { Metadata } from 'next';
 import { Badge, Box, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react';
-import {
-  CORPUS_CURRENCY,
-  CORPUS_DISCLAIMER,
-  type CorpusDocument,
-  type RequirementUnit,
-  corpusDocumentSchema,
-  parseCorpus,
-} from '@/lib/corpus';
+import { type CorpusDocument, type RequirementUnit } from '@/lib/corpus';
+import { CORPUS_LIST, type Corpus } from '@/lib/corpora';
 import { Page } from '@/components/ui/shell';
-import documentsJson from '@/data/corpus/documents.json';
-import law26Json from '@/data/corpus/law-26-2007.json';
-import decree43Json from '@/data/corpus/decree-43-2013.json';
 
 export const metadata: Metadata = {
   title: 'Requirements: Mizan',
-  description:
-    'The corpus: Dubai tenancy law parsed into citable requirement units, English and Arabic.',
+  description: 'The corpora: regulations parsed into citable requirement units.',
 };
 
-const documents = documentsJson.map(d => corpusDocumentSchema.parse(d));
-const unitsBySource = new Map<string, RequirementUnit[]>([
-  ['LAW26-2007', parseCorpus(law26Json)],
-  ['DEC43-2013', parseCorpus(decree43Json)],
-]);
-
 export default function RequirementsPage() {
-  const all = [...unitsBySource.values()].flat();
-  const total = all.length;
-  const testable = all.filter(u => u.testable).length;
-
   return (
     <Page>
       <Stack gap="4" mb="10">
@@ -40,35 +20,63 @@ export default function RequirementsPage() {
           textTransform="uppercase"
           color="accent.fg"
         >
-          The corpus
+          The corpora
         </Text>
         <Heading fontFamily="heading" fontSize="3xl">
           Requirements
         </Heading>
         <Text color="fg.muted" maxW="2xl">
-          Dubai tenancy law parsed into {total} citable requirement units, {testable} of them
-          testable against code. Every answer and every audit finding in this demo points back to
-          one of the units below.
+          Each corpus is a regulation parsed into citable requirement units. Every answer and every
+          audit finding in this demo points back to one of the units below.
         </Text>
-        <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
-          <Text fontSize="xs" color="fg.subtle">
-            {CORPUS_DISCLAIMER.en}
-          </Text>
-          <Text fontSize="xs" color="fg.subtle" dir="rtl" lang="ar" mt="1">
-            {CORPUS_DISCLAIMER.ar}
-          </Text>
-        </Box>
-        <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
-          <Text fontSize="xs" color="fg.subtle">
-            {CORPUS_CURRENCY.note}
-          </Text>
-        </Box>
       </Stack>
 
-      {documents.map(doc => (
-        <DocumentSection key={doc.slug} doc={doc} units={unitsBySource.get(doc.slug) ?? []} />
+      {CORPUS_LIST.map(corpus => (
+        <CorpusSection key={corpus.id} corpus={corpus} />
       ))}
     </Page>
+  );
+}
+
+function CorpusSection({ corpus }: { corpus: Corpus }) {
+  const testable = corpus.units.filter(u => u.testable).length;
+  const bySource = new Map<string, RequirementUnit[]>();
+  for (const unit of corpus.units) {
+    bySource.set(unit.source, [...(bySource.get(unit.source) ?? []), unit]);
+  }
+
+  return (
+    <Box as="section" mb="16">
+      <Heading as="h2" fontFamily="heading" fontSize="2xl" mb="2">
+        {corpus.name}
+      </Heading>
+      <Text color="fg.muted" fontSize="sm" mb="4">
+        {corpus.units.length} units, {testable} testable against code.
+      </Text>
+      <Stack gap="3" mb="6">
+        <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
+          <Text fontSize="xs" color="fg.subtle">
+            {corpus.disclaimer.en}
+          </Text>
+          {corpus.disclaimer.ar && (
+            <Text fontSize="xs" color="fg.subtle" dir="rtl" lang="ar" mt="1">
+              {corpus.disclaimer.ar}
+            </Text>
+          )}
+        </Box>
+        {corpus.currencyNote && (
+          <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
+            <Text fontSize="xs" color="fg.subtle">
+              {corpus.currencyNote}
+            </Text>
+          </Box>
+        )}
+      </Stack>
+
+      {corpus.documents.map(doc => (
+        <DocumentSection key={doc.slug} doc={doc} units={bySource.get(doc.slug) ?? []} />
+      ))}
+    </Box>
   );
 }
 
@@ -86,10 +94,12 @@ function DocumentSection({ doc, units }: { doc: CorpusDocument; units: Requireme
         {doc.titleEn}
       </Heading>
       <Text fontSize="sm" color="fg.subtle" mt="2">
-        <Text as="span" dir="rtl" lang="ar">
-          {doc.titleAr}
-        </Text>
-        {doc.amendedBy ? ` · as amended by ${doc.amendedBy}` : ''} ·{' '}
+        {doc.titleAr && (
+          <Text as="span" dir="rtl" lang="ar">
+            {doc.titleAr}{' '}
+          </Text>
+        )}
+        {doc.amendedBy ? `· as amended by ${doc.amendedBy} ` : ''}·{' '}
         <Link href={doc.officialSourceEn} color="accent.fg" rel="noopener noreferrer">
           official source
         </Link>
@@ -137,27 +147,29 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
         )}
         {unit.amendedBy && (
           <Badge colorPalette="orange" variant="subtle">
-            amended by Law 33/2008
+            amended by {unit.amendedBy}
           </Badge>
         )}
       </HStack>
       <Text mt="3" fontSize="sm" lineHeight="tall" color="fg.default" whiteSpace="pre-line">
         {unit.textEn}
       </Text>
-      <Text
-        mt="3"
-        fontSize="sm"
-        lineHeight="tall"
-        color="fg.muted"
-        whiteSpace="pre-line"
-        dir="rtl"
-        lang="ar"
-        borderInlineStartWidth="2px"
-        borderColor="border.default"
-        ps="4"
-      >
-        {unit.textAr}
-      </Text>
+      {unit.textAr && (
+        <Text
+          mt="3"
+          fontSize="sm"
+          lineHeight="tall"
+          color="fg.muted"
+          whiteSpace="pre-line"
+          dir="rtl"
+          lang="ar"
+          borderInlineStartWidth="2px"
+          borderColor="border.default"
+          ps="4"
+        >
+          {unit.textAr}
+        </Text>
+      )}
       {unit.editorialNote && (
         <Box
           mt="3"

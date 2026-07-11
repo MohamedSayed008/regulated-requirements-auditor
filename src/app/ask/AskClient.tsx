@@ -2,6 +2,7 @@
 
 import { type FormEvent, useRef, useState } from 'react';
 import { Box, Button, Input, Link, Stack, Text } from '@chakra-ui/react';
+import { type CorpusOption, CorpusToggle } from '@/components/CorpusToggle';
 
 type Segment =
   { kind: 'text'; text: string } | { kind: 'citation'; unitId: string; citedText: string };
@@ -18,8 +19,15 @@ const ERROR_COPY: Record<string, string> = {
   default: 'Something went wrong. Please try again.',
 };
 
-export default function AskClient() {
+export default function AskClient({
+  corpusOptions,
+  defaultCorpusId,
+}: {
+  corpusOptions: CorpusOption[];
+  defaultCorpusId: string;
+}) {
   const [question, setQuestion] = useState('');
+  const [corpusId, setCorpusId] = useState(defaultCorpusId);
   const [segments, setSegments] = useState<Segment[]>([]);
   const [status, setStatus] = useState<Status>('idle');
   const [errorKey, setErrorKey] = useState<string>('default');
@@ -40,7 +48,7 @@ export default function AskClient() {
       const response = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ question: trimmed }),
+        body: JSON.stringify({ question: trimmed, corpusId }),
         signal: controller.signal,
       });
 
@@ -96,6 +104,11 @@ export default function AskClient() {
 
   return (
     <Box as="section" aria-label="Ask a question">
+      {corpusOptions.length > 1 && (
+        <Box mb="4">
+          <CorpusToggle options={corpusOptions} value={corpusId} onChange={setCorpusId} />
+        </Box>
+      )}
       <form onSubmit={handleSubmit}>
         <Stack direction={{ base: 'column', sm: 'row' }} gap="3">
           <Input

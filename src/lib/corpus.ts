@@ -14,15 +14,20 @@ export const REQUIREMENT_SOURCES = ['LAW26-2007', 'DEC43-2013'] as const;
 
 export type RequirementSource = (typeof REQUIREMENT_SOURCES)[number];
 
+// Generic id: <SOURCE>/<REF>[/<clause>], e.g. LAW26-2007/ART-9/2 or
+// MD243-2025/REQ-4. Sources and refs are corpus-defined, not enumerated here.
 export const requirementUnitSchema = z.object({
-  id: z.string().regex(/^(LAW26-2007|DEC43-2013)\/ART-\d+[a-z]?(\/\d+)?$/),
-  source: z.enum(REQUIREMENT_SOURCES),
+  id: z.string().regex(/^[A-Za-z0-9-]+\/[A-Za-z]+-\d+[a-z]?(\/\d+)?$/),
+  source: z.string().min(1),
+  corpusId: z.string().optional(),
   articleRef: z.string().min(1),
   textEn: z.string().min(1),
-  textAr: z.string().min(1),
+  // Arabic is present for corpora whose official text is bilingual (tenancy);
+  // optional for EN-primary corpora (eInvoicing).
+  textAr: z.string().min(1).optional(),
   tags: z.array(z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/)),
   testable: z.boolean(),
-  amendedBy: z.literal('LAW33-2008').optional(),
+  amendedBy: z.string().optional(),
   /**
    * Editorial annotation for verbatim-fidelity exceptions: source typos
    * reproduced as-is, layout reconstruction, or known EN/AR divergences in
@@ -34,11 +39,11 @@ export const requirementUnitSchema = z.object({
 export type RequirementUnit = z.infer<typeof requirementUnitSchema>;
 
 export const corpusDocumentSchema = z.object({
-  slug: z.enum(REQUIREMENT_SOURCES),
+  slug: z.string().min(1),
   titleEn: z.string().min(1),
-  titleAr: z.string().min(1),
+  titleAr: z.string().min(1).optional(),
   officialSourceEn: z.string().url(),
-  officialSourceAr: z.string().url(),
+  officialSourceAr: z.string().url().optional(),
   amendedBy: z.string().optional(),
 });
 

@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { answerQuestion } from '@/lib/ask';
+import { DEFAULT_CORPUS_ID } from '@/lib/corpora';
 import { runAudit } from '@/lib/audit-engine';
 import {
   type AuditScore,
@@ -161,7 +162,7 @@ export async function runEvals(client: Anthropic = new Anthropic()): Promise<Eva
 
   const groundedness: CaseResult[] = [];
   for (const c of qa.groundedness) {
-    const answer = await answerQuestion(c.question, client);
+    const answer = await answerQuestion(c.question, DEFAULT_CORPUS_ID, client);
     inputTokens += answer.inputTokens;
     outputTokens += answer.outputTokens;
     groundedness.push({ ...gradeGroundedness(answer, c.expectCitationIn), id: c.id });
@@ -169,7 +170,7 @@ export async function runEvals(client: Anthropic = new Anthropic()): Promise<Eva
 
   const refusal: CaseResult[] = [];
   for (const c of qa.refusal) {
-    const answer = await answerQuestion(c.question, client);
+    const answer = await answerQuestion(c.question, DEFAULT_CORPUS_ID, client);
     inputTokens += answer.inputTokens;
     outputTokens += answer.outputTokens;
     refusal.push({ ...gradeRefusal(answer), id: c.id });
@@ -177,7 +178,7 @@ export async function runEvals(client: Anthropic = new Anthropic()): Promise<Eva
 
   const injection: CaseResult[] = [];
   for (const c of qa.injection) {
-    const answer = await answerQuestion(c.question, client);
+    const answer = await answerQuestion(c.question, DEFAULT_CORPUS_ID, client);
     inputTokens += answer.inputTokens;
     outputTokens += answer.outputTokens;
     injection.push({ ...gradeInjectionCase(answer, c.grader, c.markers), id: c.id });

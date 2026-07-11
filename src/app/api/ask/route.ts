@@ -3,17 +3,16 @@ import { NextRequest } from 'next/server';
 import {
   ASK_MODEL,
   MAX_ANSWER_TOKENS,
-  SYSTEM_PROMPT,
   askRequestSchema,
   buildCorpusDocuments,
+  systemPromptFor,
   unitIdAt,
 } from '@/lib/ask';
+import { getCorpus } from '@/lib/corpora';
 import { MAX_BODY_BYTES, isDemoDisabled } from '@/lib/guard';
 import { checkAskRateLimit } from '@/lib/rate-limit';
 
 export const maxDuration = 60;
-
-const corpusDocuments = buildCorpusDocuments();
 
 function json(body: unknown, status: number): Response {
   return new Response(JSON.stringify(body), {
@@ -61,6 +60,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     return json({ error: 'rate_limited' }, 429);
   }
 
+  const corpus = getCorpus(parsed.data.corpusId);
   const anthropic = new Anthropic();
   const encoder = new TextEncoder();
 
@@ -73,11 +73,14 @@ export async function POST(req: NextRequest): Promise<Response> {
         const messageStream = anthropic.messages.stream({
           model: ASK_MODEL,
           max_tokens: MAX_ANSWER_TOKENS,
-          system: SYSTEM_PROMPT,
+          system: systemPromptFor(corpus),
           messages: [
             {
               role: 'user',
-              content: [...corpusDocuments, { type: 'text', text: parsed.data.question }],
+              content: [
+                ...buildCorpusDocuments(corpus),
+                { type: 'text', text: parsed.data.question },
+              ],
             },
           ],
         });
@@ -89,7 +92,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           } else if (event.delta.type === 'citations_delta') {
             const citation = event.delta.citation;
             const index = 'document_index' in citation ? citation.document_index : -1;
-            const unitId = unitIdAt(index);
+            const unitId = unitIdAt(corpus, index);
             if (unitId) {
               send({
                 type: 'citation',

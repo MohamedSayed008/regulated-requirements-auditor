@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Heading, Stack, Text } from '@chakra-ui/react';
 import { Page } from '@/components/ui/shell';
+import { CORPUS_LIST, DEFAULT_CORPUS_ID } from '@/lib/corpora';
 import AskClient from '@/app/ask/AskClient';
 
 export const metadata: Metadata = {
@@ -30,7 +31,10 @@ export default function AskPage() {
           the answer says so: refusal is a feature.
         </Text>
       </Stack>
-      <AskClient />
+      <AskClient
+        corpusOptions={CORPUS_LIST.map(c => ({ id: c.id, shortName: c.shortName }))}
+        defaultCorpusId={DEFAULT_CORPUS_ID}
+      />
       <Text mt="10" fontSize="xs" color="fg.subtle">
         Demo only, not legal advice. In case of conflict the Arabic text of the law prevails.
       </Text>

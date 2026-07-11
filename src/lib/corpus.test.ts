@@ -37,8 +37,10 @@ describe('corpus requirement units', () => {
   it('has bilingual text on every unit (Arabic authentic, English translation)', () => {
     for (const unit of parseCorpus(allUnits)) {
       expect(unit.textEn.trim().length).toBeGreaterThan(10);
-      expect(unit.textAr.trim().length).toBeGreaterThan(10);
-      expect(/[؀-ۿ]/.test(unit.textAr)).toBe(true);
+      // The tenancy corpus is fully bilingual; Arabic must be present here.
+      expect(unit.textAr).toBeDefined();
+      expect(unit.textAr!.trim().length).toBeGreaterThan(10);
+      expect(/[؀-ۿ]/.test(unit.textAr!)).toBe(true);
     }
   });
 
