@@ -52,9 +52,10 @@ export default function Home() {
           Mizan reads the regulation, answers with citations, and audits code against it.
         </Heading>
         <Text fontSize="lg" color="fg.muted">
-          A requirements auditor running on Dubai tenancy law. Every answer cites the exact clause,
-          every code finding is human-approved before it counts, and every release publishes its
-          eval report. No citation, no answer. No human approval, no finding.
+          A requirements auditor running on two live corpora: Dubai tenancy law and the UAE
+          eInvoicing mandate. Every answer cites the exact clause, every code finding is
+          human-approved before it counts, and every release publishes its eval report. No citation,
+          no answer. No human approval, no finding.
         </Text>
         <HStack gap="3" flexWrap="wrap">
           <Button asChild bg="accent.solid" color="white" _hover={{ bg: 'teal.600' }}>
