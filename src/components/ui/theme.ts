@@ -7,6 +7,12 @@ import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
  */
 const config = defineConfig({
   theme: {
+    keyframes: {
+      mizanRise: {
+        from: { opacity: '0', transform: 'translateY(10px)' },
+        to: { opacity: '1', transform: 'translateY(0)' },
+      },
+    },
     tokens: {
       colors: {
         teal: {
