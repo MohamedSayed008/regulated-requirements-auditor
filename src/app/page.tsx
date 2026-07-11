@@ -84,8 +84,7 @@ export default function Home() {
         {CAPABILITIES.map(c => (
           <Box
             key={c.href}
-            as={NextLink}
-            {...{ href: c.href }}
+            asChild
             borderWidth="1px"
             borderColor="border.default"
             bg="bg.panel"
@@ -94,12 +93,14 @@ export default function Home() {
             transition="border-color 0.15s"
             _hover={{ borderColor: 'accent.solid' }}
           >
-            <Heading as="h3" fontSize="md" mb="2" color="fg.default">
-              {c.title}
-            </Heading>
-            <Text fontSize="sm" color="fg.muted">
-              {c.body}
-            </Text>
+            <NextLink href={c.href}>
+              <Heading as="h3" fontSize="md" mb="2" color="fg.default">
+                {c.title}
+              </Heading>
+              <Text fontSize="sm" color="fg.muted">
+                {c.body}
+              </Text>
+            </NextLink>
           </Box>
         ))}
       </Grid>
