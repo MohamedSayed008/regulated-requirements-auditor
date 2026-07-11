@@ -14,10 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://audit.mohamedattwa.com'),
   title: 'Mizan: Regulated Requirements Auditor',
   description:
     'Governed agentic AI for regulated workflows: requirement documents answered with citations, code audited against them, findings human-approved, evals published.',
-  robots: { index: false },
+  alternates: { canonical: '/' },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
