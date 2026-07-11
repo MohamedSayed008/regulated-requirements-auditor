@@ -8,23 +8,10 @@ import {
   buildCorpusDocuments,
   unitIdAt,
 } from '@/lib/ask';
-import {
-  GLOBAL_RATE_LIMIT_MAX,
-  GLOBAL_RATE_LIMIT_WINDOW_MS,
-  MAX_BODY_BYTES,
-  RATE_LIMIT_MAX,
-  RATE_LIMIT_WINDOW_MS,
-  checkRateWindow,
-  isDemoDisabled,
-} from '@/lib/guard';
+import { MAX_BODY_BYTES, isDemoDisabled } from '@/lib/guard';
+import { checkAskRateLimit } from '@/lib/rate-limit';
 
 export const maxDuration = 60;
-
-// In-memory rate state, reset on instance recycle. Same two-layer scheme as
-// the portfolio contact API: per-IP plus per-instance global, so rotating IPs
-// cannot make one instance spend more than GLOBAL_RATE_LIMIT_MAX per hour.
-const ipHits = new Map<string, number[]>();
-let globalHits: number[] = [];
 
 const corpusDocuments = buildCorpusDocuments();
 
@@ -41,6 +28,11 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   if (!process.env.ANTHROPIC_API_KEY) {
     return json({ error: 'not_configured' }, 503);
+  }
+
+  const contentType = req.headers.get('content-type') ?? '';
+  if (!contentType.includes('application/json')) {
+    return json({ error: 'unsupported_media_type' }, 415);
   }
 
   const contentLength = Number(req.headers.get('content-length') ?? 0);
@@ -63,25 +55,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     return json({ error: 'invalid_question' }, 400);
   }
 
-  const now = Date.now();
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  const ipWindow = checkRateWindow(ipHits.get(ip) ?? [], now, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
-  if (ipWindow === null) {
+  const rate = await checkAskRateLimit(ip);
+  if (!rate.ok) {
     return json({ error: 'rate_limited' }, 429);
-  }
-  const globalWindow = checkRateWindow(
-    globalHits,
-    now,
-    GLOBAL_RATE_LIMIT_MAX,
-    GLOBAL_RATE_LIMIT_WINDOW_MS
-  );
-  if (globalWindow === null) {
-    return json({ error: 'rate_limited' }, 429);
-  }
-  ipHits.set(ip, ipWindow);
-  globalHits = globalWindow;
-  if (ipHits.size > 5000) {
-    ipHits.clear();
   }
 
   const anthropic = new Anthropic();
