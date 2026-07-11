@@ -3,7 +3,7 @@
     "corpusId": "dubai-tenancy",
     "corpusName": "Dubai tenancy law",
     "report": {
-      "ranAt": "2026-07-11T20:04:26.175Z",
+      "ranAt": "2026-07-11T20:30:06.487Z",
       "model": "claude-opus-4-8",
       "suites": [
         {
@@ -111,15 +111,15 @@
       "auditScore": {
         "precision": 1,
         "recall": 1,
-        "truePositives": 6,
+        "truePositives": 9,
         "falsePositives": 0,
         "seededViolations": 5,
         "detectedViolations": 5
       },
       "usage": {
         "inputTokens": 13843,
-        "outputTokens": 6148,
-        "estimatedCostUsd": 0.2229
+        "outputTokens": 7241,
+        "estimatedCostUsd": 0.2502
       }
     }
   },
@@ -127,7 +127,7 @@
     "corpusId": "uae-einvoicing",
     "corpusName": "UAE eInvoicing mandate",
     "report": {
-      "ranAt": "2026-07-11T20:05:53.171Z",
+      "ranAt": "2026-07-11T20:31:25.558Z",
       "model": "claude-opus-4-8",
       "suites": [
         {
@@ -223,17 +223,17 @@
         }
       ],
       "auditScore": {
-        "precision": 0.7,
+        "precision": 0.875,
         "recall": 1,
         "truePositives": 7,
-        "falsePositives": 3,
-        "seededViolations": 5,
-        "detectedViolations": 5
+        "falsePositives": 1,
+        "seededViolations": 6,
+        "detectedViolations": 6
       },
       "usage": {
         "inputTokens": 9239,
-        "outputTokens": 6684,
-        "estimatedCostUsd": 0.2133
+        "outputTokens": 6097,
+        "estimatedCostUsd": 0.1986
       }
     }
   }
