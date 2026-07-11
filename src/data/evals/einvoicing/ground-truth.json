@@ -26,7 +26,7 @@
     {
       "id": "E4-no-asp",
       "file": "sample-app-einvoicing/src/transmit.ts",
-      "acceptableRequirementIds": ["MD243-2025/REQ-3", "MD243-2025/REQ-4"],
+      "acceptableRequirementIds": ["MD243-2025/REQ-3", "MD243-2025/REQ-4", "MD243-2025/REQ-7"],
       "expectedSeverity": "high",
       "description": "transmitToFta posts the invoice directly to the FTA with no Accredited Service Provider in the path."
     },
@@ -36,6 +36,13 @@
       "acceptableRequirementIds": ["MD243-2025/REQ-10"],
       "expectedSeverity": "high",
       "description": "storeInvoice persists records in a US storage region, so invoice data is held outside the UAE."
+    },
+    {
+      "id": "E6-incomplete-line-items",
+      "file": "sample-app-einvoicing/src/invoice.ts",
+      "acceptableRequirementIds": ["MOF-FIELDS-2026/REQ-5"],
+      "expectedSeverity": "medium",
+      "description": "The LineItem model omits mandatory line-level fields (unit of measure, line net/extension amount, and tax category code) required for a valid eInvoice."
     }
   ],
   "cleanFiles": ["sample-app-einvoicing/src/validate.ts"]
