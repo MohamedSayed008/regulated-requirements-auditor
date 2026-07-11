@@ -1,12 +1,16 @@
 import NextLink from 'next/link';
 import { Badge, Box, Button, Grid, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import { Page } from '@/components/ui/shell';
-import { evalReportSchema } from '@/lib/eval-report';
-import reportJson from '@/data/evals/report.json';
+import { evalReportSetSchema } from '@/lib/eval-report';
+import reportsJson from '@/data/evals/reports.json';
 
-const report = evalReportSchema.parse(reportJson);
-const evalPass = report.suites.reduce((a, s) => a + s.passed, 0);
-const evalTotal = report.suites.reduce((a, s) => a + s.total, 0);
+const reports = evalReportSetSchema.parse(reportsJson);
+const evalPass = reports.reduce((a, r) => a + r.report.suites.reduce((s, x) => s + x.passed, 0), 0);
+const evalTotal = reports.reduce((a, r) => a + r.report.suites.reduce((s, x) => s + x.total, 0), 0);
+const minPrecision = reports.length
+  ? Math.min(...reports.map(r => r.report.auditScore.precision))
+  : 0;
+const minRecall = reports.length ? Math.min(...reports.map(r => r.report.auditScore.recall)) : 0;
 
 const CAPABILITIES = [
   {
@@ -71,8 +75,7 @@ export default function Home() {
             {evalPass}/{evalTotal} eval cases pass
           </Badge>
           <Badge colorPalette="teal" variant="subtle">
-            audit precision {report.auditScore.precision.toFixed(2)} / recall{' '}
-            {report.auditScore.recall.toFixed(2)}
+            audit precision {minPrecision.toFixed(2)} / recall {minRecall.toFixed(2)}
           </Badge>
           <Badge colorPalette="teal" variant="subtle">
             English and Arabic

@@ -34,7 +34,16 @@ export const evalReportSchema = z.object({
   }),
 });
 
+export const corpusReportSchema = z.object({
+  corpusId: z.string(),
+  corpusName: z.string(),
+  report: evalReportSchema,
+});
+
+export const evalReportSetSchema = z.array(corpusReportSchema);
+
 export type CaseResult = z.infer<typeof caseResultSchema>;
 export type SuiteResult = z.infer<typeof suiteResultSchema>;
 export type AuditScore = z.infer<typeof auditScoreSchema>;
 export type EvalReport = z.infer<typeof evalReportSchema>;
+export type CorpusReport = z.infer<typeof corpusReportSchema>;

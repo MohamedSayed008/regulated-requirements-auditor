@@ -1,0 +1,42 @@
+{
+  "note": "Seeded compliance violations in sample-app-einvoicing. Used ONLY by the eval suite to measure audit precision and recall against the UAE eInvoicing corpus. The auditing agent must never see this file.",
+  "target": "sample-app-einvoicing",
+  "violations": [
+    {
+      "id": "E1-pdf-not-structured",
+      "file": "sample-app-einvoicing/src/format.ts",
+      "acceptableRequirementIds": ["MOF-EINV/REQ-1", "MD243-2025/REQ-1"],
+      "expectedSeverity": "high",
+      "description": "renderInvoice produces a PDF-style text document and treats it as the invoice to send; an eInvoice must be structured data, not a PDF."
+    },
+    {
+      "id": "E2-missing-buyer-trn",
+      "file": "sample-app-einvoicing/src/invoice.ts",
+      "acceptableRequirementIds": ["MOF-FIELDS-2026/REQ-2"],
+      "expectedSeverity": "high",
+      "description": "The invoice model and builder omit the buyer's Tax Registration Number, a mandatory field."
+    },
+    {
+      "id": "E3-no-tax-breakdown",
+      "file": "sample-app-einvoicing/src/invoice.ts",
+      "acceptableRequirementIds": ["MOF-FIELDS-2026/REQ-6"],
+      "expectedSeverity": "high",
+      "description": "The invoice reports a single total with no VAT tax breakdown per category, which a valid eInvoice must include."
+    },
+    {
+      "id": "E4-no-asp",
+      "file": "sample-app-einvoicing/src/transmit.ts",
+      "acceptableRequirementIds": ["MD243-2025/REQ-3", "MD243-2025/REQ-4"],
+      "expectedSeverity": "high",
+      "description": "transmitToFta posts the invoice directly to the FTA with no Accredited Service Provider in the path."
+    },
+    {
+      "id": "E5-storage-outside-uae",
+      "file": "sample-app-einvoicing/src/storage.ts",
+      "acceptableRequirementIds": ["MD243-2025/REQ-10"],
+      "expectedSeverity": "high",
+      "description": "storeInvoice persists records in a US storage region, so invoice data is held outside the UAE."
+    }
+  ],
+  "cleanFiles": ["sample-app-einvoicing/src/validate.ts"]
+}
