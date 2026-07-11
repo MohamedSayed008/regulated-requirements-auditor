@@ -5,6 +5,9 @@ import { auditRunSchema } from '@/lib/findings';
 import { SEVERITY_ORDER } from '@/lib/severity';
 import { Page } from '@/components/ui/shell';
 import { FindingCard } from '@/components/FindingCard';
+import { AuditExport, type ClauseText } from '@/components/AuditExport';
+import { AuditTrace } from '@/components/AuditTrace';
+import { requirementById } from '@/lib/requirement-lookup';
 import runJson from '@/data/audit/latest-run.json';
 
 export const metadata: Metadata = {
@@ -17,6 +20,19 @@ const run = auditRunSchema.parse(runJson);
 const findings = [...run.findings].sort(
   (a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]
 );
+
+// The cached /audit run replays the tenancy sample.
+const CORPUS_LABEL = 'Dubai tenancy law';
+
+// Bundle each cited clause's text so the exported report carries the real
+// requirement language, not just its id.
+const clauses: Record<string, ClauseText> = {};
+for (const finding of run.findings) {
+  const unit = requirementById(finding.requirementId);
+  if (unit && !clauses[finding.requirementId]) {
+    clauses[finding.requirementId] = { articleRef: unit.articleRef, textEn: unit.textEn };
+  }
+}
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -54,9 +70,10 @@ export default function AuditPage() {
           the review queue is where a human approves or rejects them.
         </Text>
         <HStack gap="3" flexWrap="wrap">
-          <Button asChild bg="accent.solid" color="white" _hover={{ bg: 'teal.600' }} size="sm">
+          <Button asChild variant="outline" borderColor="border.default" size="sm">
             <NextLink href="/review">Open the review queue</NextLink>
           </Button>
+          <AuditExport run={run} clauses={clauses} corpusLabel={CORPUS_LABEL} />
         </HStack>
       </Stack>
 
@@ -77,6 +94,8 @@ export default function AuditPage() {
         </Text>
         <Text>· target: {run.target}</Text>
       </HStack>
+
+      <AuditTrace run={run} corpusLabel={CORPUS_LABEL} />
 
       <Stack gap="4">
         {findings.map(finding => (
