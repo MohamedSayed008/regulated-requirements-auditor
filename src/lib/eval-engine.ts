@@ -46,6 +46,13 @@ interface Violation {
 interface GroundTruth {
   violations: Violation[];
   cleanFiles: string[];
+  /**
+   * Requirements a violation file also genuinely breaches beyond the seeded
+   * set. A finding matching these counts as a true positive (the finding is
+   * correct) but is not a required detection, so it lifts precision without
+   * distorting recall.
+   */
+  alsoLegitimate?: { file: string; requirementIds: string[] }[];
 }
 
 interface QaDataset {
@@ -184,11 +191,19 @@ function computeAuditScore(
     return v.matchKeywords.some(k => text.includes(k.toLowerCase()));
   };
 
+  const alsoLegitimate = groundTruth.alsoLegitimate ?? [];
+  const isAlsoLegitimate = (f: (typeof findings)[number]) =>
+    alsoLegitimate.some(a => a.file === f.filePath && a.requirementIds.includes(f.requirementId));
+
   for (const f of findings) {
     const match = violations.find(v => matches(f, v));
     if (match) {
       truePositives += 1;
       detected.add(match.id);
+    } else if (isAlsoLegitimate(f)) {
+      // A correct finding beyond the seeded set: credit it, but it is not a
+      // required detection, so it does not affect recall.
+      truePositives += 1;
     } else {
       falsePositives += 1;
     }

@@ -45,5 +45,19 @@
       "description": "The LineItem model omits mandatory line-level fields (unit of measure, line net/extension amount, and tax category code) required for a valid eInvoice."
     }
   ],
+  "alsoLegitimate": [
+    {
+      "file": "sample-app-einvoicing/src/invoice.ts",
+      "requirementIds": ["MD243-2025/REQ-8", "MOF-FIELDS-2026/REQ-1"]
+    },
+    {
+      "file": "sample-app-einvoicing/src/format.ts",
+      "requirementIds": ["MD243-2025/REQ-1"]
+    },
+    {
+      "file": "sample-app-einvoicing/src/transmit.ts",
+      "requirementIds": ["MD243-2025/REQ-7"]
+    }
+  ],
   "cleanFiles": ["sample-app-einvoicing/src/validate.ts"]
 }
