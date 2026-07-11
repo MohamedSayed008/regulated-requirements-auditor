@@ -22,17 +22,20 @@ import {
  * path in production.
  */
 
-const hasUpstash =
-  Boolean(process.env.UPSTASH_REDIS_REST_URL) && Boolean(process.env.UPSTASH_REDIS_REST_TOKEN);
+// Accept either the Upstash Marketplace names or the older Vercel KV names, so
+// whichever the integration provisions works without a code change.
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 
-const durableLimiter = hasUpstash
-  ? new Ratelimit({
-      redis: Redis.fromEnv(),
-      limiter: Ratelimit.slidingWindow(RATE_LIMIT_MAX, `${RATE_LIMIT_WINDOW_MS} ms`),
-      prefix: 'mizan:ask',
-      analytics: false,
-    })
-  : null;
+const durableLimiter =
+  redisUrl && redisToken
+    ? new Ratelimit({
+        redis: new Redis({ url: redisUrl, token: redisToken }),
+        limiter: Ratelimit.slidingWindow(RATE_LIMIT_MAX, `${RATE_LIMIT_WINDOW_MS} ms`),
+        prefix: 'mizan:ask',
+        analytics: false,
+      })
+    : null;
 
 // In-memory fallback state (per instance).
 const ipHits = new Map<string, number[]>();
