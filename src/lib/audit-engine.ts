@@ -58,7 +58,8 @@ function codeBlock(files: SnapshotFile[]): string {
 /** Runs one audit pass and returns a validated, cacheable run. */
 export async function runAudit(
   client: Anthropic = new Anthropic(),
-  files: SnapshotFile[] = AUDIT_SNAPSHOT
+  files: SnapshotFile[] = AUDIT_SNAPSHOT,
+  target = 'sample-app'
 ): Promise<AuditRun> {
   const units = testableRequirements();
 
@@ -96,7 +97,7 @@ export async function runAudit(
   return {
     ranAt: new Date().toISOString(),
     model: AUDIT_MODEL,
-    target: 'sample-app',
+    target,
     requirementsChecked: units.length,
     filesScanned: files.map(f => f.path),
     findings,

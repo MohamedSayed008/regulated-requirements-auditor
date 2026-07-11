@@ -1,0 +1,40 @@
+import type { Metadata } from 'next';
+import { Heading, Stack, Text } from '@chakra-ui/react';
+import { Page } from '@/components/ui/shell';
+import AuditRepoClient from '@/app/audit-repo/AuditRepoClient';
+
+export const metadata: Metadata = {
+  title: 'Audit a repo: Mizan',
+  description: 'Audit a public GitHub repository against Dubai tenancy law.',
+};
+
+export default function AuditRepoPage() {
+  return (
+    <Page>
+      <Stack gap="4" mb="8">
+        <Text
+          fontSize="sm"
+          fontWeight="semibold"
+          letterSpacing="0.2em"
+          textTransform="uppercase"
+          color="accent.fg"
+        >
+          Audit your code
+        </Text>
+        <Heading fontFamily="heading" fontSize="3xl">
+          Audit a public repo against the law
+        </Heading>
+        <Text color="fg.muted" maxW="2xl">
+          Paste a public GitHub repository URL. Mizan fetches a bounded set of its source files and
+          audits them against the testable Dubai tenancy requirements, raising findings tied to the
+          clause they violate. This is most meaningful for property or tenancy-management code; for
+          unrelated code it will honestly report nothing applicable.
+        </Text>
+      </Stack>
+      <AuditRepoClient />
+      <Text mt="10" fontSize="xs" color="fg.subtle">
+        Only public repositories, up to 12 source files. AI-generated findings, not legal advice.
+      </Text>
+    </Page>
+  );
+}
