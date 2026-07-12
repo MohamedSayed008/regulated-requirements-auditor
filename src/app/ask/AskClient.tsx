@@ -7,6 +7,15 @@ import { type CorpusOption, CorpusToggle } from '@/components/CorpusToggle';
 type Segment =
   { kind: 'text'; text: string } | { kind: 'citation'; unitId: string; citedText: string };
 
+/**
+ * The prompt forbids markdown, but a model can still slip emphasis markers in;
+ * they would render literally, so drop them. Safe on plain prose: legal text in
+ * this corpus never uses ** or backticks.
+ */
+function stripMarkdownMarkers(text: string): string {
+  return text.replace(/\*\*|__|`/g, '');
+}
+
 type Status = 'idle' | 'streaming' | 'done' | 'error';
 
 const ERROR_COPY: Record<string, string> = {
@@ -217,7 +226,7 @@ export default function AskClient({
           {segments.map((segment, i) =>
             segment.kind === 'text' ? (
               <Text as="span" key={i} whiteSpace="pre-line">
-                {segment.text}
+                {stripMarkdownMarkers(segment.text)}
               </Text>
             ) : (
               <Link

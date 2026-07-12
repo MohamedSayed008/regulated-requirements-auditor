@@ -71,6 +71,7 @@ Rules:
       ? ' The Arabic text of the law is the authentic version and prevails over the English translation; mention this only when the distinction matters to the answer.'
       : ''
   }
+- Write plain prose only: no markdown syntax of any kind (no **, *, #, backticks, or bullet markers). The interface renders plain text.
 - Never use em dashes. Use commas, colons, or periods.`;
 }
 
