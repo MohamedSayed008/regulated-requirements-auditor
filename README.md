@@ -78,6 +78,31 @@ honestly rather than suppressed. Building the eval suite caught four bugs in the
 test harness itself before they reached the report — which is the argument for
 publishing evals at all.
 
+The eval numbers are enforced, not just published: CI runs an eval-regression
+gate (`src/lib/eval-gate.test.ts`) with explicit per-corpus floors, so a commit
+that ships worse precision or recall fails the build. No eval report, no
+release, as a robot.
+
+## MCP server
+
+Mizan is also an MCP server: any MCP client (Claude Code, Cursor, an agent) can
+use the same governed capabilities at `https://audit.mohamedattwa.com/api/mcp`
+(Streamable HTTP).
+
+| Tool                  | Access        | What it does                                                        |
+| --------------------- | ------------- | ------------------------------------------------------------------- |
+| `search_requirements` | public        | Keyword search over the corpora, returns citable unit ids           |
+| `get_requirement`     | public        | One unit with full English and Arabic text                          |
+| `list_corpora`        | public        | The available regulations                                           |
+| `audit_repo`          | rate-limited  | Audit a public GitHub repo against a corpus                         |
+| `list_decisions`      | public        | The durable human decision trail                                    |
+| `get_activity`        | public        | Usage totals from the audit log                                     |
+| `decide_finding`      | reviewer only | Approve/reject/reset a finding through the same governed write path |
+
+The write tool requires the reviewer credential and lands in the same
+append-only audit log as the UI, so an agent-made decision is exactly as
+accountable as a human-clicked one.
+
 ## Architecture
 
 - **Next.js (App Router) + TypeScript + Chakra UI v3**, deployed on Vercel.

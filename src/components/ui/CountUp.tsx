@@ -1,52 +1,34 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useInViewOnce } from '@/hooks/useInViewOnce';
 
 /**
- * Counts from 0 to `to` (ease-out cubic, ~1.1s) once the element scrolls into
- * view. Renders the final value immediately under prefers-reduced-motion.
+ * Counts from 0 to `to` (ease-out cubic, ~1.1s) once the element enters the
+ * viewport. Jumps straight to the final value under prefers-reduced-motion.
  */
 export function CountUp({ to, decimals = 0 }: { to: number; decimals?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
+  const [ref, entered] = useInViewOnce<HTMLSpanElement>();
   const [value, setValue] = useState(0);
+  const frameRef = useRef(0);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    let frame = 0;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const run = () => {
-      // Under reduced motion, jump straight to the final value (one deferred set).
-      if (reduced) {
-        frame = requestAnimationFrame(() => setValue(to));
-        return;
-      }
-      const duration = 1100;
-      const start = performance.now();
-      const ease = (t: number) => 1 - Math.pow(1 - t, 3);
-      const step = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1);
-        setValue(to * ease(progress));
-        if (progress < 1) frame = requestAnimationFrame(step);
-      };
-      frame = requestAnimationFrame(step);
-    };
-    // Already at or above the viewport (deep link, restored scroll): count now.
-    if (reduced || node.getBoundingClientRect().top < window.innerHeight) {
-      run();
-      return () => cancelAnimationFrame(frame);
+    if (!entered) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      frameRef.current = requestAnimationFrame(() => setValue(to));
+      return () => cancelAnimationFrame(frameRef.current);
     }
-    const observer = new IntersectionObserver(entries => {
-      if (!entries.some(e => e.isIntersecting)) return;
-      observer.disconnect();
-      run();
-    });
-    observer.observe(node);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
+    const duration = 1100;
+    const start = performance.now();
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      setValue(to * ease(progress));
+      if (progress < 1) frameRef.current = requestAnimationFrame(step);
     };
-  }, [to]);
+    frameRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frameRef.current);
+  }, [entered, to]);
 
   return <span ref={ref}>{value.toFixed(decimals)}</span>;
 }

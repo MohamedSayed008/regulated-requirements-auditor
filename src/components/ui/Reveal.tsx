@@ -1,7 +1,8 @@
 'use client';
 
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode } from 'react';
 import { Box, type BoxProps } from '@chakra-ui/react';
+import { useInViewOnce } from '@/hooks/useInViewOnce';
 
 /**
  * Reveal-on-scroll wrapper: renders hidden (.rv, styled in theme globalCss) and
@@ -13,41 +14,13 @@ export function Reveal({
   delay = 0,
   ...props
 }: BoxProps & { children: ReactNode; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    let frame = 0;
-    // Anything at or above the current viewport shows immediately: hydration
-    // can land mid-page (deep links, restored scroll) and those elements would
-    // otherwise never intersect.
-    if (node.getBoundingClientRect().top < window.innerHeight) {
-      frame = requestAnimationFrame(() => setShown(true));
-      return () => cancelAnimationFrame(frame);
-    }
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries.some(e => e.isIntersecting)) {
-          frame = requestAnimationFrame(() => setShown(true));
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '0px 0px -8% 0px' }
-    );
-    observer.observe(node);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-    };
-  }, []);
+  const [ref, entered] = useInViewOnce<HTMLDivElement>('0px 0px -8% 0px');
 
   return (
     <Box
       ref={ref}
-      className={shown ? 'rv in' : 'rv'}
-      style={{ transitionDelay: shown ? `${delay}ms` : undefined }}
+      className={entered ? 'rv in' : 'rv'}
+      style={{ transitionDelay: entered ? `${delay}ms` : undefined }}
       {...props}
     >
       {children}

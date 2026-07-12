@@ -2,7 +2,8 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { SESSION_COOKIE, sameOrigin } from '@/lib/session';
 import { resolveRole } from '@/lib/auth';
-import { getStore, logEvent, reviewDecisionSchema } from '@/lib/store';
+import { getStore } from '@/lib/store';
+import { applyReviewDecision } from '@/lib/review-actions';
 import { MAX_BODY_BYTES } from '@/lib/guard';
 
 /**
@@ -51,29 +52,6 @@ export async function POST(req: NextRequest): Promise<Response> {
   const parsed = writeSchema.safeParse(parsedBody);
   if (!parsed.success) return json({ error: 'invalid_request' }, 400);
 
-  if (parsed.data.status === 'proposed') {
-    await getStore().deleteDecision(parsed.data.runTarget, parsed.data.findingId);
-    logEvent({
-      ts: new Date().toISOString(),
-      actor: 'reviewer',
-      action: 'review_decide',
-      detail: `reset ${parsed.data.findingId} on ${parsed.data.runTarget} to proposed`,
-    });
-    return json({ reset: true }, 200);
-  }
-
-  const decision = reviewDecisionSchema.parse({
-    ...parsed.data,
-    status: parsed.data.status,
-    reviewer: 'reviewer',
-    decidedAt: new Date().toISOString(),
-  });
-  await getStore().saveDecision(decision);
-  logEvent({
-    ts: decision.decidedAt,
-    actor: 'reviewer',
-    action: 'review_decide',
-    detail: `${decision.status} ${decision.findingId} on ${decision.runTarget}`,
-  });
-  return json({ decision }, 200);
+  const result = await applyReviewDecision(parsed.data);
+  return json(result, 200);
 }
