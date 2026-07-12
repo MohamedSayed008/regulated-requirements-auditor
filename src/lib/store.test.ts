@@ -109,4 +109,15 @@ describe('MemoryStore', () => {
     expect(log.map(e => e.detail)).toEqual(['second', 'first']);
     expect(await store.listLog(1)).toHaveLength(1);
   });
+
+  it('registers, expires, and revokes sessions', async () => {
+    const store = new MemoryStore();
+    await store.createSession('alive', 60_000);
+    await store.createSession('expired', -1);
+    expect(await store.sessionActive('alive')).toBe(true);
+    expect(await store.sessionActive('expired')).toBe(false);
+    expect(await store.sessionActive('never-existed')).toBe(false);
+    await store.revokeSession('alive');
+    expect(await store.sessionActive('alive')).toBe(false);
+  });
 });

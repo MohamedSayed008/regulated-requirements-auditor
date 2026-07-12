@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { SESSION_COOKIE, roleFromCookie } from '@/lib/session';
+import { SESSION_COOKIE, sameOrigin } from '@/lib/session';
+import { resolveRole } from '@/lib/auth';
 import { getStore, logEvent, reviewDecisionSchema } from '@/lib/store';
 import { MAX_BODY_BYTES } from '@/lib/guard';
 
@@ -14,7 +15,9 @@ import { MAX_BODY_BYTES } from '@/lib/guard';
 const writeSchema = z.object({
   findingId: z.string().min(1).max(40),
   runTarget: z.string().min(1).max(120),
-  status: z.enum(['approved', 'rejected']),
+  // 'proposed' reverts the finding: the decision is removed, the log keeps
+  // the full history (the audit log is append-only by design).
+  status: z.enum(['approved', 'rejected', 'proposed']),
   note: z.string().max(500).optional(),
 });
 
@@ -33,7 +36,8 @@ export async function GET(req: NextRequest): Promise<Response> {
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const role = roleFromCookie(req.cookies.get(SESSION_COOKIE)?.value);
+  if (!sameOrigin(req)) return json({ error: 'forbidden' }, 403);
+  const role = await resolveRole(req.cookies.get(SESSION_COOKIE)?.value);
   if (role !== 'reviewer') return json({ error: 'forbidden' }, 403);
 
   const raw = await req.text();
@@ -47,8 +51,20 @@ export async function POST(req: NextRequest): Promise<Response> {
   const parsed = writeSchema.safeParse(parsedBody);
   if (!parsed.success) return json({ error: 'invalid_request' }, 400);
 
+  if (parsed.data.status === 'proposed') {
+    await getStore().deleteDecision(parsed.data.runTarget, parsed.data.findingId);
+    logEvent({
+      ts: new Date().toISOString(),
+      actor: 'reviewer',
+      action: 'review_decide',
+      detail: `reset ${parsed.data.findingId} on ${parsed.data.runTarget} to proposed`,
+    });
+    return json({ reset: true }, 200);
+  }
+
   const decision = reviewDecisionSchema.parse({
     ...parsed.data,
+    status: parsed.data.status,
     reviewer: 'reviewer',
     decidedAt: new Date().toISOString(),
   });

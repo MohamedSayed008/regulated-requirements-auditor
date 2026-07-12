@@ -65,7 +65,7 @@ export default function ReviewClient({
       persisted: false,
     };
     setReviews(prev => ({ ...prev, [id]: next }));
-    if (role !== 'reviewer' || status === 'proposed') return;
+    if (role !== 'reviewer') return;
 
     void fetch('/api/review', {
       method: 'POST',
@@ -80,7 +80,11 @@ export default function ReviewClient({
       .then(response => {
         if (!response.ok) throw new Error('save_failed');
         setSaveError(false);
-        setReviews(prev => ({ ...prev, [id]: { ...prev[id], persisted: true } }));
+        // A reset removes the durable record, so nothing is "saved" after it.
+        setReviews(prev => ({
+          ...prev,
+          [id]: { ...prev[id], persisted: status !== 'proposed' },
+        }));
       })
       .catch(() => {
         setSaveError(true);
@@ -179,12 +183,9 @@ export default function ReviewClient({
       </Stack>
 
       <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="2xl" p="5">
-        <HStack justify="space-between" mb="3" flexWrap="wrap">
-          <Text fontSize="sm" fontWeight="medium" color="fg.default">
-            Decision trail
-          </Text>
-          {role === 'reviewer' && <SignOutButton />}
-        </HStack>
+        <Text fontSize="sm" fontWeight="medium" color="fg.default" mb="3">
+          Decision trail
+        </Text>
         <Stack gap="2">
           {initialFindings.map(finding => {
             const review = reviews[finding.id];
@@ -307,23 +308,5 @@ function SignInPanel() {
         </Text>
       )}
     </Box>
-  );
-}
-
-function SignOutButton() {
-  const router = useRouter();
-  return (
-    <Button
-      size="xs"
-      variant="outline"
-      borderColor="border.default"
-      color="fg.muted"
-      _hover={{ color: 'fg.default', borderColor: 'accent.solid' }}
-      onClick={() => {
-        void fetch('/api/session', { method: 'DELETE' }).then(() => router.refresh());
-      }}
-    >
-      Sign out reviewer
-    </Button>
   );
 }

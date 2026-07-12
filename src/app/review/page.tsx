@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { auditRunSchema } from '@/lib/findings';
 import { SEVERITY_ORDER } from '@/lib/severity';
-import { SESSION_COOKIE, roleFromCookie } from '@/lib/session';
+import { SESSION_COOKIE } from '@/lib/session';
+import { resolveRole } from '@/lib/auth';
 import { getStore } from '@/lib/store';
 import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -27,7 +28,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function ReviewPage() {
   const cookieStore = await cookies();
-  const role = roleFromCookie(cookieStore.get(SESSION_COOKIE)?.value);
+  const role = await resolveRole(cookieStore.get(SESSION_COOKIE)?.value);
   const persisted = await getStore()
     .listDecisions(run.target)
     .catch(() => []);

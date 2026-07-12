@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Box, Container, Flex, HStack, Text } from '@chakra-ui/react';
 import { MizanBeam } from '@/components/icons/MizanMark';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { SessionChip } from '@/components/ui/SessionChip';
 
 const NAV = [
   { href: '/requirements', label: 'Requirements' },
@@ -90,6 +91,8 @@ export function Nav() {
               })}
             </HStack>
           </Box>
+
+          <SessionChip />
 
           <ThemeToggle />
 

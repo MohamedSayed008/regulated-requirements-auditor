@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { Badge, Box, Grid, HStack, Stack, Text } from '@chakra-ui/react';
-import { SESSION_COOKIE, roleFromCookie } from '@/lib/session';
+import { SESSION_COOKIE } from '@/lib/session';
+import { resolveRole } from '@/lib/auth';
 import { type AuditLogEntry, fromMicros, getStore } from '@/lib/store';
 import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -31,7 +32,7 @@ const ACTION_PALETTE: Record<AuditLogEntry['action'], string> = {
 
 export default async function ActivityPage() {
   const cookieStore = await cookies();
-  const role = roleFromCookie(cookieStore.get(SESSION_COOKIE)?.value);
+  const role = await resolveRole(cookieStore.get(SESSION_COOKIE)?.value);
   const store = getStore();
   const [totals, events] = await Promise.all([
     store.getTotals().catch(() => null),

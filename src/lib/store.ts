@@ -51,18 +51,25 @@ export interface UsageTotals {
 
 export interface Store {
   saveDecision(decision: ReviewDecision): Promise<void>;
+  /** Reverts a finding to proposed by removing its persisted decision. */
+  deleteDecision(runTarget: string, findingId: string): Promise<void>;
   /** Decisions for one audited target, newest last, keyed by findingId. */
   listDecisions(runTarget: string): Promise<ReviewDecision[]>;
   appendLog(entry: AuditLogEntry): Promise<void>;
   /** Newest first. */
   listLog(limit: number): Promise<AuditLogEntry[]>;
   getTotals(): Promise<UsageTotals>;
+  /** Session registry: a token is only valid while its jti is registered. */
+  createSession(jti: string, ttlMs: number): Promise<void>;
+  sessionActive(jti: string): Promise<boolean>;
+  revokeSession(jti: string): Promise<void>;
 }
 
 const KEYS = {
   decisions: (target: string) => `mizan:decisions:${target}`,
   log: 'mizan:log',
   totals: 'mizan:totals',
+  session: (jti: string) => `mizan:session:${jti}`,
 } as const;
 
 const LOG_CAP = 300;
@@ -102,6 +109,10 @@ class RedisStore implements Store {
     await this.redis.hset(KEYS.decisions(decision.runTarget), {
       [decision.findingId]: JSON.stringify(decision),
     });
+  }
+
+  async deleteDecision(runTarget: string, findingId: string): Promise<void> {
+    await this.redis.hdel(KEYS.decisions(runTarget), findingId);
   }
 
   async listDecisions(runTarget: string): Promise<ReviewDecision[]> {
@@ -158,6 +169,18 @@ class RedisStore implements Store {
       outputTokens: num('outputTokens'),
     };
   }
+
+  async createSession(jti: string, ttlMs: number): Promise<void> {
+    await this.redis.set(KEYS.session(jti), '1', { px: ttlMs });
+  }
+
+  async sessionActive(jti: string): Promise<boolean> {
+    return (await this.redis.exists(KEYS.session(jti))) === 1;
+  }
+
+  async revokeSession(jti: string): Promise<void> {
+    await this.redis.del(KEYS.session(jti));
+  }
 }
 
 /** Per-instance fallback for local dev without Redis credentials. */
@@ -170,6 +193,10 @@ export class MemoryStore implements Store {
     const byTarget = this.decisions.get(decision.runTarget) ?? new Map<string, ReviewDecision>();
     byTarget.set(decision.findingId, decision);
     this.decisions.set(decision.runTarget, byTarget);
+  }
+
+  async deleteDecision(runTarget: string, findingId: string): Promise<void> {
+    this.decisions.get(runTarget)?.delete(findingId);
   }
 
   async listDecisions(runTarget: string): Promise<ReviewDecision[]> {
@@ -197,6 +224,26 @@ export class MemoryStore implements Store {
 
   async getTotals(): Promise<UsageTotals> {
     return { ...this.totals };
+  }
+
+  private sessions = new Map<string, number>();
+
+  async createSession(jti: string, ttlMs: number): Promise<void> {
+    this.sessions.set(jti, Date.now() + ttlMs);
+  }
+
+  async sessionActive(jti: string): Promise<boolean> {
+    const expiresAt = this.sessions.get(jti);
+    if (expiresAt === undefined) return false;
+    if (expiresAt < Date.now()) {
+      this.sessions.delete(jti);
+      return false;
+    }
+    return true;
+  }
+
+  async revokeSession(jti: string): Promise<void> {
+    this.sessions.delete(jti);
   }
 }
 
