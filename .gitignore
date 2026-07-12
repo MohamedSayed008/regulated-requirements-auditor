@@ -24,3 +24,9 @@ node_modules
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Working documents and launch collateral stay untracked
+MASTER_PLAN.md
+LAUNCH_POST.md
+mizan-redesign*.html
+mizan-demo*.gif
