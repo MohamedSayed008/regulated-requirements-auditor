@@ -248,7 +248,7 @@ export default function Home() {
                   left="0"
                   w="100%"
                   h="3px"
-                  bg="linear-gradient(90deg, #e6cd86, transparent)"
+                  bg="linear-gradient(90deg, var(--chakra-colors-law-solid), transparent)"
                 />
                 <Text
                   fontFamily="heading"
@@ -278,7 +278,7 @@ export default function Home() {
                   left="0"
                   w="100%"
                   h="3px"
-                  bg="linear-gradient(90deg, #0f766e, transparent)"
+                  bg="linear-gradient(90deg, var(--chakra-colors-accent-solid), transparent)"
                 />
                 <Text
                   fontFamily="heading"
@@ -315,13 +315,7 @@ export default function Home() {
                     EVICTION_NOTICE_MONTHS
                   </Text>{' '}
                   ={' '}
-                  <Text
-                    as="span"
-                    color="warn.fg"
-                    bg="rgba(192, 57, 47, 0.22)"
-                    rounded="xs"
-                    px="0.5"
-                  >
+                  <Text as="span" color="warn.fg" bg="warn.bg" rounded="xs" px="0.5">
                     3
                   </Text>
                   ;

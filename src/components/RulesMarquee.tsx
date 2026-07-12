@@ -15,12 +15,15 @@ const RULES = [
 export function RulesMarquee() {
   return (
     <Box
+      role="group"
+      aria-label="The three governing rules"
       borderYWidth="1px"
       borderColor="border.default"
       py="4"
       overflow="hidden"
       bg="bg.panel"
-      aria-label="No citation, no answer. No human approval, no finding. No eval report, no release."
+      // WCAG 2.2.2: moving content pauses under the pointer or keyboard focus.
+      css={{ '&:hover > div, &:focus-within > div': { animationPlayState: 'paused' } }}
     >
       <Box
         display="flex"

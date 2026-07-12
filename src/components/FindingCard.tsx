@@ -19,7 +19,7 @@ export function FindingCard({ finding, actions }: { finding: Finding; actions?: 
   return (
     <Box
       borderWidth="1px"
-      borderColor={finding.status === 'approved' ? 'green.900' : 'border.default'}
+      borderColor={finding.status === 'approved' ? 'success.line' : 'border.default'}
       bg="bg.panel"
       rounded="2xl"
       overflow="hidden"

@@ -90,6 +90,8 @@ const config = defineConfig({
         'accent.fg': { value: { base: '#0d7a70', _dark: '{colors.teal.300}' } },
         'accent.solid': { value: { base: '#0d9488', _dark: '{colors.teal.700}' } },
         'accent.muted': { value: { base: '#ddefe9', _dark: '{colors.teal.950}' } },
+        // hover state for solid-teal controls; keeps AA contrast in both modes
+        'accent.emphasis': { value: { base: '#0a6158', _dark: '{colors.teal.400}' } },
         // gold = the law / justice side
         'law.fg': { value: { base: '#8a6413', _dark: '{colors.gold.300}' } },
         'law.solid': { value: { base: '#9c7422', _dark: '{colors.gold.400}' } },
@@ -102,8 +104,9 @@ const config = defineConfig({
         // syntax accents in code excerpts
         'code.kw': { value: { base: '#7c3aed', _dark: '#c084fc' } },
         'code.num': { value: { base: '#be185d', _dark: '#f0abfc' } },
-        // status numerals
+        // status numerals and accents
         'success.fg': { value: { base: '#15803d', _dark: '#86efac' } },
+        'success.line': { value: { base: '#b7dcc2', _dark: '#1c3b2a' } },
         'warning.fg': { value: { base: '#b45309', _dark: '#fdba74' } },
       },
     },
@@ -114,8 +117,8 @@ const config = defineConfig({
       color: 'fg.default',
     },
     '::selection': {
-      bg: '#243b38',
-      color: '#c8fff2',
+      bg: 'accent.solid',
+      color: 'white',
     },
     // Shared reveal-on-scroll. The Reveal component toggles `.in`. Animated
     // components opt out individually via _motionReduce.

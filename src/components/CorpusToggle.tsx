@@ -49,7 +49,9 @@ export function CorpusToggle({
               borderColor={active ? 'accent.fg' : 'border.default'}
               transition="all 0.2s"
               _hover={
-                active ? { bg: 'teal.400' } : { color: 'fg.default', borderColor: 'accent.solid' }
+                active
+                  ? { bg: 'accent.emphasis' }
+                  : { color: 'fg.default', borderColor: 'accent.solid' }
               }
             >
               {opt.shortName}
