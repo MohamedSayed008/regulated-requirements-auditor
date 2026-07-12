@@ -1,7 +1,6 @@
 'use client';
 
-import { type FormEvent, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import { Badge, Box, Button, Grid, HStack, Input, Stack, Text } from '@chakra-ui/react';
 import { type Finding, type FindingStatus } from '@/lib/findings';
 import { type ReviewDecision } from '@/lib/store';
@@ -98,7 +97,6 @@ export default function ReviewClient({
 
   return (
     <Stack gap="6">
-      {role !== 'reviewer' && <SignInPanel />}
       {saveError && (
         <Box
           role="alert"
@@ -242,71 +240,6 @@ function Tally({ label, value, palette }: { label: string; value: number; palett
           {label}
         </Badge>
       </HStack>
-    </Box>
-  );
-}
-
-function SignInPanel() {
-  const router = useRouter();
-  const [password, setPassword] = useState('');
-  const [state, setState] = useState<'idle' | 'pending' | 'failed'>('idle');
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!password || state === 'pending') return;
-    setState('pending');
-    try {
-      const response = await fetch('/api/session', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
-      if (!response.ok) {
-        setState('failed');
-        return;
-      }
-      router.refresh();
-    } catch {
-      setState('failed');
-    }
-  }
-
-  return (
-    <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="xl" p="4">
-      <form onSubmit={handleSubmit}>
-        <HStack gap="2.5" flexWrap="wrap">
-          <Text fontSize="sm" color="fg.muted" flex="1" minW="24ch">
-            Reviewers sign in to make decisions that persist to the audit trail.
-          </Text>
-          <Input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Reviewer password"
-            aria-label="Reviewer password"
-            size="sm"
-            maxW="56"
-            bg="bg.canvas"
-            borderColor="border.default"
-            _placeholder={{ color: 'fg.subtle' }}
-          />
-          <Button
-            type="submit"
-            size="sm"
-            bg="accent.solid"
-            color="white"
-            _hover={{ bg: 'teal.600' }}
-            loading={state === 'pending'}
-          >
-            Sign in
-          </Button>
-        </HStack>
-      </form>
-      {state === 'failed' && (
-        <Text mt="2" fontSize="xs" color="warn.fg">
-          That password was not accepted.
-        </Text>
-      )}
     </Box>
   );
 }

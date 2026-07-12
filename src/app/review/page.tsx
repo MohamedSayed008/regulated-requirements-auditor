@@ -39,7 +39,7 @@ export default async function ReviewPage() {
         The AI proposes, a human decides. Each finding below is a proposal, not a verdict.
         {role === 'reviewer'
           ? ' You are signed in as the reviewer: decisions persist to the audit trail.'
-          : ' Approve or reject to try the workflow; as a visitor your decisions stay in this session only, while the signed reviewer decisions below are the durable record.'}
+          : ' Approve or reject to try the workflow; as a visitor your decisions stay in this session only. The reviewer signs in from the top bar, and those decisions are the durable record.'}
       </PageHeader>
       <Reveal delay={160}>
         <ReviewClient
