@@ -24,7 +24,7 @@ export default function AskPage() {
         >
           Ask with citations
         </Text>
-        <Heading fontFamily="heading" fontSize="3xl">
+        <Heading fontFamily="serif" fontWeight="500" fontSize="3xl">
           Ask the regulation
         </Heading>
         <Text color="fg.muted" maxW="xl">

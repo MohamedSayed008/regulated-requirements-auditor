@@ -61,7 +61,7 @@ export default function AuditPage() {
         >
           Code audit
         </Text>
-        <Heading fontFamily="heading" fontSize="3xl">
+        <Heading fontFamily="serif" fontWeight="500" fontSize="3xl">
           The code audited against the law
         </Heading>
         <Text color="fg.muted" maxW="2xl">

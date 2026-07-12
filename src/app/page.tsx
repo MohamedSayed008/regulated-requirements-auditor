@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import { Badge, Box, Button, Grid, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import { Page } from '@/components/ui/shell';
 import { MizanMark } from '@/components/icons/MizanMark';
+import { GirihPattern } from '@/components/icons/GirihPattern';
 import { evalReportSetSchema } from '@/lib/eval-report';
 import reportsJson from '@/data/evals/reports.json';
 
@@ -47,53 +48,8 @@ const CAPABILITIES = [
 export default function Home() {
   return (
     <Page>
-      <Stack gap="5" maxW="3xl" mb="10">
-        <Text
-          fontFamily="heading"
-          fontSize="xs"
-          letterSpacing="0.2em"
-          textTransform="uppercase"
-          color="accent.fg"
-        >
-          Governed agentic AI for regulated workflows
-        </Text>
-        <Heading fontFamily="heading" fontSize={{ base: '3xl', md: '4xl' }} lineHeight="1.15">
-          Mizan reads the regulation, answers with citations, and audits code against it.
-        </Heading>
-        <Text fontSize="lg" color="fg.muted">
-          A requirements auditor running on two live corpora: Dubai tenancy law and the UAE
-          eInvoicing mandate. Every answer cites the exact clause, every code finding is
-          human-approved before it counts, and every release publishes its eval report.
-        </Text>
-        <HStack gap="3" flexWrap="wrap" pt="1">
-          <Button asChild bg="accent.solid" color="white" _hover={{ bg: 'teal.600' }}>
-            <NextLink href="/ask">Try it: ask with citations</NextLink>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            borderColor="accent.solid"
-            color="accent.fg"
-            _hover={{ bg: 'accent.muted' }}
-          >
-            <NextLink href="/evals">See the eval report</NextLink>
-          </Button>
-        </HStack>
-        <HStack gap="2" flexWrap="wrap" pt="2">
-          <Badge colorPalette="green" variant="subtle">
-            {evalPass}/{evalTotal} eval cases pass
-          </Badge>
-          <Badge colorPalette="teal" variant="subtle">
-            audit precision {minPrecision.toFixed(2)} / recall {minRecall.toFixed(2)}
-          </Badge>
-          <Badge colorPalette="teal" variant="subtle">
-            English and Arabic
-          </Badge>
-        </HStack>
-      </Stack>
-
+      <Hero />
       <WeighingPanel />
-
       <RulesBand />
 
       <Text
@@ -101,7 +57,7 @@ export default function Home() {
         fontSize="xs"
         letterSpacing="0.2em"
         textTransform="uppercase"
-        color="fg.subtle"
+        color="law.fg"
         mb="4"
       >
         What it does
@@ -117,18 +73,25 @@ export default function Home() {
             rounded="xl"
             p="5"
             transition="border-color 0.15s, transform 0.15s"
-            _hover={{ borderColor: 'accent.solid', transform: 'translateY(-2px)' }}
+            _hover={{ borderColor: 'law.solid', transform: 'translateY(-2px)' }}
           >
             <NextLink href={c.route}>
               <HStack justify="space-between" mb="2">
                 <Text fontFamily="heading" fontSize="xs" color="accent.fg">
                   {c.route}
                 </Text>
-                <Text fontFamily="heading" fontSize="sm" color="fg.subtle" aria-hidden="true">
+                <Text fontFamily="serif" fontSize="lg" color="law.fg" aria-hidden="true">
                   &rarr;
                 </Text>
               </HStack>
-              <Heading as="h3" fontSize="md" mb="2" color="fg.default">
+              <Heading
+                as="h3"
+                fontFamily="serif"
+                fontWeight="500"
+                fontSize="lg"
+                mb="2"
+                color="fg.default"
+              >
                 {c.title}
               </Heading>
               <Text fontSize="sm" color="fg.muted">
@@ -148,10 +111,112 @@ export default function Home() {
   );
 }
 
+function Hero() {
+  return (
+    <Box position="relative" overflow="hidden" mb="12">
+      <Box
+        position="absolute"
+        inset="0"
+        color="law.fg"
+        opacity="0.06"
+        pointerEvents="none"
+        css={{
+          maskImage: 'radial-gradient(115% 80% at 88% 8%, #000, transparent 62%)',
+          WebkitMaskImage: 'radial-gradient(115% 80% at 88% 8%, #000, transparent 62%)',
+        }}
+      >
+        <GirihPattern />
+      </Box>
+
+      <Stack gap="6" maxW="3xl" position="relative">
+        <Text
+          fontFamily="heading"
+          fontSize="xs"
+          letterSpacing="0.2em"
+          textTransform="uppercase"
+          color="law.fg"
+        >
+          Governed agentic AI for regulated workflows
+        </Text>
+
+        <HStack gap={{ base: '4', md: '6' }} align="center" flexWrap="wrap">
+          <Text
+            fontFamily="arabic"
+            lang="ar"
+            fontSize={{ base: '6xl', md: '8xl' }}
+            lineHeight="0.9"
+            color="law.fg"
+          >
+            ميزان
+          </Text>
+          <Stack gap="1">
+            <Text fontFamily="serif" fontSize="3xl" color="fg.default">
+              Mizan
+            </Text>
+            <Text fontFamily="heading" fontSize="xs" letterSpacing="wide" color="fg.subtle">
+              the scale for regulated code
+            </Text>
+          </Stack>
+        </HStack>
+
+        <Heading
+          as="h1"
+          fontFamily="serif"
+          fontWeight="500"
+          fontSize={{ base: '3xl', md: '4xl' }}
+          lineHeight="1.2"
+          color="fg.default"
+        >
+          Reads the regulation, answers with citations, and audits code against it.
+        </Heading>
+
+        <Text fontSize="lg" color="fg.muted" maxW="2xl">
+          A requirements auditor running on two live corpora: Dubai tenancy law and the UAE
+          eInvoicing mandate. Every answer cites the exact clause, every code finding is
+          human-approved before it counts, and every release publishes its eval report.
+        </Text>
+
+        <HStack gap="3" flexWrap="wrap" pt="1">
+          <Button
+            asChild
+            bg="law.solid"
+            color="bg.canvas"
+            fontWeight="600"
+            _hover={{ bg: 'gold.400' }}
+          >
+            <NextLink href="/ask">Try it: ask with citations</NextLink>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            borderColor="accent.solid"
+            color="accent.fg"
+            _hover={{ bg: 'accent.muted' }}
+          >
+            <NextLink href="/evals">See the eval report</NextLink>
+          </Button>
+        </HStack>
+
+        <HStack gap="2" flexWrap="wrap" pt="2">
+          <Badge colorPalette="green" variant="subtle">
+            {evalPass}/{evalTotal} eval cases pass
+          </Badge>
+          <Badge colorPalette="teal" variant="subtle">
+            audit precision {minPrecision.toFixed(2)} / recall {minRecall.toFixed(2)}
+          </Badge>
+          <Badge colorPalette="yellow" variant="subtle">
+            English and العربية
+          </Badge>
+        </HStack>
+      </Stack>
+    </Box>
+  );
+}
+
 /**
- * The signature: one real finding from the replayed audit, weighed. The mark is
- * the fulcrum; the clause and the offending code are the two pans; the verdict
- * is the reading. Content is the actual F1 finding from the cached run.
+ * The signature: one real finding, weighed. The law (gold, in serif) sits on one
+ * pan, the offending code (teal, in mono) on the other, the scale mark between.
+ * Content is the actual F1 finding from the cached audit run.
  */
 function WeighingPanel() {
   return (
@@ -179,17 +244,17 @@ function WeighingPanel() {
         gap={{ base: '3', md: '6' }}
         alignItems="stretch"
       >
-        <Pan label="The regulation" tone="clause">
-          <Text fontFamily="heading" fontSize="xs" color="accent.fg" mb="2">
+        <Pan label="The law" tone="law">
+          <Text fontFamily="heading" fontSize="xs" color="law.fg" mb="2">
             LAW26-2007/ART-25/2
           </Text>
-          <Text fontSize="sm" color="fg.muted" lineHeight="tall">
+          <Text fontFamily="serif" fontSize="md" color="fg.muted" lineHeight="tall">
             Twelve months&rsquo; notice required before eviction.
           </Text>
         </Pan>
 
         <Box
-          color="accent.fg"
+          color="law.fg"
           justifySelf="center"
           alignSelf="center"
           transform={{ base: 'rotate(90deg)', md: 'none' }}
@@ -199,7 +264,7 @@ function WeighingPanel() {
         </Box>
 
         <Pan label="The code" tone="code">
-          <Text fontFamily="heading" fontSize="xs" color="fg.subtle" mb="2">
+          <Text fontFamily="heading" fontSize="xs" color="accent.fg" mb="2">
             eviction.ts:16
           </Text>
           <Box
@@ -254,15 +319,17 @@ function Pan({
   children,
 }: {
   label: string;
-  tone: 'clause' | 'code';
+  tone: 'law' | 'code';
   children: ReactNode;
 }) {
+  const edge = tone === 'law' ? 'law.solid' : 'accent.solid';
+  const labelColor = tone === 'law' ? 'law.fg' : 'accent.fg';
   return (
     <Box
       borderWidth="1px"
       borderColor="border.default"
       borderTopWidth="2px"
-      borderTopColor={tone === 'clause' ? 'accent.solid' : 'border.default'}
+      borderTopColor={edge}
       bg="bg.canvas"
       rounded="lg"
       p="3.5"
@@ -272,7 +339,7 @@ function Pan({
         fontSize="xs"
         letterSpacing="wide"
         textTransform="uppercase"
-        color="fg.subtle"
+        color={labelColor}
         mb="2"
       >
         {label}
@@ -298,9 +365,9 @@ function RulesBand() {
       {RULES.map((rule, i) => (
         <HStack as="li" key={rule} gap={{ base: '3', md: '6' }}>
           {i > 0 && (
-            <Box aria-hidden="true" color="accent.fg" fontSize="xs">
-              &bull;
-            </Box>
+            <Text aria-hidden="true" fontFamily="arabic" color="law.fg" fontSize="md">
+              &#1758;
+            </Text>
           )}
           <Text fontFamily="heading" fontSize="xs" color="fg.muted" whiteSpace="nowrap">
             {rule}

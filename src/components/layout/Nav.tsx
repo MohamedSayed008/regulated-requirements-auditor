@@ -35,18 +35,18 @@ export function Nav() {
           <Box
             asChild
             flexShrink="0"
-            color="accent.fg"
-            _hover={{ color: 'teal.400' }}
+            color="law.fg"
+            _hover={{ color: 'gold.400' }}
             transition="color 0.15s"
           >
             <NextLink href="/" aria-label="Mizan, home">
               <HStack gap="2.5" align="center">
                 <MizanMark width="26" height="26" />
-                <HStack gap="1.5" align="baseline">
-                  <Text fontFamily="heading" fontWeight="bold" fontSize="md" color="fg.default">
+                <HStack gap="2" align="baseline">
+                  <Text fontFamily="serif" fontWeight="600" fontSize="lg" color="fg.default">
                     Mizan
                   </Text>
-                  <Text fontSize="sm" color="fg.subtle" aria-hidden="true">
+                  <Text fontFamily="arabic" fontSize="lg" color="law.fg" aria-hidden="true">
                     ميزان
                   </Text>
                 </HStack>

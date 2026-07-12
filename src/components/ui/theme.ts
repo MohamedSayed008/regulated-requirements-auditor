@@ -1,9 +1,14 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 
 /**
- * Mizan theme: dark-first, teal accent. Semantic tokens keep the palette in
- * one place so pages read `bg="bg.panel"` / `color="fg.muted"` rather than
- * hardcoded colors.
+ * Mizan theme: warm-ink, bilingual, with a two-sided accent that carries the
+ * product's thesis. Brass/gold is "the law" (the scale of justice); teal is
+ * "the code" (verification). Semantic tokens keep the palette in one place so
+ * pages read `bg="bg.panel"` / `color="law.fg"` rather than hardcoded colors.
+ *
+ * Font roles: `serif` (Spectral) is the law voice, `heading` (Geist Mono) is
+ * the code/data voice, `arabic` (Amiri) is the bilingual display face, `body`
+ * (Geist Sans) is reading text.
  */
 const config = defineConfig({
   theme: {
@@ -23,24 +28,39 @@ const config = defineConfig({
           900: { value: '#134e4a' },
           950: { value: '#042f2e' },
         },
+        gold: {
+          300: { value: '#e8cf88' },
+          400: { value: '#d4af5a' },
+          600: { value: '#a67c2e' },
+          700: { value: '#835f22' },
+          900: { value: '#3a2c12' },
+          950: { value: '#241a0a' },
+        },
       },
       fonts: {
         heading: { value: 'var(--font-geist-mono), ui-monospace, monospace' },
         body: { value: 'var(--font-geist-sans), system-ui, sans-serif' },
+        serif: { value: 'var(--font-spectral), Georgia, "Times New Roman", serif' },
+        arabic: { value: 'var(--font-amiri), "Times New Roman", serif' },
       },
     },
     semanticTokens: {
       colors: {
-        'bg.canvas': { value: { base: '#0a0a0f', _dark: '#0a0a0f' } },
-        'bg.panel': { value: { base: '#12121a', _dark: '#12121a' } },
-        'bg.subtle': { value: { base: '#191926', _dark: '#191926' } },
-        'fg.default': { value: { base: '#e8e8ef', _dark: '#e8e8ef' } },
-        'fg.muted': { value: { base: '#9a9aad', _dark: '#9a9aad' } },
-        'fg.subtle': { value: { base: '#6b6b80', _dark: '#6b6b80' } },
-        'border.default': { value: { base: '#26263a', _dark: '#26263a' } },
+        'bg.canvas': { value: { base: '#0d0b08', _dark: '#0d0b08' } },
+        'bg.panel': { value: { base: '#17130d', _dark: '#17130d' } },
+        'bg.subtle': { value: { base: '#201a12', _dark: '#201a12' } },
+        'fg.default': { value: { base: '#f2ece0', _dark: '#f2ece0' } },
+        'fg.muted': { value: { base: '#b0a691', _dark: '#b0a691' } },
+        'fg.subtle': { value: { base: '#79705d', _dark: '#79705d' } },
+        'border.default': { value: { base: '#2e2618', _dark: '#2e2618' } },
+        // teal = the code / verification side
         'accent.fg': { value: '{colors.teal.300}' },
         'accent.solid': { value: '{colors.teal.700}' },
         'accent.muted': { value: '{colors.teal.950}' },
+        // gold = the law / justice side
+        'law.fg': { value: '{colors.gold.300}' },
+        'law.solid': { value: '{colors.gold.600}' },
+        'law.muted': { value: '{colors.gold.950}' },
       },
     },
   },

@@ -117,7 +117,7 @@ export default function EvalsPage() {
         >
           Published evals
         </Text>
-        <Heading fontFamily="heading" fontSize="3xl">
+        <Heading fontFamily="serif" fontWeight="500" fontSize="3xl">
           How reliable is it?
         </Heading>
         <Text color="fg.muted" maxW="2xl">

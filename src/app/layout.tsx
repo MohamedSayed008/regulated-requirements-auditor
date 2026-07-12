@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { type ReactNode } from 'react';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Spectral, Amiri } from 'next/font/google';
 import { Provider } from '@/components/ui/provider';
 import { siteConfig, siteJsonLd } from '@/lib/site';
 
@@ -12,6 +12,21 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+// The law voice (serif) and the bilingual display face (Arabic).
+const spectral = Spectral({
+  variable: '--font-spectral',
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const amiri = Amiri({
+  variable: '--font-amiri',
+  weight: ['400', '700'],
+  subsets: ['arabic', 'latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -50,7 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${spectral.variable} ${amiri.variable}`}
     >
       <body>
         <script

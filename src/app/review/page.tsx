@@ -31,7 +31,7 @@ export default function ReviewPage() {
         >
           Human approval
         </Text>
-        <Heading fontFamily="heading" fontSize="3xl">
+        <Heading fontFamily="serif" fontWeight="500" fontSize="3xl">
           Review queue
         </Heading>
         <Text color="fg.muted" maxW="2xl">

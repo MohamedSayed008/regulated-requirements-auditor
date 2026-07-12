@@ -24,7 +24,7 @@ export default function AuditRepoPage() {
         >
           Audit your code
         </Text>
-        <Heading fontFamily="heading" fontSize="3xl">
+        <Heading fontFamily="serif" fontWeight="500" fontSize="3xl">
           Audit a public repo against the law
         </Heading>
         <Text color="fg.muted" maxW="2xl">
