@@ -5,6 +5,7 @@ import { MAX_BODY_BYTES, isDemoDisabled } from '@/lib/guard';
 import { checkAskRateLimit } from '@/lib/rate-limit';
 import { fetchRepoFiles } from '@/lib/repo-fetch';
 import { runAudit } from '@/lib/audit-engine';
+import { logEvent, toMicros } from '@/lib/store';
 
 export const maxDuration = 120;
 
@@ -60,6 +61,16 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     const target = `${fetched.owner}/${fetched.repo}`;
     const run = await runAudit(new Anthropic(), fetched.files, target, parsed.data.corpusId);
+    logEvent({
+      ts: new Date().toISOString(),
+      actor: 'public',
+      action: 'audit_repo',
+      corpusId: parsed.data.corpusId,
+      detail: `audited ${target}: ${run.findings.length} findings across ${run.filesScanned.length} files`,
+      costMicros: toMicros(run.usage.estimatedCostUsd),
+      inputTokens: run.usage.inputTokens,
+      outputTokens: run.usage.outputTokens,
+    });
     return json({ run, branch: fetched.branch }, 200);
   } catch (error: unknown) {
     if (error instanceof Anthropic.RateLimitError)

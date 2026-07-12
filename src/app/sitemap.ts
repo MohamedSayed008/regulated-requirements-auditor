@@ -10,6 +10,7 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: '/evals', priority: 0.8 },
   { path: '/requirements', priority: 0.7 },
   { path: '/review', priority: 0.6 },
+  { path: '/activity', priority: 0.5 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

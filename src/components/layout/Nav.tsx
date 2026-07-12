@@ -13,6 +13,7 @@ const NAV = [
   { href: '/audit-repo', label: 'Audit a repo' },
   { href: '/review', label: 'Review' },
   { href: '/evals', label: 'Evals' },
+  { href: '/activity', label: 'Activity' },
 ];
 
 function isActive(pathname: string, href: string): boolean {

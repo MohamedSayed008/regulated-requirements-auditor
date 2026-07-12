@@ -11,6 +11,12 @@ import {
 import { getCorpus } from '@/lib/corpora';
 import { MAX_BODY_BYTES, isDemoDisabled } from '@/lib/guard';
 import { checkAskRateLimit } from '@/lib/rate-limit';
+import { logEvent } from '@/lib/store';
+
+// Opus 4.8 pricing is $5/M input and $25/M output, i.e. 5 and 25 micro-dollars
+// per token, which keeps the logged cost an exact integer.
+const MICROS_PER_INPUT_TOKEN = 5;
+const MICROS_PER_OUTPUT_TOKEN = 25;
 
 export const maxDuration = 60;
 
@@ -112,6 +118,18 @@ export async function POST(req: NextRequest): Promise<Response> {
             cacheReadTokens: final.usage.cache_read_input_tokens ?? 0,
             cacheWriteTokens: final.usage.cache_creation_input_tokens ?? 0,
           },
+        });
+        logEvent({
+          ts: new Date().toISOString(),
+          actor: 'public',
+          action: 'ask',
+          corpusId: corpus.id,
+          detail: parsed.data.question.slice(0, 120),
+          costMicros:
+            final.usage.input_tokens * MICROS_PER_INPUT_TOKEN +
+            final.usage.output_tokens * MICROS_PER_OUTPUT_TOKEN,
+          inputTokens: final.usage.input_tokens,
+          outputTokens: final.usage.output_tokens,
         });
       } catch (error: unknown) {
         if (error instanceof Anthropic.RateLimitError) {
