@@ -36,3 +36,31 @@ export function MizanMark({ title, ...props }: SVGProps<SVGSVGElement> & { title
     </svg>
   );
 }
+
+/**
+ * Beam-only variant (pivot, beam, chains, pans - no post or stand) used where
+ * the mark sways: rotating the full scale would swing its base, this reads as
+ * the beam tilting on its pivot.
+ */
+export function MizanBeam(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 48 26"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      role="presentation"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="24" cy="8.5" r="1.7" fill="currentColor" stroke="none" />
+      <path d="M8 12H40" />
+      <path d="M8 12 4 20M8 12 12 20" />
+      <path d="M4 20q4 5.5 8 0" />
+      <path d="M40 12 36 20M40 12 44 20" />
+      <path d="M36 20q4 5.5 8 0" />
+    </svg>
+  );
+}

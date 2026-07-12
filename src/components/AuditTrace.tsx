@@ -13,6 +13,8 @@ interface Step {
   title: string;
   detail: string;
   href?: string;
+  /** The human step renders gold: it is the law side of the pipeline. */
+  gold?: boolean;
 }
 
 function buildSteps(run: AuditRun, corpusLabel: string): Step[] {
@@ -41,6 +43,7 @@ function buildSteps(run: AuditRun, corpusLabel: string): Step[] {
       title: 'Human review',
       detail: `Findings enter the queue as proposed. None are final until a person approves or rejects them.`,
       href: '/review',
+      gold: true,
     },
     {
       title: 'Cost accounted',
@@ -58,8 +61,8 @@ function TraceStep({ step, index, last }: { step: Step; index: number; last: boo
           h="7"
           rounded="full"
           borderWidth="1px"
-          borderColor="accent.solid"
-          color="accent.fg"
+          borderColor={step.gold ? 'law.solid' : 'accent.solid'}
+          color={step.gold ? 'law.fg' : 'accent.fg'}
           bg="bg.canvas"
           display="flex"
           alignItems="center"

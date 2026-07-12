@@ -1,7 +1,7 @@
 'use client';
 
 import { type FormEvent, useRef, useState } from 'react';
-import { Box, Button, Input, Link, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, HStack, Input, Link, Stack, Text } from '@chakra-ui/react';
 import { type CorpusOption, CorpusToggle } from '@/components/CorpusToggle';
 
 type Segment =
@@ -22,11 +22,13 @@ const ERROR_COPY: Record<string, string> = {
 export default function AskClient({
   corpusOptions,
   defaultCorpusId,
+  initialQuestion = '',
 }: {
   corpusOptions: CorpusOption[];
   defaultCorpusId: string;
+  initialQuestion?: string;
 }) {
-  const [question, setQuestion] = useState('');
+  const [question, setQuestion] = useState(initialQuestion);
   const [corpusId, setCorpusId] = useState(defaultCorpusId);
   const [segments, setSegments] = useState<Segment[]>([]);
   const [status, setStatus] = useState<Status>('idle');
@@ -110,50 +112,89 @@ export default function AskClient({
         </Box>
       )}
       <form onSubmit={handleSubmit}>
-        <Stack direction={{ base: 'column', sm: 'row' }} gap="3">
+        <Stack
+          direction={{ base: 'column', sm: 'row' }}
+          align={{ base: 'stretch', sm: 'center' }}
+          gap="2.5"
+          bg="bg.panel"
+          borderWidth="1px"
+          borderColor="border.default"
+          rounded="xl"
+          p="2"
+          ps={{ base: '2', sm: '4' }}
+          transition="border-color 0.25s"
+          _focusWithin={{ borderColor: 'accent.solid' }}
+        >
           <Input
             value={question}
             onChange={e => setQuestion(e.target.value)}
             placeholder="e.g. How much notice is needed before a rent increase?"
             maxLength={500}
-            aria-label="Your question about Dubai tenancy law"
-            bg="bg.panel"
-            borderColor="border.default"
+            aria-label="Your question about the regulation"
+            variant="outline"
+            border="none"
+            bg="transparent"
             color="fg.default"
             _placeholder={{ color: 'fg.subtle' }}
-            _focus={{ borderColor: 'accent.solid' }}
+            _focus={{ outline: 'none', boxShadow: 'none' }}
             size="lg"
+            flex="1"
+            px={{ base: '3', sm: '0' }}
           />
           <Button
             type="submit"
             disabled={status === 'streaming' || question.trim().length < 8}
             bg="accent.solid"
             color="white"
+            fontWeight="600"
             _hover={{ bg: 'teal.600' }}
             size="lg"
             px="6"
+            rounded="lg"
           >
             {status === 'streaming' ? 'Answering' : 'Ask'}
           </Button>
         </Stack>
       </form>
+      <Text mt="3" fontSize="xs" color="fg.subtle">
+        AI-generated answer. Verify every claim against the cited requirement units before relying
+        on it.
+      </Text>
 
       {status === 'streaming' && segments.length === 0 && (
-        <Text mt="6" fontSize="sm" color="fg.subtle" animation="pulse">
-          Reading the corpus and grounding the answer
-        </Text>
+        <HStack
+          mt="8"
+          gap="2.5"
+          borderWidth="1px"
+          borderColor="border.default"
+          bg="bg.panel"
+          rounded="xl"
+          p="5"
+        >
+          <Box
+            w="1.5"
+            h="1.5"
+            rounded="full"
+            bg="accent.fg"
+            animation="pulseDot 1.2s infinite"
+            _motionReduce={{ animation: 'none' }}
+          />
+          <Text fontSize="sm" color="fg.muted">
+            Reading the corpus and grounding the answer
+          </Text>
+        </HStack>
       )}
 
       {status === 'error' && (
         <Box
           role="alert"
-          mt="6"
+          mt="8"
           borderWidth="1px"
           borderColor="red.900"
           bg="red.950"
-          rounded="lg"
-          px="4"
-          py="3"
+          rounded="xl"
+          px="5"
+          py="4"
         >
           <Text fontSize="sm" color="red.300">
             {ERROR_COPY[errorKey] ?? ERROR_COPY.default}
@@ -162,21 +203,16 @@ export default function AskClient({
       )}
 
       {segments.length > 0 && (
-        <Text mt="6" fontSize="xs" color="fg.subtle">
-          AI-generated answer. It may contain mistakes: verify every claim against the cited
-          requirement units before relying on it.
-        </Text>
-      )}
-      {segments.length > 0 && (
         <Box
-          mt="2"
+          mt="8"
           borderWidth="1px"
           borderColor="border.default"
           bg="bg.panel"
-          rounded="xl"
-          p="5"
-          fontSize="sm"
-          lineHeight="tall"
+          rounded="2xl"
+          p="6"
+          fontSize="md"
+          lineHeight="1.8"
+          color="fg.default"
         >
           {segments.map((segment, i) =>
             segment.kind === 'text' ? (
@@ -189,17 +225,19 @@ export default function AskClient({
                 href={`/requirements#${segment.unitId}`}
                 title={segment.citedText}
                 mx="1"
-                display="inline-block"
+                display="inline-flex"
+                alignItems="center"
+                verticalAlign="middle"
                 borderWidth="1px"
                 borderColor="accent.solid"
-                bg="accent.muted"
-                px="1.5"
+                bg="bg.subtle"
+                px="2"
                 py="0.5"
-                rounded="sm"
+                rounded="md"
                 fontFamily="heading"
                 fontSize="xs"
                 color="accent.fg"
-                _hover={{ bg: 'teal.900' }}
+                _hover={{ bg: 'accent.muted' }}
               >
                 {segment.unitId}
               </Link>

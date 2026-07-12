@@ -3,7 +3,7 @@
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Box, Container, Flex, HStack, Text } from '@chakra-ui/react';
-import { MizanMark } from '@/components/icons/MizanMark';
+import { MizanBeam } from '@/components/icons/MizanMark';
 
 const NAV = [
   { href: '/requirements', label: 'Requirements' },
@@ -28,20 +28,23 @@ export function Nav() {
       zIndex="10"
       borderBottomWidth="1px"
       borderColor="border.default"
-      bg="bg.canvas"
+      bg="rgba(12, 10, 7, 0.72)"
+      backdropFilter="blur(14px)"
     >
-      <Container maxW="4xl" py="3">
+      <Container maxW="6xl" py="3.5">
         <Flex align="center" gap="6">
-          <Box
-            asChild
-            flexShrink="0"
-            color="law.fg"
-            _hover={{ color: 'gold.400' }}
-            transition="color 0.15s"
-          >
+          <Box asChild flexShrink="0">
             <NextLink href="/" aria-label="Mizan, home">
               <HStack gap="2.5" align="center">
-                <MizanMark width="26" height="26" />
+                <Box
+                  color="law.fg"
+                  display="inline-flex"
+                  animation="swayBeam 6s ease-in-out infinite"
+                  _motionReduce={{ animation: 'none' }}
+                  transformOrigin="50% 18%"
+                >
+                  <MizanBeam width="26" height="15" />
+                </Box>
                 <HStack gap="2" align="baseline">
                   <Text fontFamily="serif" fontWeight="600" fontSize="lg" color="fg.default">
                     Mizan
@@ -61,7 +64,7 @@ export function Nav() {
             overflowX="auto"
             css={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
           >
-            <HStack gap="5" minW="max-content">
+            <HStack gap="6" minW="max-content">
               {NAV.map(item => {
                 const active = isActive(pathname, item.href);
                 return (
@@ -74,8 +77,8 @@ export function Nav() {
                     borderBottomWidth="2px"
                     borderColor={active ? 'accent.solid' : 'transparent'}
                     pb="0.5"
-                    transition="color 0.15s"
-                    _hover={{ color: 'accent.fg' }}
+                    transition="color 0.2s"
+                    _hover={{ color: 'fg.default' }}
                   >
                     <NextLink href={item.href} aria-current={active ? 'page' : undefined}>
                       {item.label}
@@ -84,6 +87,23 @@ export function Nav() {
                 );
               })}
             </HStack>
+          </Box>
+
+          <Box
+            asChild
+            flexShrink="0"
+            display={{ base: 'none', sm: 'inline-flex' }}
+            fontSize="sm"
+            fontWeight="600"
+            color="bg.canvas"
+            bg="law.fg"
+            rounded="full"
+            px="4"
+            py="1.5"
+            transition="background 0.2s"
+            _hover={{ bg: 'gold.400' }}
+          >
+            <NextLink href="/ask">Try it</NextLink>
           </Box>
         </Flex>
       </Container>

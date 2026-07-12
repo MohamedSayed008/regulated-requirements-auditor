@@ -3,6 +3,9 @@ import { Badge, Box, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react
 import { type CorpusDocument, type RequirementUnit } from '@/lib/corpus';
 import { CORPUS_LIST, type Corpus } from '@/lib/corpora';
 import { Page } from '@/components/ui/shell';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { Reveal } from '@/components/ui/Reveal';
+import { CorpusPanels } from '@/components/CorpusPanels';
 
 export const metadata: Metadata = {
   title: 'Requirements',
@@ -14,28 +17,22 @@ export const metadata: Metadata = {
 export default function RequirementsPage() {
   return (
     <Page>
-      <Stack gap="4" mb="10">
-        <Text
-          fontSize="sm"
-          fontWeight="semibold"
-          letterSpacing="0.2em"
-          textTransform="uppercase"
-          color="accent.fg"
-        >
-          The corpora
-        </Text>
-        <Heading fontFamily="serif" fontWeight="500" fontSize="3xl">
-          Requirements
-        </Heading>
-        <Text color="fg.muted" maxW="2xl">
-          Each corpus is a regulation parsed into citable requirement units. Every answer and every
-          audit finding in this demo points back to one of the units below.
-        </Text>
-      </Stack>
-
-      {CORPUS_LIST.map(corpus => (
-        <CorpusSection key={corpus.id} corpus={corpus} />
-      ))}
+      <PageHeader eyebrow="The corpora" title="Requirements">
+        Each corpus is a regulation parsed into citable requirement units. Every answer and every
+        audit finding in this demo points back to one of the units below.
+      </PageHeader>
+      <Reveal delay={160}>
+        <CorpusPanels
+          options={CORPUS_LIST.map(c => ({
+            id: c.id,
+            shortName: `${c.shortName} · ${c.units.length} units`,
+          }))}
+          panels={CORPUS_LIST.map(corpus => ({
+            id: corpus.id,
+            content: <CorpusSection corpus={corpus} />,
+          }))}
+        />
+      </Reveal>
     </Page>
   );
 }
@@ -48,20 +45,18 @@ function CorpusSection({ corpus }: { corpus: Corpus }) {
   }
 
   return (
-    <Box as="section" mb="16">
-      <Heading as="h2" fontFamily="heading" fontSize="2xl" mb="2">
-        {corpus.name}
-      </Heading>
-      <Text color="fg.muted" fontSize="sm" mb="4">
-        {corpus.units.length} units, {testable} testable against code.
+    <Box as="section">
+      <Text fontSize="sm" color="fg.subtle" mb="4">
+        {corpus.units.length} units, {testable} testable against code
+        {corpus.bilingual ? ' · bilingual (English / العربية)' : ''}
       </Text>
-      <Stack gap="3" mb="6">
+      <Stack gap="3" mb="8">
         <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
           <Text fontSize="xs" color="fg.subtle">
             {corpus.disclaimer.en}
           </Text>
           {corpus.disclaimer.ar && (
-            <Text fontSize="xs" color="fg.subtle" dir="rtl" lang="ar" mt="1">
+            <Text fontSize="xs" color="fg.subtle" dir="rtl" lang="ar" mt="1" fontFamily="arabic">
               {corpus.disclaimer.ar}
             </Text>
           )}
@@ -85,27 +80,30 @@ function CorpusSection({ corpus }: { corpus: Corpus }) {
 function DocumentSection({ doc, units }: { doc: CorpusDocument; units: RequirementUnit[] }) {
   return (
     <Box as="section" aria-labelledby={doc.slug} mb="14">
-      <Heading
-        id={doc.slug}
-        as="h2"
-        fontSize="xl"
+      <HStack
+        justify="space-between"
+        align="baseline"
+        flexWrap="wrap"
+        gap="2"
         borderBottomWidth="1px"
         borderColor="border.default"
-        pb="3"
+        pb="3.5"
       >
-        {doc.titleEn}
-      </Heading>
-      <Text fontSize="sm" color="fg.subtle" mt="2">
-        {doc.titleAr && (
-          <Text as="span" dir="rtl" lang="ar">
-            {doc.titleAr}{' '}
-          </Text>
-        )}
-        {doc.amendedBy ? `· as amended by ${doc.amendedBy} ` : ''}·{' '}
-        <Link href={doc.officialSourceEn} color="accent.fg" rel="noopener noreferrer">
-          official source
-        </Link>
-      </Text>
+        <Heading id={doc.slug} as="h2" fontFamily="heading" fontSize="xl">
+          {doc.titleEn}
+        </Heading>
+        <Text fontSize="sm" color="fg.subtle">
+          {doc.amendedBy ? `as amended by ${doc.amendedBy} · ` : ''}
+          <Link href={doc.officialSourceEn} color="accent.fg" rel="noopener noreferrer">
+            official source
+          </Link>
+        </Text>
+      </HStack>
+      {doc.titleAr && (
+        <Text fontSize="sm" color="fg.subtle" mt="2" dir="rtl" lang="ar" fontFamily="arabic">
+          {doc.titleAr}
+        </Text>
+      )}
       <Stack gap="4" mt="6">
         {units.map(unit => (
           <UnitCard key={unit.id} unit={unit} />
@@ -116,17 +114,24 @@ function DocumentSection({ doc, units }: { doc: CorpusDocument; units: Requireme
 }
 
 function UnitCard({ unit }: { unit: RequirementUnit }) {
+  // Left rule encodes the unit's nature: gold marks an editorial caveat, teal a
+  // testable unit, plain line otherwise.
+  const rule = unit.editorialNote ? 'law.solid' : unit.testable ? 'accent.solid' : 'border.default';
   return (
     <Box
       id={unit.id}
       scrollMarginTop="24"
       borderWidth="1px"
       borderColor="border.default"
+      borderStartWidth="3px"
+      borderStartColor={rule}
       bg="bg.panel"
       rounded="xl"
       p="5"
+      transition="transform 0.25s"
+      _hover={{ transform: 'translateX(3px)' }}
     >
-      <HStack gap="2" flexWrap="wrap">
+      <HStack gap="2.5" flexWrap="wrap">
         <Box
           as="code"
           bg="bg.subtle"
@@ -143,28 +148,29 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
           {unit.articleRef}
         </Text>
         {unit.testable && (
-          <Badge colorPalette="teal" variant="subtle">
+          <Badge colorPalette="teal" variant="subtle" rounded="full">
             testable
           </Badge>
         )}
         {unit.amendedBy && (
-          <Badge colorPalette="orange" variant="subtle">
+          <Badge colorPalette="orange" variant="subtle" rounded="full">
             amended by {unit.amendedBy}
           </Badge>
         )}
       </HStack>
-      <Text mt="3" fontSize="sm" lineHeight="tall" color="fg.default" whiteSpace="pre-line">
+      <Text mt="3.5" fontSize="sm" lineHeight="1.7" color="fg.default" whiteSpace="pre-line">
         {unit.textEn}
       </Text>
       {unit.textAr && (
         <Text
-          mt="3"
-          fontSize="sm"
-          lineHeight="tall"
+          mt="3.5"
+          fontSize="md"
+          lineHeight="1.9"
           color="fg.muted"
           whiteSpace="pre-line"
           dir="rtl"
           lang="ar"
+          fontFamily="arabic"
           borderInlineStartWidth="2px"
           borderColor="border.default"
           ps="4"
@@ -174,21 +180,21 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
       )}
       {unit.editorialNote && (
         <Box
-          mt="3"
+          mt="3.5"
           borderWidth="1px"
-          borderColor="orange.900"
-          bg="orange.950"
+          borderColor="gold.900"
+          bg="law.muted"
           rounded="lg"
-          px="3"
-          py="2"
+          px="3.5"
+          py="2.5"
         >
-          <Text fontSize="xs" color="orange.300">
+          <Text fontSize="xs" color="law.fg">
             Editorial note: {unit.editorialNote}
           </Text>
         </Box>
       )}
       {unit.tags.length > 0 && (
-        <HStack gap="1.5" mt="3" flexWrap="wrap">
+        <HStack gap="1.5" mt="3.5" flexWrap="wrap">
           {unit.tags.map(tag => (
             <Box
               key={tag}

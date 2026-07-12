@@ -36,7 +36,7 @@ export default function ReviewClient({ initialFindings }: { initialFindings: Fin
     <Stack gap="6">
       <Grid templateColumns="repeat(3, 1fr)" gap="3">
         <Tally label="Approved" value={counts.approved} palette="green" />
-        <Tally label="Rejected" value={counts.rejected} palette="gray" />
+        <Tally label="Rejected" value={counts.rejected} palette="red" />
         <Tally label="Pending" value={counts.pending} palette="orange" />
       </Grid>
 
@@ -131,14 +131,21 @@ export default function ReviewClient({ initialFindings }: { initialFindings: Fin
   );
 }
 
+const TALLY_COLOR: Record<string, string> = {
+  green: 'green.300',
+  red: 'red.300',
+  orange: 'orange.300',
+  gray: 'fg.muted',
+};
+
 function Tally({ label, value, palette }: { label: string; value: number; palette: string }) {
   return (
-    <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
+    <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="xl" p="4.5">
       <HStack justify="space-between">
-        <Text fontFamily="heading" fontSize="2xl" color="fg.default">
+        <Text fontFamily="heading" fontSize="2xl" color={TALLY_COLOR[palette] ?? 'fg.default'}>
           {value}
         </Text>
-        <Badge colorPalette={palette} variant="subtle">
+        <Badge colorPalette={palette} variant="subtle" rounded="full">
           {label}
         </Badge>
       </HStack>
