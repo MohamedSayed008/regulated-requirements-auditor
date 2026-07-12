@@ -5,8 +5,10 @@ import { CORPUS_LIST, DEFAULT_CORPUS_ID } from '@/lib/corpora';
 import AskClient from '@/app/ask/AskClient';
 
 export const metadata: Metadata = {
-  title: 'Ask: Mizan',
-  description: 'Ask questions about Dubai tenancy law and get answers with the exact clause cited.',
+  title: 'Ask',
+  description:
+    'Ask a question about the regulation and get an answer with the exact clause cited. Runs on Dubai tenancy law and the UAE eInvoicing mandate.',
+  alternates: { canonical: '/ask' },
 };
 
 export default function AskPage() {

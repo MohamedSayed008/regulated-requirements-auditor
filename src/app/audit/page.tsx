@@ -11,9 +11,10 @@ import { requirementById } from '@/lib/requirement-lookup';
 import runJson from '@/data/audit/latest-run.json';
 
 export const metadata: Metadata = {
-  title: 'Audit: Mizan',
+  title: 'Audit',
   description:
-    'A replayed code audit: a tenancy-management app checked against Dubai tenancy law, with findings.',
+    'A replayed code audit: a tenancy-management app checked against Dubai tenancy law, with each finding tied to the clause it violates.',
+  alternates: { canonical: '/audit' },
 };
 
 const run = auditRunSchema.parse(runJson);

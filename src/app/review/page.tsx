@@ -7,9 +7,10 @@ import ReviewClient from '@/app/review/ReviewClient';
 import runJson from '@/data/audit/latest-run.json';
 
 export const metadata: Metadata = {
-  title: 'Review queue: Mizan',
+  title: 'Review queue',
   description:
     'The human-in-the-loop step: approve or reject each proposed finding before it counts.',
+  alternates: { canonical: '/review' },
 };
 
 const run = auditRunSchema.parse(runJson);

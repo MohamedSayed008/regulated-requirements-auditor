@@ -5,8 +5,10 @@ import { CORPUS_LIST, type Corpus } from '@/lib/corpora';
 import { Page } from '@/components/ui/shell';
 
 export const metadata: Metadata = {
-  title: 'Requirements: Mizan',
-  description: 'The corpora: regulations parsed into citable requirement units.',
+  title: 'Requirements',
+  description:
+    'The corpora: regulations parsed into citable requirement units, English and Arabic.',
+  alternates: { canonical: '/requirements' },
 };
 
 export default function RequirementsPage() {

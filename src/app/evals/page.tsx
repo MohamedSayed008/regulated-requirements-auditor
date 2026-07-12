@@ -5,9 +5,10 @@ import { Page } from '@/components/ui/shell';
 import reportsJson from '@/data/evals/reports.json';
 
 export const metadata: Metadata = {
-  title: 'Evals: Mizan',
+  title: 'Evals',
   description:
     'The published eval report per corpus: groundedness, refusal correctness, injection resistance, and audit precision/recall.',
+  alternates: { canonical: '/evals' },
 };
 
 const reports = evalReportSetSchema.parse(reportsJson);

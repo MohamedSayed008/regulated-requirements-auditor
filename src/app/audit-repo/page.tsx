@@ -5,8 +5,10 @@ import { CORPUS_LIST, DEFAULT_CORPUS_ID } from '@/lib/corpora';
 import AuditRepoClient from '@/app/audit-repo/AuditRepoClient';
 
 export const metadata: Metadata = {
-  title: 'Audit a repo: Mizan',
-  description: 'Audit a public GitHub repository against Dubai tenancy law.',
+  title: 'Audit a repo',
+  description:
+    'Audit any public GitHub repository against a chosen regulation, through the same governed findings pipeline.',
+  alternates: { canonical: '/audit-repo' },
 };
 
 export default function AuditRepoPage() {
