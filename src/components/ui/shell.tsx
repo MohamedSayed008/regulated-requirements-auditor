@@ -22,7 +22,9 @@ export function Page({
       minH="100dvh"
       display="flex"
       flexDirection="column"
-      bg="radial-gradient(120% 90% at 85% -10%, rgba(230, 205, 134, 0.07), transparent 55%), radial-gradient(90% 70% at 5% 110%, rgba(15, 118, 110, 0.10), transparent 55%), #0c0a07"
+      bg="bg.canvas"
+      backgroundImage="radial-gradient(120% 90% at 85% -10%, rgba(230, 205, 134, 0.07), transparent 55%), radial-gradient(90% 70% at 5% 110%, rgba(15, 118, 110, 0.10), transparent 55%)"
+      transition="background 0.3s"
     >
       <Nav />
       {bleed ? (

@@ -74,21 +74,37 @@ const config = defineConfig({
     },
     semanticTokens: {
       colors: {
-        'bg.canvas': { value: { base: '#0c0a07', _dark: '#0c0a07' } },
-        'bg.panel': { value: { base: '#151009', _dark: '#151009' } },
-        'bg.subtle': { value: { base: '#1e1810', _dark: '#1e1810' } },
-        'fg.default': { value: { base: '#f4efe4', _dark: '#f4efe4' } },
-        'fg.muted': { value: { base: '#b3a890', _dark: '#b3a890' } },
-        'fg.subtle': { value: { base: '#7b715c', _dark: '#7b715c' } },
-        'border.default': { value: { base: '#2c2417', _dark: '#2c2417' } },
+        // Light values first (base), the dark palette under _dark. Dark is the
+        // default via next-themes; the toggle flips the html class.
+        'bg.canvas': { value: { base: '#f7f2e8', _dark: '#0c0a07' } },
+        'bg.panel': { value: { base: '#fffdf6', _dark: '#151009' } },
+        'bg.subtle': { value: { base: '#efe7d6', _dark: '#1e1810' } },
+        'fg.default': { value: { base: '#211a0f', _dark: '#f4efe4' } },
+        'fg.muted': { value: { base: '#6b6047', _dark: '#b3a890' } },
+        'fg.subtle': { value: { base: '#7c714f', _dark: '#7b715c' } },
+        'border.default': { value: { base: '#e5dcc7', _dark: '#2c2417' } },
+        'nav.bg': {
+          value: { base: 'rgba(247, 242, 232, 0.82)', _dark: 'rgba(12, 10, 7, 0.72)' },
+        },
         // teal = the code / verification side
-        'accent.fg': { value: '{colors.teal.300}' },
-        'accent.solid': { value: '{colors.teal.700}' },
-        'accent.muted': { value: '{colors.teal.950}' },
+        'accent.fg': { value: { base: '#0d7a70', _dark: '{colors.teal.300}' } },
+        'accent.solid': { value: { base: '#0d9488', _dark: '{colors.teal.700}' } },
+        'accent.muted': { value: { base: '#ddefe9', _dark: '{colors.teal.950}' } },
         // gold = the law / justice side
-        'law.fg': { value: '{colors.gold.300}' },
-        'law.solid': { value: '{colors.gold.400}' },
-        'law.muted': { value: '{colors.gold.950}' },
+        'law.fg': { value: { base: '#8a6413', _dark: '{colors.gold.300}' } },
+        'law.solid': { value: { base: '#9c7422', _dark: '{colors.gold.400}' } },
+        'law.muted': { value: { base: '#fbf1d8', _dark: '{colors.gold.950}' } },
+        'law.line': { value: { base: '#e6cf98', _dark: '{colors.gold.900}' } },
+        // warnings / errors
+        'warn.fg': { value: { base: '#b42318', _dark: '#fca5a5' } },
+        'warn.bg': { value: { base: '#fdeceb', _dark: '#2a1010' } },
+        'warn.line': { value: { base: '#f1c4c1', _dark: '#5a1f1f' } },
+        // syntax accents in code excerpts
+        'code.kw': { value: { base: '#7c3aed', _dark: '#c084fc' } },
+        'code.num': { value: { base: '#be185d', _dark: '#f0abfc' } },
+        // status numerals
+        'success.fg': { value: { base: '#15803d', _dark: '#86efac' } },
+        'warning.fg': { value: { base: '#b45309', _dark: '#fdba74' } },
       },
     },
   },

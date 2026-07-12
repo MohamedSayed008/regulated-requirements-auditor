@@ -148,13 +148,13 @@ export default function AuditRepoClient({
           role="alert"
           mt="8"
           borderWidth="1px"
-          borderColor="red.900"
-          bg="red.950"
+          borderColor="warn.line"
+          bg="warn.bg"
           rounded="xl"
           px="5"
           py="4"
         >
-          <Text fontSize="sm" color="red.300">
+          <Text fontSize="sm" color="warn.fg">
             {ERROR_COPY[errorKey] ?? ERROR_COPY.default}
           </Text>
         </Box>

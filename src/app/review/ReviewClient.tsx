@@ -132,9 +132,9 @@ export default function ReviewClient({ initialFindings }: { initialFindings: Fin
 }
 
 const TALLY_COLOR: Record<string, string> = {
-  green: 'green.300',
-  red: 'red.300',
-  orange: 'orange.300',
+  green: 'success.fg',
+  red: 'warn.fg',
+  orange: 'warning.fg',
   gray: 'fg.muted',
 };
 

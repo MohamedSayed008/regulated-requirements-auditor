@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Box, Container, Flex, HStack, Text } from '@chakra-ui/react';
 import { MizanBeam } from '@/components/icons/MizanMark';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 const NAV = [
   { href: '/requirements', label: 'Requirements' },
@@ -28,7 +29,7 @@ export function Nav() {
       zIndex="10"
       borderBottomWidth="1px"
       borderColor="border.default"
-      bg="rgba(12, 10, 7, 0.72)"
+      bg="nav.bg"
       backdropFilter="blur(14px)"
     >
       <Container maxW="6xl" py="3.5">
@@ -89,6 +90,8 @@ export function Nav() {
             </HStack>
           </Box>
 
+          <ThemeToggle />
+
           <Box
             asChild
             flexShrink="0"
@@ -101,7 +104,7 @@ export function Nav() {
             px="4"
             py="1.5"
             transition="background 0.2s"
-            _hover={{ bg: 'gold.400' }}
+            _hover={{ bg: 'law.solid' }}
           >
             <NextLink href="/ask">Try it</NextLink>
           </Box>

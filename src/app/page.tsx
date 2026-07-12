@@ -308,7 +308,7 @@ export default function Home() {
                     14
                   </Text>
                   {'  '}
-                  <Text as="span" color="purple.300">
+                  <Text as="span" color="code.kw">
                     export const
                   </Text>{' '}
                   <Text as="span" color="accent.fg">
@@ -317,7 +317,7 @@ export default function Home() {
                   ={' '}
                   <Text
                     as="span"
-                    color="red.300"
+                    color="warn.fg"
                     bg="rgba(192, 57, 47, 0.22)"
                     rounded="xs"
                     px="0.5"
@@ -384,10 +384,11 @@ export default function Home() {
                 h="100%"
                 borderWidth="1px"
                 borderColor="border.default"
-                bg={
+                bg="bg.panel"
+                backgroundImage={
                   card.tint === 'teal'
-                    ? 'linear-gradient(150deg, rgba(15, 118, 110, 0.10), #0c0a07)'
-                    : 'bg.panel'
+                    ? 'linear-gradient(150deg, rgba(15, 118, 110, 0.10), transparent)'
+                    : undefined
                 }
                 rounded="2xl"
                 p="7"

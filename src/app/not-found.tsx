@@ -31,7 +31,7 @@ export default function NotFound() {
           bg="law.solid"
           color="bg.canvas"
           fontWeight="600"
-          _hover={{ bg: 'gold.400' }}
+          _hover={{ bg: 'law.solid' }}
         >
           <NextLink href="/">Back to home</NextLink>
         </Button>

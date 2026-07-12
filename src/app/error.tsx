@@ -38,7 +38,7 @@ export default function Error({
             bg="law.solid"
             color="bg.canvas"
             fontWeight="600"
-            _hover={{ bg: 'gold.400' }}
+            _hover={{ bg: 'law.solid' }}
           >
             Try again
           </Button>

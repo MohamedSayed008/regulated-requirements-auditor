@@ -26,7 +26,7 @@ export default function EvalsPage() {
       </PageHeader>
 
       {reports.length === 0 && (
-        <Box borderWidth="1px" borderColor="gold.900" bg="law.muted" rounded="lg" p="4">
+        <Box borderWidth="1px" borderColor="law.line" bg="law.muted" rounded="lg" p="4">
           <Text fontSize="sm" color="law.fg">
             The eval reports have not been generated yet.
           </Text>
@@ -87,7 +87,7 @@ function CorpusReportSection({ entry }: { entry: CorpusReport }) {
         <Reveal delay={90}>
           <Box
             borderWidth="1px"
-            borderColor="gold.900"
+            borderColor="law.line"
             bg="law.muted"
             rounded="xl"
             px="5"

@@ -182,7 +182,7 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
         <Box
           mt="3.5"
           borderWidth="1px"
-          borderColor="gold.900"
+          borderColor="law.line"
           bg="law.muted"
           rounded="lg"
           px="3.5"
