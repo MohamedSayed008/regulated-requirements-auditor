@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { type ReactNode } from 'react';
 import { Geist, Geist_Mono, Spectral, Amiri } from 'next/font/google';
+import { Box } from '@chakra-ui/react';
 import { Provider } from '@/components/ui/provider';
+import { Nav } from '@/components/layout/Nav';
+import { Footer } from '@/components/layout/Footer';
 import { siteConfig, siteJsonLd } from '@/lib/site';
 
 const geistSans = Geist({
@@ -73,7 +76,24 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           // Controlled config serialized to JSON, never user input.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd()) }}
         />
-        <Provider>{children}</Provider>
+        <Provider>
+          {/* Persistent app shell: nav + footer render once and survive
+              navigation; only <main> swaps (and shows loading.tsx) per route. */}
+          <Box
+            minH="100dvh"
+            display="flex"
+            flexDirection="column"
+            bg="bg.canvas"
+            backgroundImage="radial-gradient(120% 90% at 85% -10%, rgba(230, 205, 134, 0.07), transparent 55%), radial-gradient(90% 70% at 5% 110%, rgba(15, 118, 110, 0.10), transparent 55%)"
+            transition="background 0.3s"
+          >
+            <Nav />
+            <Box as="main" flex="1">
+              {children}
+            </Box>
+            <Footer />
+          </Box>
+        </Provider>
       </body>
     </html>
   );
