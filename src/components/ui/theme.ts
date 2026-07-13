@@ -81,7 +81,7 @@ const config = defineConfig({
         'bg.subtle': { value: { base: '#efe7d6', _dark: '#1e1810' } },
         'fg.default': { value: { base: '#211a0f', _dark: '#f4efe4' } },
         'fg.muted': { value: { base: '#6b6047', _dark: '#b3a890' } },
-        'fg.subtle': { value: { base: '#7c714f', _dark: '#7b715c' } },
+        'fg.subtle': { value: { base: '#6f6444', _dark: '#968c72' } },
         'border.default': { value: { base: '#e5dcc7', _dark: '#2c2417' } },
         'nav.bg': {
           value: { base: 'rgba(247, 242, 232, 0.82)', _dark: 'rgba(12, 10, 7, 0.72)' },

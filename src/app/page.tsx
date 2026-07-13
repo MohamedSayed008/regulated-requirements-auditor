@@ -55,7 +55,7 @@ export default function Home() {
     <Page bleed>
       <Container maxW="6xl" pt={{ base: '14', md: '20' }} pb="16">
         <Grid
-          templateColumns={{ base: '1fr', lg: '1.15fr 0.85fr' }}
+          templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(0, 1.15fr) minmax(0, 0.85fr)' }}
           gap={{ base: '10', lg: '14' }}
           alignItems="center"
         >
@@ -116,10 +116,7 @@ export default function Home() {
             </Reveal>
             <Reveal delay={180}>
               <Box asChild display="block" maxW="lg">
-                <NextLink
-                  href={`/ask?q=${encodeURIComponent(HERO_QUESTION)}`}
-                  aria-label={`Ask: ${HERO_QUESTION}`}
-                >
+                <NextLink href={`/ask?q=${encodeURIComponent(HERO_QUESTION)}`}>
                   <HStack
                     gap="2.5"
                     bg="bg.panel"
@@ -131,13 +128,14 @@ export default function Home() {
                     transition="border-color 0.25s"
                     _hover={{ borderColor: 'accent.solid' }}
                   >
-                    <Text fontFamily="heading" fontSize="sm" color="fg.subtle">
+                    <Text fontFamily="heading" fontSize="sm" color="fg.subtle" flexShrink="0">
                       /ask
                     </Text>
-                    <Text flex="1" fontSize="sm" color="fg.muted" truncate>
+                    <Text flex="1" minW="0" fontSize="sm" color="fg.muted" truncate>
                       {HERO_QUESTION}
                     </Text>
                     <Box
+                      flexShrink="0"
                       fontSize="sm"
                       fontWeight="600"
                       color="white"
@@ -161,7 +159,7 @@ export default function Home() {
 
         <Reveal delay={240}>
           <Grid
-            templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}
+            templateColumns={{ base: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' }}
             mt="14"
             borderWidth="1px"
             borderColor="border.default"
@@ -234,7 +232,7 @@ export default function Home() {
             overflow="hidden"
             bg="bg.panel"
           >
-            <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }}>
+            <Grid templateColumns={{ base: '1fr', md: 'minmax(0, 1fr) minmax(0, 1fr)' }}>
               <Box
                 p="8"
                 borderEndWidth={{ base: '0', md: '1px' }}
@@ -365,7 +363,7 @@ export default function Home() {
             </Text>
           </HStack>
         </Reveal>
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap="4">
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, minmax(0, 1fr))' }} gap="4">
           {PIPELINE.map((card, i) => (
             <Reveal
               key={card.route}
