@@ -2,75 +2,75 @@
 
 import { type FormEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Badge, Box, Button, HStack, Input, Popover, Portal, Stack, Text } from '@chakra-ui/react';
+import { Badge, Button, HStack, Input, Popover, Portal, Stack, Text } from '@chakra-ui/react';
 
 type ChipState = 'unknown' | 'viewer' | 'reviewer';
 
 /**
- * Global session control in the nav. Sign-in happens right here in a popover,
- * the chip flips to the reviewer badge immediately on success (no reload), and
- * router.refresh() re-renders the server components that depend on the role.
- * The load-time whoami call is also the sliding-rotation touchpoint.
+ * Global session control in the nav. The nav is rendered per page, so this
+ * component remounts on every navigation; a module-scoped cache of the last
+ * resolved role means a remount starts from that role instead of flashing an
+ * empty placeholder. Before the first resolution the trigger renders disabled
+ * (stable footprint, no hide/show) rather than hidden.
  */
+let cachedRole: ChipState = 'unknown';
+
 export function SessionChip() {
   const router = useRouter();
   const pathname = usePathname();
-  const [state, setState] = useState<ChipState>('unknown');
+  const [state, setState] = useState<ChipState>(cachedRole);
 
   useEffect(() => {
     let cancelled = false;
+    const resolve = (role: ChipState) => {
+      if (cancelled) return;
+      cachedRole = role;
+      setState(role);
+    };
     void fetch('/api/session', { method: 'GET' })
       .then(response => (response.ok ? response.json() : { role: 'viewer' }))
-      .then((body: { role?: string }) => {
-        if (!cancelled) setState(body.role === 'reviewer' ? 'reviewer' : 'viewer');
-      })
-      .catch(() => {
-        if (!cancelled) setState('viewer');
-      });
+      .then((body: { role?: string }) => resolve(body.role === 'reviewer' ? 'reviewer' : 'viewer'))
+      .catch(() => resolve('viewer'));
     return () => {
       cancelled = true;
     };
-    // Re-check when the route changes so a rotated/expired session stays honest.
+    // Re-check on navigation so a rotated or expired session stays honest.
   }, [pathname]);
 
-  if (state === 'unknown') return <Box w="16" />;
+  function setRole(role: ChipState) {
+    cachedRole = role;
+    setState(role);
+    router.refresh();
+  }
 
-  if (state === 'viewer') {
+  if (state === 'reviewer') {
     return (
-      <SignInPopover
-        onSignedIn={() => {
-          setState('reviewer');
-          router.refresh();
-        }}
-      />
+      <HStack gap="2" flexShrink="0">
+        <Badge colorPalette="green" variant="subtle" rounded="full">
+          reviewer
+        </Badge>
+        <Button
+          size="xs"
+          variant="outline"
+          borderColor="border.default"
+          color="fg.muted"
+          _hover={{ color: 'fg.default', borderColor: 'accent.solid' }}
+          onClick={() => {
+            void fetch('/api/session', { method: 'DELETE' }).then(() => setRole('viewer'));
+          }}
+        >
+          Sign out
+        </Button>
+      </HStack>
     );
   }
 
-  return (
-    <HStack gap="2" flexShrink="0">
-      <Badge colorPalette="green" variant="subtle" rounded="full">
-        reviewer
-      </Badge>
-      <Button
-        size="xs"
-        variant="outline"
-        borderColor="border.default"
-        color="fg.muted"
-        _hover={{ color: 'fg.default', borderColor: 'accent.solid' }}
-        onClick={() => {
-          void fetch('/api/session', { method: 'DELETE' }).then(() => {
-            setState('viewer');
-            router.refresh();
-          });
-        }}
-      >
-        Sign out
-      </Button>
-    </HStack>
-  );
+  // 'viewer' shows the interactive trigger; 'unknown' shows it disabled while
+  // the first session check is in flight, keeping the footprint stable.
+  return <SignInPopover disabled={state === 'unknown'} onSignedIn={() => setRole('reviewer')} />;
 }
 
-function SignInPopover({ onSignedIn }: { onSignedIn: () => void }) {
+function SignInPopover({ disabled, onSignedIn }: { disabled: boolean; onSignedIn: () => void }) {
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState<'idle' | 'pending' | 'failed'>('idle');
@@ -98,6 +98,21 @@ function SignInPopover({ onSignedIn }: { onSignedIn: () => void }) {
     }
   }
 
+  const trigger = (
+    <Button
+      size="xs"
+      variant="ghost"
+      color="fg.subtle"
+      _hover={{ color: 'fg.default', bg: 'transparent' }}
+      flexShrink="0"
+      disabled={disabled}
+    >
+      Reviewer sign in
+    </Button>
+  );
+
+  if (disabled) return trigger;
+
   return (
     <Popover.Root
       open={open}
@@ -107,17 +122,7 @@ function SignInPopover({ onSignedIn }: { onSignedIn: () => void }) {
       }}
       positioning={{ placement: 'bottom-end' }}
     >
-      <Popover.Trigger asChild>
-        <Button
-          size="xs"
-          variant="ghost"
-          color="fg.subtle"
-          _hover={{ color: 'fg.default', bg: 'transparent' }}
-          flexShrink="0"
-        >
-          Reviewer sign in
-        </Button>
-      </Popover.Trigger>
+      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
       <Portal>
         <Popover.Positioner>
           <Popover.Content
