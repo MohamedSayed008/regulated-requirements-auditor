@@ -21,6 +21,7 @@ export default function RequirementsPage() {
         Each corpus is a regulation parsed into citable requirement units. Every answer and every
         audit finding in this demo points back to one of the units below.
       </PageHeader>
+      <ColorLegend />
       <Reveal delay={160}>
         <CorpusPanels
           options={CORPUS_LIST.map(c => ({
@@ -34,6 +35,37 @@ export default function RequirementsPage() {
         />
       </Reveal>
     </Page>
+  );
+}
+
+function ColorLegend() {
+  // Decodes the left-rule colour on each UnitCard. Kept in the same priority
+  // order as UnitCard: editorial caveat wins over testable, plain otherwise.
+  const items = [
+    { color: 'law.solid', label: 'Editorial caveat' },
+    { color: 'accent.solid', label: 'Testable against code' },
+    { color: 'border.default', label: 'Reference only' },
+  ];
+  return (
+    <HStack gap="5" rowGap="2" flexWrap="wrap" mb="8">
+      <Text
+        fontSize="xs"
+        fontFamily="heading"
+        letterSpacing="0.1em"
+        textTransform="uppercase"
+        color="fg.subtle"
+      >
+        Left rule
+      </Text>
+      {items.map(item => (
+        <HStack key={item.label} gap="2.5">
+          <Box w="1" h="5" rounded="full" bg={item.color} flexShrink="0" aria-hidden="true" />
+          <Text fontSize="xs" color="fg.muted">
+            {item.label}
+          </Text>
+        </HStack>
+      ))}
+    </HStack>
   );
 }
 
