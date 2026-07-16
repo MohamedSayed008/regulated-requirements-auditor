@@ -30,3 +30,12 @@ MASTER_PLAN.md
 LAUNCH_POST.md
 mizan-redesign*.html
 mizan-demo*.gif
+
+# OpenWolf brain (local context cache)
+.wolf/
+
+.serena/
+
+/graphify-out
+
+.codex/
