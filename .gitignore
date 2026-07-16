@@ -38,4 +38,6 @@ mizan-demo*.gif
 
 /graphify-out
 
-.codex/
+# Codex config leaks absolute machine paths — keep only the portable prompts
+.codex/*
+!.codex/prompts/
