@@ -66,9 +66,12 @@ const uaeEinvoicing: Corpus = {
   units: parseCorpus(einvoicingUnits),
   disclaimer: {
     en: 'Unofficial reproduction for demonstration purposes, not legal advice. Source: UAE Ministry of Finance and Federal Tax Authority. Verify against the official texts before relying on it.',
+    ar: 'استنساخ غير رسمي لأغراض العرض فقط وليس استشارة قانونية أو ضريبية. المصدر: وزارة المالية والهيئة الاتحادية للضرائب في الإمارات. النص العربي هنا ترجمة غير رسمية؛ تحقق من النصوص الرسمية قبل الاعتماد عليها.',
   },
   currencyNote:
     'As of July 2026: the eInvoicing pilot and voluntary phase open 1 July 2026; businesses with revenue at or above AED 50 million must appoint an Accredited Service Provider by 30 October 2026 and go live 1 January 2027; other businesses go live 1 July 2027; government entities 1 October 2027. B2C transactions are excluded until a future decision.',
+  currencyNoteAr:
+    'كما في يوليو 2026: يبدأ البرنامج التجريبي والمرحلة الطوعية للفوترة الإلكترونية في 1 يوليو 2026؛ وعلى المنشآت التي تبلغ إيراداتها 50 مليون درهم أو أكثر تعيين مزود خدمة معتمد بحلول 30 أكتوبر 2026 وبدء التشغيل في 1 يناير 2027؛ وتبدأ بقية المنشآت في 1 يوليو 2027، والجهات الحكومية في 1 أكتوبر 2027. وتظل معاملات الأعمال مع المستهلكين مستثناة إلى حين صدور قرار لاحق.',
   bilingual: false,
 };
 

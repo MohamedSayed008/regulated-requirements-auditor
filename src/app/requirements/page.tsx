@@ -116,6 +116,7 @@ function CorpusSection({ corpus, lang }: { corpus: Corpus; lang: Lang }) {
           doc={doc}
           units={bySource.get(doc.slug) ?? []}
           lang={lang}
+          official={corpus.bilingual}
         />
       ))}
     </Box>
@@ -126,10 +127,13 @@ function DocumentSection({
   doc,
   units,
   lang,
+  official,
 }: {
   doc: CorpusDocument;
   units: RequirementUnit[];
   lang: Lang;
+  /** True when the corpus's Arabic text is the authentic official version. */
+  official: boolean;
 }) {
   const t = translations[lang].requirements;
   return (
@@ -168,14 +172,22 @@ function DocumentSection({
       )}
       <Stack gap="4" mt="6">
         {units.map(unit => (
-          <UnitCard key={unit.id} unit={unit} lang={lang} />
+          <UnitCard key={unit.id} unit={unit} lang={lang} official={official} />
         ))}
       </Stack>
     </Box>
   );
 }
 
-function UnitCard({ unit, lang }: { unit: RequirementUnit; lang: Lang }) {
+function UnitCard({
+  unit,
+  lang,
+  official,
+}: {
+  unit: RequirementUnit;
+  lang: Lang;
+  official: boolean;
+}) {
   const t = translations[lang].requirements;
   // Left rule encodes the unit's nature: gold marks an editorial caveat, teal a
   // testable unit, plain line otherwise.
@@ -232,7 +244,7 @@ function UnitCard({ unit, lang }: { unit: RequirementUnit; lang: Lang }) {
       >
         {lang === 'ar' ? (unit.textAr ?? unit.textEn) : unit.textEn}
       </Text>
-      {lang === 'en' && unit.textAr && (
+      {lang === 'en' && official && unit.textAr && (
         <Text
           mt="3.5"
           fontSize="md"
