@@ -24,6 +24,7 @@ const NAV = [
   { href: '/ask', label: 'Ask' },
   { href: '/audit', label: 'Audit' },
   { href: '/audit-repo', label: 'Audit a repo' },
+  { href: '/readiness', label: 'Readiness' },
   { href: '/review', label: 'Review' },
   { href: '/evals', label: 'Evals' },
   { href: '/activity', label: 'Activity' },

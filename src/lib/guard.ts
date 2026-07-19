@@ -18,6 +18,11 @@ export const GLOBAL_RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 // Questions and audit-run requests are short; anything bigger is abuse.
 export const MAX_BODY_BYTES = 4_000;
 
+// Readiness checks are deterministic (no tokens spent) so the limit is looser
+// than ask/audit, but invoice payloads are bigger than questions.
+export const READINESS_RATE_LIMIT_MAX = 60;
+export const READINESS_MAX_BODY_BYTES = 32_000;
+
 /**
  * Rolling-window rate limit check. Returns the new timestamp list when
  * allowed, or null when the caller is over the limit. Never mutates the

@@ -5,6 +5,7 @@ import {
   GLOBAL_RATE_LIMIT_WINDOW_MS,
   RATE_LIMIT_MAX,
   RATE_LIMIT_WINDOW_MS,
+  READINESS_RATE_LIMIT_MAX,
   checkRateWindow,
 } from '@/lib/guard';
 
@@ -37,9 +38,22 @@ const durableLimiter =
       })
     : null;
 
+// Readiness runs are deterministic (no model spend), so they get their own
+// looser limiter instead of eating into the ask/audit token budget.
+const readinessLimiter =
+  redisUrl && redisToken
+    ? new Ratelimit({
+        redis: new Redis({ url: redisUrl, token: redisToken }),
+        limiter: Ratelimit.slidingWindow(READINESS_RATE_LIMIT_MAX, `${RATE_LIMIT_WINDOW_MS} ms`),
+        prefix: 'mizan:readiness',
+        analytics: false,
+      })
+    : null;
+
 // In-memory fallback state (per instance).
 const ipHits = new Map<string, number[]>();
 let globalHits: number[] = [];
+const readinessHits = new Map<string, number[]>();
 
 export interface RateDecision {
   ok: boolean;
@@ -65,5 +79,23 @@ export async function checkAskRateLimit(ip: string): Promise<RateDecision> {
   ipHits.set(ip, ipWindow);
   globalHits = globalWindow;
   if (ipHits.size > 5000) ipHits.clear();
+  return { ok: true, durable: false };
+}
+
+export async function checkReadinessRateLimit(ip: string): Promise<RateDecision> {
+  if (readinessLimiter) {
+    const { success } = await readinessLimiter.limit(ip);
+    return { ok: success, durable: true };
+  }
+
+  const window = checkRateWindow(
+    readinessHits.get(ip) ?? [],
+    Date.now(),
+    READINESS_RATE_LIMIT_MAX,
+    RATE_LIMIT_WINDOW_MS
+  );
+  if (window === null) return { ok: false, durable: false };
+  readinessHits.set(ip, window);
+  if (readinessHits.size > 5000) readinessHits.clear();
   return { ok: true, durable: false };
 }

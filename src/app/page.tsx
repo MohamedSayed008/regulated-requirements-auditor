@@ -42,10 +42,17 @@ const PIPELINE = [
     tint: 'panel',
   },
   {
+    route: '/readiness',
+    title: 'eInvoicing readiness',
+    body: 'Field-level invoice validation against the mandate, every gap cited to its ministerial requirement.',
+    wide: false,
+    tint: 'panel',
+  },
+  {
     route: '/evals',
     title: 'Published evals',
-    body: 'Groundedness, refusal, injection resistance, and audit precision/recall against a seeded ground truth. Graders are programmatic, so the numbers are reproducible, misses included.',
-    wide: true,
+    body: 'Groundedness, refusal, injection resistance, and audit precision/recall against a seeded ground truth. Graders are programmatic, so the numbers are reproducible.',
+    wide: false,
     tint: 'teal',
   },
 ] as const;

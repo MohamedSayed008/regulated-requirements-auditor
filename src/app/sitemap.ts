@@ -7,6 +7,7 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: '/ask', priority: 0.9 },
   { path: '/audit', priority: 0.9 },
   { path: '/audit-repo', priority: 0.8 },
+  { path: '/readiness', priority: 0.8 },
   { path: '/evals', priority: 0.8 },
   { path: '/requirements', priority: 0.7 },
   { path: '/review', priority: 0.6 },

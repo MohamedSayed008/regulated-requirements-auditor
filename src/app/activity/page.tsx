@@ -22,12 +22,14 @@ const ACTION_LABEL: Record<AuditLogEntry['action'], string> = {
   ask: 'question asked',
   audit_repo: 'repo audited',
   review_decide: 'decision recorded',
+  readiness: 'readiness checked',
 };
 
 const ACTION_PALETTE: Record<AuditLogEntry['action'], string> = {
   ask: 'teal',
   audit_repo: 'yellow',
   review_decide: 'green',
+  readiness: 'purple',
 };
 
 export default async function ActivityPage() {
@@ -120,6 +122,7 @@ export default async function ActivityPage() {
 function maskedDetail(event: AuditLogEntry): string {
   if (event.action === 'ask') return 'question content visible to the reviewer';
   if (event.action === 'audit_repo') return 'repository and findings visible to the reviewer';
+  if (event.action === 'readiness') return 'result summary visible to the reviewer';
   return 'decision detail visible to the reviewer';
 }
 

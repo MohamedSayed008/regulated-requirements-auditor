@@ -10,7 +10,8 @@ import { applyReviewDecision } from '@/lib/review-actions';
 import { passwordMatches } from '@/lib/session';
 import { fromMicros, getStore, logEvent, toMicros } from '@/lib/store';
 import { checkAskRateLimit } from '@/lib/rate-limit';
-import { isDemoDisabled } from '@/lib/guard';
+import { READINESS_MAX_BODY_BYTES, isDemoDisabled } from '@/lib/guard';
+import { runReadiness } from '@/lib/readiness';
 
 export const maxDuration = 120;
 
@@ -102,6 +103,44 @@ const handler = createMcpHandler(
             bilingual: c.bilingual,
           }))
         )
+    );
+
+    server.registerTool(
+      'check_invoice_readiness',
+      {
+        title: 'Check eInvoicing readiness',
+        description:
+          'Validate an invoice payload against the UAE eInvoicing mandate. Deterministic field-level checks (no model calls); every result cites the requirement unit it validates. Pass the invoice as a JSON string; process facts are optional.',
+        inputSchema: {
+          invoiceJson: z.string().min(2).max(READINESS_MAX_BODY_BYTES),
+          format: z.enum(['structured', 'pdf', 'image', 'email']).optional(),
+          aspAppointed: z.boolean().optional(),
+          storageInUae: z.boolean().optional(),
+          canIssueCreditNotes: z.boolean().optional(),
+        },
+      },
+      async ({ invoiceJson, format, aspAppointed, storageInUae, canIssueCreditNotes }) => {
+        let invoice: unknown;
+        try {
+          invoice = JSON.parse(invoiceJson);
+        } catch {
+          return text({ error: 'invalid_json', hint: 'invoiceJson must be a JSON object.' });
+        }
+        const report = runReadiness(invoice, {
+          format,
+          aspAppointed,
+          storageInUae,
+          canIssueCreditNotes,
+        });
+        logEvent({
+          ts: new Date().toISOString(),
+          actor: 'public',
+          action: 'readiness',
+          corpusId: 'uae-einvoicing',
+          detail: `readiness (mcp): ${report.summary.pass} pass, ${report.summary.fail} fail, ${report.summary.notAssessed} not assessed (${report.summary.readyPercent}% ready)`,
+        });
+        return text(report);
+      }
     );
 
     server.registerTool(

@@ -25,7 +25,7 @@ export const reviewDecisionSchema = z.object({
 });
 export type ReviewDecision = z.infer<typeof reviewDecisionSchema>;
 
-export const LOG_ACTIONS = ['ask', 'audit_repo', 'review_decide'] as const;
+export const LOG_ACTIONS = ['ask', 'audit_repo', 'review_decide', 'readiness'] as const;
 
 export const auditLogEntrySchema = z.object({
   ts: z.string(),
