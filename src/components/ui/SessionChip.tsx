@@ -3,6 +3,7 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Badge, Button, HStack, Input, Popover, Portal, Stack, Text } from '@chakra-ui/react';
+import { type Lang, translations } from '@/lib/i18n';
 
 type ChipState = 'unknown' | 'viewer' | 'reviewer';
 
@@ -15,7 +16,8 @@ type ChipState = 'unknown' | 'viewer' | 'reviewer';
  */
 let cachedRole: ChipState = 'unknown';
 
-export function SessionChip() {
+export function SessionChip({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].session;
   const router = useRouter();
   const pathname = usePathname();
   const [state, setState] = useState<ChipState>(cachedRole);
@@ -47,7 +49,7 @@ export function SessionChip() {
     return (
       <HStack gap="2" flexShrink="0">
         <Badge colorPalette="green" variant="subtle" rounded="full">
-          reviewer
+          {t.reviewer}
         </Badge>
         <Button
           size="xs"
@@ -59,7 +61,7 @@ export function SessionChip() {
             void fetch('/api/session', { method: 'DELETE' }).then(() => setRole('viewer'));
           }}
         >
-          Sign out
+          {t.signOut}
         </Button>
       </HStack>
     );
@@ -67,10 +69,25 @@ export function SessionChip() {
 
   // 'viewer' shows the interactive trigger; 'unknown' shows it disabled while
   // the first session check is in flight, keeping the footprint stable.
-  return <SignInPopover disabled={state === 'unknown'} onSignedIn={() => setRole('reviewer')} />;
+  return (
+    <SignInPopover
+      lang={lang}
+      disabled={state === 'unknown'}
+      onSignedIn={() => setRole('reviewer')}
+    />
+  );
 }
 
-function SignInPopover({ disabled, onSignedIn }: { disabled: boolean; onSignedIn: () => void }) {
+function SignInPopover({
+  lang,
+  disabled,
+  onSignedIn,
+}: {
+  lang: Lang;
+  disabled: boolean;
+  onSignedIn: () => void;
+}) {
+  const t = translations[lang].session;
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState<'idle' | 'pending' | 'failed'>('idle');
@@ -107,7 +124,7 @@ function SignInPopover({ disabled, onSignedIn }: { disabled: boolean; onSignedIn
       flexShrink="0"
       disabled={disabled}
     >
-      Reviewer sign in
+      {t.signIn}
     </Button>
   );
 
@@ -140,16 +157,15 @@ function SignInPopover({ disabled, onSignedIn }: { disabled: boolean; onSignedIn
               <form onSubmit={handleSubmit}>
                 <Stack gap="2.5">
                   <Text fontSize="xs" color="fg.muted">
-                    Reviewer decisions persist to the audit trail and unlock event detail on the
-                    activity log.
+                    {t.popoverBody}
                   </Text>
                   <Input
                     type="password"
                     autoComplete="current-password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    placeholder="Reviewer password"
-                    aria-label="Reviewer password"
+                    placeholder={t.passwordPlaceholder}
+                    aria-label={t.passwordAria}
                     size="sm"
                     bg="bg.canvas"
                     borderColor="border.default"
@@ -165,11 +181,11 @@ function SignInPopover({ disabled, onSignedIn }: { disabled: boolean; onSignedIn
                     loading={status === 'pending'}
                     disabled={password.length === 0}
                   >
-                    Sign in
+                    {t.submit}
                   </Button>
                   {status === 'failed' && (
                     <Text fontSize="xs" color="warn.fg">
-                      That password was not accepted.
+                      {t.failed}
                     </Text>
                   )}
                 </Stack>

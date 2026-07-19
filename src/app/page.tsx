@@ -6,6 +6,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { CountUp } from '@/components/ui/CountUp';
 import { ScaleHero } from '@/components/ScaleHero';
 import { RulesMarquee } from '@/components/RulesMarquee';
+import { type Lang, localePath, translations } from '@/lib/i18n';
 import { evalReportSetSchema } from '@/lib/eval-report';
 import reportsJson from '@/data/evals/reports.json';
 
@@ -17,49 +18,12 @@ const minPrecision = reports.length
   : 0;
 const minRecall = reports.length ? Math.min(...reports.map(r => r.report.auditScore.recall)) : 0;
 
-const HERO_QUESTION = 'How much notice is needed before a rent increase?';
+export default function Home({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].home;
+  const displayFont = lang === 'ar' ? 'arabic' : 'serif';
 
-const PIPELINE = [
-  {
-    route: '/ask',
-    title: 'Ask with citations',
-    body: "Grounded Q&A over the corpus. Citations come from the model's citation output, not prompt engineering. Out-of-corpus questions are refused, and the refusal is eval-tested.",
-    wide: true,
-    tint: 'panel',
-  },
-  {
-    route: '/audit',
-    title: 'Audit code',
-    body: 'Zod-validated findings, each tied to a clause with file and line.',
-    wide: false,
-    tint: 'panel',
-  },
-  {
-    route: '/review',
-    title: 'Human approval',
-    body: 'The AI proposes; a person decides. Nothing counts until approved.',
-    wide: false,
-    tint: 'panel',
-  },
-  {
-    route: '/readiness',
-    title: 'eInvoicing readiness',
-    body: 'Field-level invoice validation against the mandate, every gap cited to its ministerial requirement.',
-    wide: false,
-    tint: 'panel',
-  },
-  {
-    route: '/evals',
-    title: 'Published evals',
-    body: 'Groundedness, refusal, injection resistance, and audit precision/recall against a seeded ground truth. Graders are programmatic, so the numbers are reproducible.',
-    wide: false,
-    tint: 'teal',
-  },
-] as const;
-
-export default function Home() {
   return (
-    <Page bleed>
+    <Page bleed lang={lang}>
       <Container maxW="6xl" pt={{ base: '14', md: '20' }} pb="16">
         <Grid
           templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(0, 1.15fr) minmax(0, 0.85fr)' }}
@@ -73,7 +37,7 @@ export default function Home() {
                 gap="2.5"
                 fontFamily="heading"
                 fontSize="xs"
-                letterSpacing="0.16em"
+                letterSpacing={lang === 'ar' ? 'normal' : '0.16em'}
                 textTransform="uppercase"
                 color="law.fg"
                 borderWidth="1px"
@@ -91,39 +55,39 @@ export default function Home() {
                   animation="pulseDot 2s infinite"
                   _motionReduce={{ animation: 'none' }}
                 />
-                <Text as="span">Governed agentic AI &middot; live</Text>
+                <Text as="span">{t.badge}</Text>
               </HStack>
             </Reveal>
             <Reveal delay={60}>
               <Heading
                 as="h1"
-                fontFamily="serif"
+                fontFamily={displayFont}
                 fontWeight="400"
                 fontSize={{ base: '4xl', md: '6xl' }}
-                lineHeight="1.07"
-                letterSpacing="-0.01em"
+                lineHeight={lang === 'ar' ? '1.25' : '1.07'}
+                letterSpacing={lang === 'ar' ? 'normal' : '-0.01em'}
                 mb="5"
               >
-                Reads the law.
+                {t.h1a}
                 <br />
-                Cites the clause.
+                {t.h1b}
                 <br />
-                <Text as="span" color="law.fg" fontStyle="italic">
-                  Weighs your code
-                </Text>{' '}
-                against it.
+                <Text as="span" color="law.fg" fontStyle={lang === 'ar' ? 'normal' : 'italic'}>
+                  {t.h1cAccent}
+                </Text>
+                {t.h1cTail}
               </Heading>
             </Reveal>
             <Reveal delay={120}>
               <Text fontSize="lg" color="fg.muted" lineHeight="1.6" maxW="52ch" mb="7">
-                A requirements auditor on two live corpora: Dubai tenancy law and the UAE eInvoicing
-                mandate. No citation, no answer. No human approval, no finding. No eval report, no
-                release.
+                {t.lede}
               </Text>
             </Reveal>
             <Reveal delay={180}>
               <Box asChild display="block" maxW="lg">
-                <NextLink href={`/ask?q=${encodeURIComponent(HERO_QUESTION)}`}>
+                <NextLink
+                  href={`${localePath(lang, '/ask')}?q=${encodeURIComponent(t.heroQuestion)}`}
+                >
                   <HStack
                     gap="2.5"
                     bg="bg.panel"
@@ -135,11 +99,17 @@ export default function Home() {
                     transition="border-color 0.25s"
                     _hover={{ borderColor: 'accent.solid' }}
                   >
-                    <Text fontFamily="heading" fontSize="sm" color="fg.subtle" flexShrink="0">
+                    <Text
+                      fontFamily="heading"
+                      fontSize="sm"
+                      color="fg.subtle"
+                      flexShrink="0"
+                      dir="ltr"
+                    >
                       /ask
                     </Text>
                     <Text flex="1" minW="0" fontSize="sm" color="fg.muted" truncate>
-                      {HERO_QUESTION}
+                      {t.heroQuestion}
                     </Text>
                     <Box
                       flexShrink="0"
@@ -151,7 +121,7 @@ export default function Home() {
                       py="2.5"
                       rounded="lg"
                     >
-                      Ask
+                      {t.askPill}
                     </Box>
                   </HStack>
                 </NextLink>
@@ -180,55 +150,55 @@ export default function Home() {
                   <CountUp to={evalPass} />/{evalTotal}
                 </>
               }
-              label="eval cases pass"
+              label={t.statEvalPass}
             />
             <StatCell
               value={<CountUp to={minPrecision} decimals={2} />}
-              label="min audit precision"
+              label={t.statPrecision}
               color="accent.fg"
             />
             <StatCell
               value={<CountUp to={minRecall} decimals={2} />}
-              label="min audit recall"
+              label={t.statRecall}
               color="accent.fg"
             />
             <Box p="5">
               <Text fontFamily="serif" fontSize="2xl" color="law.fg">
-                English &middot; العربية
+                {t.statBilingual}
               </Text>
               <Text fontSize="sm" color="fg.subtle" mt="1">
-                bilingual, RTL-aware
+                {t.statBilingualLabel}
               </Text>
             </Box>
           </Grid>
         </Reveal>
       </Container>
 
-      <RulesMarquee />
+      <RulesMarquee lang={lang} />
 
       <Container maxW="6xl" py={{ base: '16', md: '24' }}>
         <Reveal>
           <Text
             fontFamily="heading"
             fontSize="xs"
-            letterSpacing="0.2em"
+            letterSpacing={lang === 'ar' ? 'normal' : '0.2em'}
             textTransform="uppercase"
             color="law.fg"
             mb="3.5"
           >
-            One finding, weighed
+            {t.findingEyebrow}
           </Text>
         </Reveal>
         <Reveal delay={60}>
           <Heading
             as="h2"
-            fontFamily="serif"
+            fontFamily={displayFont}
             fontWeight="400"
             fontSize={{ base: '2xl', md: '4xl' }}
             mb="9"
             maxW="24ch"
           >
-            Every finding ties one line of code to the clause it breaks.
+            {t.findingTitle}
           </Heading>
         </Reveal>
         <Reveal delay={120}>
@@ -250,7 +220,7 @@ export default function Home() {
                 <Box
                   position="absolute"
                   top="0"
-                  left="0"
+                  insetInlineStart="0"
                   w="100%"
                   h="3px"
                   bg="linear-gradient(90deg, var(--chakra-colors-law-solid), transparent)"
@@ -258,29 +228,41 @@ export default function Home() {
                 <Text
                   fontFamily="heading"
                   fontSize="xs"
-                  letterSpacing="0.1em"
+                  letterSpacing={lang === 'ar' ? 'normal' : '0.1em'}
                   textTransform="uppercase"
                   color="law.fg"
                   mb="4"
                 >
-                  The law
+                  {t.theLaw}
                 </Text>
-                <Text fontFamily="heading" fontSize="xs" color="law.fg" mb="2.5">
+                <Text
+                  fontFamily="heading"
+                  fontSize="xs"
+                  color="law.fg"
+                  mb="2.5"
+                  dir="ltr"
+                  textAlign="start"
+                >
                   LAW26-2007/ART-25/2
                 </Text>
-                <Text fontFamily="serif" fontSize="xl" lineHeight="1.55" color="fg.default">
-                  The Landlord must notify the Tenant of the eviction reasons at least{' '}
+                <Text
+                  fontFamily={displayFont}
+                  fontSize="xl"
+                  lineHeight={lang === 'ar' ? '1.9' : '1.55'}
+                  color="fg.default"
+                >
+                  {t.lawClausePre}
                   <Text as="span" color="law.fg">
-                    twelve (12) months
-                  </Text>{' '}
-                  before the date of eviction, through a Notary Public or by registered mail.
+                    {t.lawClauseAccent}
+                  </Text>
+                  {t.lawClausePost}
                 </Text>
               </Box>
               <Box p="8" position="relative">
                 <Box
                   position="absolute"
                   top="0"
-                  left="0"
+                  insetInlineStart="0"
                   w="100%"
                   h="3px"
                   bg="linear-gradient(90deg, var(--chakra-colors-accent-solid), transparent)"
@@ -288,15 +270,16 @@ export default function Home() {
                 <Text
                   fontFamily="heading"
                   fontSize="xs"
-                  letterSpacing="0.1em"
+                  letterSpacing={lang === 'ar' ? 'normal' : '0.1em'}
                   textTransform="uppercase"
                   color="accent.fg"
                   mb="4"
                 >
-                  The code &middot; eviction.ts:16
+                  {t.theCode}
                 </Text>
                 <Box
                   as="pre"
+                  dir="ltr"
                   fontFamily="heading"
                   fontSize="sm"
                   lineHeight="1.7"
@@ -326,8 +309,7 @@ export default function Home() {
                   ;
                 </Box>
                 <Text fontSize="sm" color="fg.muted" lineHeight="1.6">
-                  Enforces three months where the law requires twelve: evictions become lawful far
-                  sooner than Article 25(2) allows.
+                  {t.codeExplain}
                 </Text>
               </Box>
             </Grid>
@@ -341,13 +323,13 @@ export default function Home() {
               flexWrap="wrap"
             >
               <Badge colorPalette="red" variant="solid">
-                critical
+                {t.critical}
               </Badge>
               <Text fontSize="sm" color="fg.muted" flex="1" minW="20ch">
-                Detected, cited, and routed to human review.
+                {t.findingFooter}
               </Text>
               <Badge colorPalette="green" variant="subtle">
-                approved in review
+                {t.approvedInReview}
               </Badge>
             </HStack>
           </Box>
@@ -359,23 +341,23 @@ export default function Home() {
           <HStack justify="space-between" align="end" mb="7" flexWrap="wrap" gap="4">
             <Heading
               as="h2"
-              fontFamily="serif"
+              fontFamily={displayFont}
               fontWeight="400"
               fontSize={{ base: '2xl', md: '3xl' }}
             >
-              The pipeline, end to end
+              {t.pipelineTitle}
             </Heading>
             <Text fontFamily="heading" fontSize="xs" color="fg.subtle">
-              governed at every step
+              {t.pipelineTag}
             </Text>
           </HStack>
         </Reveal>
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, minmax(0, 1fr))' }} gap="4">
-          {PIPELINE.map((card, i) => (
+          {t.pipeline.map((card, i) => (
             <Reveal
               key={card.route}
               delay={i * 70}
-              gridColumn={{ base: 'auto', md: card.wide ? 'span 2' : 'auto' }}
+              gridColumn={{ base: 'auto', md: i === 0 ? 'span 2' : 'auto' }}
             >
               <Box
                 asChild
@@ -385,7 +367,7 @@ export default function Home() {
                 borderColor="border.default"
                 bg="bg.panel"
                 backgroundImage={
-                  card.tint === 'teal'
+                  card.route === '/evals'
                     ? 'linear-gradient(150deg, rgba(15, 118, 110, 0.10), transparent)'
                     : undefined
                 }
@@ -394,16 +376,21 @@ export default function Home() {
                 transition="transform 0.3s, border-color 0.3s"
                 _hover={{ transform: 'translateY(-4px)', borderColor: 'accent.solid' }}
               >
-                <NextLink href={card.route}>
+                <NextLink href={localePath(lang, card.route)}>
                   <HStack justify="space-between" mb="3.5">
-                    <Text fontFamily="heading" fontSize="xs" color="accent.fg">
+                    <Text fontFamily="heading" fontSize="xs" color="accent.fg" dir="ltr">
                       {card.route}
                     </Text>
-                    <Text color="law.fg" fontSize="lg" aria-hidden="true">
+                    <Text
+                      color="law.fg"
+                      fontSize="lg"
+                      aria-hidden="true"
+                      transform={lang === 'ar' ? 'scaleX(-1)' : undefined}
+                    >
                       &rarr;
                     </Text>
                   </HStack>
-                  <Heading as="h3" fontFamily="serif" fontWeight="500" fontSize="xl" mb="2">
+                  <Heading as="h3" fontFamily={displayFont} fontWeight="500" fontSize="xl" mb="2">
                     {card.title}
                   </Heading>
                   <Text fontSize="sm" color="fg.muted" lineHeight="1.55" maxW="52ch">

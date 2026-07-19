@@ -8,6 +8,7 @@ import { getStore } from '@/lib/store';
 import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
+import { type Lang, translations } from '@/lib/i18n';
 import ReviewClient from '@/app/review/ReviewClient';
 import runJson from '@/data/audit/latest-run.json';
 
@@ -15,7 +16,10 @@ export const metadata: Metadata = {
   title: 'Review queue',
   description:
     'The human-in-the-loop step: approve or reject each proposed finding before it counts.',
-  alternates: { canonical: '/review' },
+  alternates: {
+    canonical: '/review',
+    languages: { 'en-US': '/review', ar: '/ar/review', 'x-default': '/review' },
+  },
 };
 
 const run = auditRunSchema.parse(runJson);
@@ -26,7 +30,8 @@ const findings = [...run.findings].sort(
 // Decisions and the role are per-request, not build-time.
 export const dynamic = 'force-dynamic';
 
-export default async function ReviewPage() {
+export default async function ReviewPage({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].review;
   const cookieStore = await cookies();
   const role = await resolveRole(cookieStore.get(SESSION_COOKIE)?.value);
   const persisted = await getStore()
@@ -34,12 +39,10 @@ export default async function ReviewPage() {
     .catch(() => []);
 
   return (
-    <Page>
-      <PageHeader eyebrow="Human approval" title="Review queue" maxW="62ch">
-        The AI proposes, a human decides. Each finding below is a proposal, not a verdict.
-        {role === 'reviewer'
-          ? ' You are signed in as the reviewer: decisions persist to the audit trail.'
-          : ' Approve or reject to try the workflow; as a visitor your decisions stay in this session only. The reviewer signs in from the top bar, and those decisions are the durable record.'}
+    <Page lang={lang}>
+      <PageHeader eyebrow={t.eyebrow} title={t.title} maxW="62ch" lang={lang}>
+        {t.ledeBase}
+        {role === 'reviewer' ? t.ledeReviewer : t.ledeVisitor}
       </PageHeader>
       <Reveal delay={160}>
         <ReviewClient
@@ -47,6 +50,7 @@ export default async function ReviewPage() {
           runTarget={run.target}
           role={role}
           persisted={persisted}
+          lang={lang}
         />
       </Reveal>
     </Page>

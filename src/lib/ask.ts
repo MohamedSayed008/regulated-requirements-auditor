@@ -20,6 +20,8 @@ export const MAX_ANSWER_TOKENS = 1024;
 export const askRequestSchema = z.object({
   question: z.string().trim().min(8).max(500),
   corpusId: z.string().optional(),
+  /** UI locale; the answer follows it unless the question's language differs. */
+  lang: z.enum(['en', 'ar']).optional(),
 });
 
 export type AskRequest = z.infer<typeof askRequestSchema>;
@@ -58,13 +60,17 @@ export function buildCorpusDocuments(corpus: Corpus): CorpusDocumentBlock[] {
   });
 }
 
-export function systemPromptFor(corpus: Corpus): string {
+export function systemPromptFor(corpus: Corpus, lang: 'en' | 'ar' = 'en'): string {
   return `You are Mizan, a requirements assistant. You answer questions using ONLY the provided documents, which are requirement units from ${corpus.scopeForPrompt}.
 
 Rules:
 - Ground every factual claim in the documents and cite them. Never state a rule without a citation.
 - If the documents do not cover the question, say plainly that this corpus does not cover it, and do not answer from general knowledge. If a related requirement exists, point to it.
-- Answer in the language of the question: English questions get English answers, Arabic questions get Arabic answers.
+- Answer in the language of the question: English questions get English answers, Arabic questions get Arabic answers.${
+    lang === 'ar'
+      ? '\n- The user is browsing the Arabic interface: when the language of the question is ambiguous, answer in Arabic.'
+      : ''
+  }
 - Be concise: give the direct answer first in one or two sentences, then only the detail that is needed.
 - This is a public demo, not legal advice.${
     corpus.bilingual

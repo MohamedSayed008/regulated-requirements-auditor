@@ -1,6 +1,7 @@
 import NextLink from 'next/link';
 import { Box, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react';
 import { type AuditRun } from '@/lib/findings';
+import { type Lang, localePath, translations } from '@/lib/i18n';
 
 /**
  * A static trace of how a cached audit run was produced and governed: corpus in,
@@ -17,42 +18,34 @@ interface Step {
   gold?: boolean;
 }
 
-function buildSteps(run: AuditRun, corpusLabel: string): Step[] {
+function buildSteps(run: AuditRun, corpusLabel: string, lang: Lang): Step[] {
+  const s = translations[lang].audit.trace.steps;
   return [
-    {
-      title: 'Requirements loaded',
-      detail: `${run.requirementsChecked} testable units from ${corpusLabel}, each with a stable citable id.`,
-    },
-    {
-      title: 'Source snapshot',
-      detail: `${run.filesScanned.length} files handed to the model line-numbered; comments are treated as data, not instructions.`,
-    },
-    {
-      title: 'Model audit',
-      detail: `${run.model}, forced to answer through one structured tool (report_findings) so the output is data, not prose.`,
-    },
-    {
-      title: 'Structured output',
-      detail: `${run.findings.length} findings emitted as JSON, each citing the requirement id it violates with file and line.`,
-    },
-    {
-      title: 'Schema validation',
-      detail: `Every finding is parsed against the Zod findingSchema before it is trusted; a malformed finding fails the run.`,
-    },
-    {
-      title: 'Human review',
-      detail: `Findings enter the queue as proposed. None are final until a person approves or rejects them.`,
-      href: '/review',
-      gold: true,
-    },
-    {
-      title: 'Cost accounted',
-      detail: `${run.usage.inputTokens.toLocaleString()} in / ${run.usage.outputTokens.toLocaleString()} out tokens, $${run.usage.estimatedCostUsd} for the run.`,
-    },
+    s.requirements(run.requirementsChecked, corpusLabel),
+    s.source(run.filesScanned.length),
+    s.model(run.model),
+    s.structured(run.findings.length),
+    s.schema(),
+    { ...s.review(), href: localePath(lang, '/review'), gold: true },
+    s.cost(
+      run.usage.inputTokens.toLocaleString(),
+      run.usage.outputTokens.toLocaleString(),
+      run.usage.estimatedCostUsd
+    ),
   ];
 }
 
-function TraceStep({ step, index, last }: { step: Step; index: number; last: boolean }) {
+function TraceStep({
+  step,
+  index,
+  last,
+  openQueue,
+}: {
+  step: Step;
+  index: number;
+  last: boolean;
+  openQueue: string;
+}) {
   return (
     <HStack gap="4" align="stretch">
       <Stack gap="0" align="center" flexShrink="0">
@@ -84,7 +77,7 @@ function TraceStep({ step, index, last }: { step: Step; index: number; last: boo
             <>
               {' '}
               <Link asChild color="accent.fg">
-                <NextLink href={step.href}>Open the queue.</NextLink>
+                <NextLink href={step.href}>{openQueue}</NextLink>
               </Link>
             </>
           )}
@@ -94,8 +87,17 @@ function TraceStep({ step, index, last }: { step: Step; index: number; last: boo
   );
 }
 
-export function AuditTrace({ run, corpusLabel }: { run: AuditRun; corpusLabel: string }) {
-  const steps = buildSteps(run, corpusLabel);
+export function AuditTrace({
+  run,
+  corpusLabel,
+  lang = 'en',
+}: {
+  run: AuditRun;
+  corpusLabel: string;
+  lang?: Lang;
+}) {
+  const t = translations[lang].audit.trace;
+  const steps = buildSteps(run, corpusLabel, lang);
   return (
     <Box
       as="section"
@@ -108,14 +110,20 @@ export function AuditTrace({ run, corpusLabel }: { run: AuditRun; corpusLabel: s
       mb="8"
     >
       <Heading as="h2" id="trace-heading" fontFamily="heading" fontSize="lg" mb="1">
-        How this run was governed
+        {t.heading}
       </Heading>
       <Text fontSize="sm" color="fg.muted" mb="5">
-        The pipeline that produced the findings below, traced from the run itself.
+        {t.sub}
       </Text>
       <Stack gap="0">
         {steps.map((step, i) => (
-          <TraceStep key={step.title} step={step} index={i} last={i === steps.length - 1} />
+          <TraceStep
+            key={step.title}
+            step={step}
+            index={i}
+            last={i === steps.length - 1}
+            openQueue={t.openQueue}
+          />
         ))}
       </Stack>
     </Box>

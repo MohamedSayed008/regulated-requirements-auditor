@@ -2,29 +2,31 @@
 
 import { useTheme } from 'next-themes';
 import { Box, Button, ClientOnly, Skeleton } from '@chakra-ui/react';
+import { type Lang, translations } from '@/lib/i18n';
 
 /**
  * Light/dark switch, following the official Chakra v3 color-mode pattern:
  * next-themes owns the state (class attribute on <html>), and ClientOnly
  * defers the icon to the client so it never mismatches the server render.
  */
-export function ThemeToggle() {
+export function ThemeToggle({ lang = 'en' }: { lang?: Lang }) {
   return (
     <ClientOnly fallback={<Skeleton w="8" h="8" rounded="full" flexShrink="0" />}>
-      <ToggleButton />
+      <ToggleButton lang={lang} />
     </ClientOnly>
   );
 }
 
-function ToggleButton() {
+function ToggleButton({ lang }: { lang: Lang }) {
   const { resolvedTheme, setTheme } = useTheme();
+  const t = translations[lang].theme;
   const isLight = resolvedTheme === 'light';
   return (
     <Button
       type="button"
       onClick={() => setTheme(isLight ? 'dark' : 'light')}
-      aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-      title="Toggle light / dark"
+      aria-label={isLight ? t.toDark : t.toLight}
+      title={t.title}
       variant="outline"
       size="xs"
       w="8"

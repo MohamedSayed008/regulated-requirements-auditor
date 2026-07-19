@@ -6,6 +6,7 @@ import { type Finding, type FindingStatus } from '@/lib/findings';
 import { type ReviewDecision } from '@/lib/store';
 import { type Role } from '@/lib/session';
 import { FindingCard } from '@/components/FindingCard';
+import { type Lang, translations } from '@/lib/i18n';
 
 interface ReviewState {
   status: FindingStatus;
@@ -19,12 +20,15 @@ export default function ReviewClient({
   runTarget,
   role,
   persisted,
+  lang = 'en',
 }: {
   initialFindings: Finding[];
   runTarget: string;
   role: Role;
   persisted: ReviewDecision[];
+  lang?: Lang;
 }) {
+  const t = translations[lang].review;
   const [reviews, setReviews] = useState<Record<string, ReviewState>>(() => {
     const byId = new Map(persisted.map(d => [d.findingId, d]));
     return Object.fromEntries(
@@ -108,15 +112,15 @@ export default function ReviewClient({
           py="3"
         >
           <Text fontSize="sm" color="warn.fg">
-            A decision could not be saved. It has been reverted; try again.
+            {t.saveError}
           </Text>
         </Box>
       )}
 
       <Grid templateColumns="repeat(3, 1fr)" gap="3">
-        <Tally label="Approved" value={counts.approved} palette="green" />
-        <Tally label="Rejected" value={counts.rejected} palette="red" />
-        <Tally label="Pending" value={counts.pending} palette="orange" />
+        <Tally label={t.approved} value={counts.approved} palette="green" />
+        <Tally label={t.rejected} value={counts.rejected} palette="red" />
+        <Tally label={t.pending} value={counts.pending} palette="orange" />
       </Grid>
 
       <Stack gap="4">
@@ -127,6 +131,7 @@ export default function ReviewClient({
             <FindingCard
               key={finding.id}
               finding={merged}
+              lang={lang}
               actions={
                 <Stack gap="3">
                   <HStack gap="2" flexWrap="wrap">
@@ -136,7 +141,7 @@ export default function ReviewClient({
                       colorPalette="green"
                       onClick={() => decide(finding.id, 'approved')}
                     >
-                      Approve
+                      {t.approve}
                     </Button>
                     <Button
                       size="sm"
@@ -144,7 +149,7 @@ export default function ReviewClient({
                       colorPalette="red"
                       onClick={() => decide(finding.id, 'rejected')}
                     >
-                      Reject
+                      {t.reject}
                     </Button>
                     {review.status !== 'proposed' && (
                       <Button
@@ -153,20 +158,20 @@ export default function ReviewClient({
                         color="fg.subtle"
                         onClick={() => decide(finding.id, 'proposed')}
                       >
-                        Reset
+                        {t.reset}
                       </Button>
                     )}
                     {review.persisted && (
                       <Badge colorPalette="teal" variant="subtle" rounded="full">
-                        saved
+                        {t.saved}
                       </Badge>
                     )}
                   </HStack>
                   <Input
                     value={review.note}
                     onChange={e => setNote(finding.id, e.target.value)}
-                    placeholder="Reviewer note (optional)"
-                    aria-label={`Reviewer note for ${finding.id}`}
+                    placeholder={t.notePlaceholder}
+                    aria-label={t.noteAria(finding.id)}
                     size="sm"
                     bg="bg.canvas"
                     borderColor="border.default"
@@ -182,7 +187,7 @@ export default function ReviewClient({
 
       <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="2xl" p="5">
         <Text fontSize="sm" fontWeight="medium" color="fg.default" mb="3">
-          Decision trail
+          {t.trail}
         </Text>
         <Stack gap="2">
           {initialFindings.map(finding => {
@@ -200,7 +205,9 @@ export default function ReviewClient({
                   variant="subtle"
                   rounded="full"
                 >
-                  {review.status === 'proposed' ? 'pending' : review.status}
+                  {review.status === 'proposed'
+                    ? t.pending.toLowerCase()
+                    : (translations[lang].finding.status[review.status] ?? review.status)}
                 </Badge>
                 <Text fontFamily="heading" color="accent.fg">
                   {finding.requirementId}
@@ -209,10 +216,14 @@ export default function ReviewClient({
                 {review.decidedAt && (
                   <Text fontFamily="heading" color="fg.subtle">
                     {review.decidedAt.slice(0, 16).replace('T', ' ')}
-                    {review.persisted ? ' · saved' : ' · this session'}
+                    {review.persisted ? t.trailSaved : t.trailSession}
                   </Text>
                 )}
-                {review.note && <Text color="fg.subtle">note: {review.note}</Text>}
+                {review.note && (
+                  <Text color="fg.subtle">
+                    {t.notePrefix} {review.note}
+                  </Text>
+                )}
               </HStack>
             );
           })}

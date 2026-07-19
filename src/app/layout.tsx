@@ -3,6 +3,7 @@ import { type ReactNode } from 'react';
 import { Geist, Geist_Mono, Spectral, Amiri } from 'next/font/google';
 import { Box } from '@chakra-ui/react';
 import { Provider } from '@/components/ui/provider';
+import { LocaleHtml } from '@/components/ui/LocaleHtml';
 import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
 import { siteConfig, siteJsonLd } from '@/lib/site';
@@ -42,7 +43,10 @@ export const metadata: Metadata = {
   keywords: [...siteConfig.keywords],
   authors: [{ name: siteConfig.author, url: siteConfig.authorUrl }],
   creator: siteConfig.author,
-  alternates: { canonical: '/' },
+  alternates: {
+    canonical: '/',
+    languages: { 'en-US': '/', ar: '/ar', 'x-default': '/' },
+  },
   openGraph: {
     type: 'website',
     siteName: siteConfig.name,
@@ -77,6 +81,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd()) }}
         />
         <Provider>
+          <LocaleHtml />
           {/* Persistent app shell: nav + footer render once and survive
               navigation; only <main> swaps (and shows loading.tsx) per route. */}
           <Box

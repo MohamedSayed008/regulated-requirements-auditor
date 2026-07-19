@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 import { Heading, Stack, Text } from '@chakra-ui/react';
 import { Reveal } from '@/components/ui/Reveal';
+import { type Lang } from '@/lib/i18n';
 
 /**
  * Interior-page header: mono teal eyebrow, serif display title, muted lede.
@@ -11,11 +12,13 @@ export function PageHeader({
   title,
   children,
   maxW = '64ch',
+  lang = 'en',
 }: {
   eyebrow: string;
   title: string;
   children?: ReactNode;
   maxW?: string;
+  lang?: Lang;
 }) {
   return (
     <Stack gap="4" mb="10">
@@ -33,7 +36,7 @@ export function PageHeader({
       <Reveal delay={60}>
         <Heading
           as="h1"
-          fontFamily="serif"
+          fontFamily={lang === 'ar' ? 'arabic' : 'serif'}
           fontWeight="400"
           fontSize={{ base: '3xl', md: '5xl' }}
           lineHeight="1.1"

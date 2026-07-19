@@ -2,6 +2,7 @@ import { Badge, Box, Grid, HStack, Link, Text } from '@chakra-ui/react';
 import { type Finding } from '@/lib/findings';
 import { SEVERITY_PALETTE } from '@/lib/severity';
 import { requirementById } from '@/lib/requirement-lookup';
+import { type Lang, localePath, translations } from '@/lib/i18n';
 import { type ReactNode } from 'react';
 
 /**
@@ -10,8 +11,18 @@ import { type ReactNode } from 'react';
  * footer. `actions` slots the approve/reject controls in the review queue;
  * omitted, the card is read-only. An approved card gets a green border tint.
  */
-export function FindingCard({ finding, actions }: { finding: Finding; actions?: ReactNode }) {
+export function FindingCard({
+  finding,
+  actions,
+  lang = 'en',
+}: {
+  finding: Finding;
+  actions?: ReactNode;
+  lang?: Lang;
+}) {
+  const t = translations[lang].finding;
   const unit = requirementById(finding.requirementId);
+  const unitText = lang === 'ar' ? (unit?.textAr ?? unit?.textEn) : unit?.textEn;
   const lines =
     finding.lineEnd !== finding.lineStart
       ? `${finding.lineStart}-${finding.lineEnd}`
@@ -37,7 +48,7 @@ export function FindingCard({ finding, actions }: { finding: Finding; actions?: 
           variant={finding.severity === 'critical' ? 'solid' : 'subtle'}
           rounded="full"
         >
-          {finding.severity}
+          {t.severity[finding.severity] ?? finding.severity}
         </Badge>
         {finding.status !== 'proposed' && (
           <Badge
@@ -45,7 +56,7 @@ export function FindingCard({ finding, actions }: { finding: Finding; actions?: 
             variant="subtle"
             rounded="full"
           >
-            {finding.status}
+            {t.status[finding.status] ?? finding.status}
           </Badge>
         )}
         <Text fontSize="sm" fontWeight="500" color="fg.default">
@@ -69,19 +80,25 @@ export function FindingCard({ finding, actions }: { finding: Finding; actions?: 
             color="fg.subtle"
             mb="2"
           >
-            Requirement
+            {t.requirement}
           </Text>
           <Link
-            href={`/requirements#${finding.requirementId}`}
+            href={`${localePath(lang, '/requirements')}#${finding.requirementId}`}
             fontFamily="heading"
             fontSize="xs"
             color="accent.fg"
           >
             {finding.requirementId}
           </Link>
-          {unit && (
-            <Text mt="2.5" fontSize="sm" color="fg.muted" lineHeight="1.6">
-              {unit.textEn.length > 320 ? `${unit.textEn.slice(0, 320)}...` : unit.textEn}
+          {unit && unitText && (
+            <Text
+              mt="2.5"
+              fontSize="sm"
+              color="fg.muted"
+              lineHeight="1.6"
+              fontFamily={lang === 'ar' && unit.textAr ? 'arabic' : undefined}
+            >
+              {unitText.length > 320 ? `${unitText.slice(0, 320)}...` : unitText}
             </Text>
           )}
         </Box>
@@ -94,10 +111,11 @@ export function FindingCard({ finding, actions }: { finding: Finding; actions?: 
             color="fg.subtle"
             mb="2"
           >
-            Code &middot; {finding.filePath}:{lines}
+            {t.code} &middot; {finding.filePath}:{lines}
           </Text>
           <Box
             as="pre"
+            dir="ltr"
             bg="bg.canvas"
             borderWidth="1px"
             borderColor="border.default"
@@ -117,13 +135,13 @@ export function FindingCard({ finding, actions }: { finding: Finding; actions?: 
       <Box px="5" py="4" borderTopWidth="1px" borderColor="border.default">
         <Text fontSize="sm" color="fg.muted" lineHeight="1.7">
           <Text as="span" color="fg.subtle">
-            Evidence:{' '}
+            {t.evidence}{' '}
           </Text>
           {finding.evidence}
         </Text>
         <Text fontSize="sm" color="fg.muted" lineHeight="1.7" mt="1">
           <Text as="span" color="fg.subtle">
-            Recommended:{' '}
+            {t.recommended}{' '}
           </Text>
           {finding.recommendedAction}
         </Text>

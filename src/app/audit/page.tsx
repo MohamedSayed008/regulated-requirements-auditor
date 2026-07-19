@@ -12,22 +12,23 @@ import { FindingCard } from '@/components/FindingCard';
 import { AuditExport, type ClauseText } from '@/components/AuditExport';
 import { AuditTrace } from '@/components/AuditTrace';
 import { requirementById } from '@/lib/requirement-lookup';
+import { type Lang, localePath, translations } from '@/lib/i18n';
 import runJson from '@/data/audit/latest-run.json';
 
 export const metadata: Metadata = {
   title: 'Audit',
   description:
     'A replayed code audit: a tenancy-management app checked against Dubai tenancy law, with each finding tied to the clause it violates.',
-  alternates: { canonical: '/audit' },
+  alternates: {
+    canonical: '/audit',
+    languages: { 'en-US': '/audit', ar: '/ar/audit', 'x-default': '/audit' },
+  },
 };
 
 const run = auditRunSchema.parse(runJson);
 const findings = [...run.findings].sort(
   (a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]
 );
-
-// The cached /audit run replays the tenancy sample.
-const CORPUS_LABEL = 'Dubai tenancy law';
 
 // Bundle each cited clause's text so the exported report carries the real
 // requirement language, not just its id.
@@ -39,13 +40,12 @@ for (const finding of run.findings) {
   }
 }
 
-export default function AuditPage() {
+export default function AuditPage({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].audit;
   return (
-    <Page>
-      <PageHeader eyebrow="Code audit · replayed run" title="The code, audited against the law">
-        A tenancy-management app checked against the {run.requirementsChecked} testable requirement
-        units. This replays a real run: the model read the source and raised each finding below,
-        tying code to the clause it violates. Findings are proposed, never final.
+    <Page lang={lang}>
+      <PageHeader eyebrow={t.eyebrow} title={t.title} lang={lang}>
+        {t.lede(run.requirementsChecked)}
       </PageHeader>
 
       <Reveal delay={160}>
@@ -57,41 +57,48 @@ export default function AuditPage() {
             size="sm"
             _hover={{ borderColor: 'accent.solid' }}
           >
-            <NextLink href="/review">Open the review queue &rarr;</NextLink>
+            <NextLink href={localePath(lang, '/review')}>{t.openQueue}</NextLink>
           </Button>
-          <AuditExport run={run} clauses={clauses} corpusLabel={CORPUS_LABEL} />
+          <AuditExport run={run} clauses={clauses} corpusLabel={t.corpusLabel} />
         </HStack>
       </Reveal>
 
       <Reveal delay={200}>
         <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }} gap="3.5" mb="5">
-          <Stat value={<CountUp to={run.findings.length} />} label="Findings raised" />
-          <Stat value={<CountUp to={run.requirementsChecked} />} label="Requirements checked" />
-          <Stat value={<CountUp to={run.filesScanned.length} />} label="Files scanned" />
-          <Stat value={`$${run.usage.estimatedCostUsd}`} label="Run cost" color="law.fg" />
+          <Stat value={<CountUp to={run.findings.length} />} label={t.statFindings} />
+          <Stat value={<CountUp to={run.requirementsChecked} />} label={t.statRequirements} />
+          <Stat value={<CountUp to={run.filesScanned.length} />} label={t.statFiles} />
+          <Stat value={`$${run.usage.estimatedCostUsd}`} label={t.statCost} color="law.fg" />
         </Grid>
         <HStack gap="3" mb="10" flexWrap="wrap" fontSize="xs" color="fg.subtle">
           <Badge colorPalette="teal" variant="subtle" fontFamily="heading" rounded="full">
             {run.model}
           </Badge>
           <Text>
-            {run.usage.inputTokens.toLocaleString()} in / {run.usage.outputTokens.toLocaleString()}{' '}
-            out tokens
+            {t.tokens(
+              run.usage.inputTokens.toLocaleString(),
+              run.usage.outputTokens.toLocaleString()
+            )}
           </Text>
-          <Text>&middot; target: {run.target}</Text>
+          <Text>
+            &middot; {t.target}{' '}
+            <Text as="span" dir="ltr">
+              {run.target}
+            </Text>
+          </Text>
         </HStack>
       </Reveal>
 
       <Reveal delay={240}>
         <Box mb="11">
-          <AuditTrace run={run} corpusLabel={CORPUS_LABEL} />
+          <AuditTrace run={run} corpusLabel={t.corpusLabel} lang={lang} />
         </Box>
       </Reveal>
 
       <Stack gap="4">
         {findings.map((finding, i) => (
           <Reveal key={finding.id} delay={Math.min(i, 4) * 60}>
-            <FindingCard finding={finding} />
+            <FindingCard finding={finding} lang={lang} />
           </Reveal>
         ))}
       </Stack>

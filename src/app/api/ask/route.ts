@@ -79,7 +79,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         const messageStream = anthropic.messages.stream({
           model: ASK_MODEL,
           max_tokens: MAX_ANSWER_TOKENS,
-          system: systemPromptFor(corpus),
+          system: systemPromptFor(corpus, parsed.data.lang ?? 'en'),
           messages: [
             {
               role: 'user',

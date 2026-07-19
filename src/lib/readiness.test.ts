@@ -146,3 +146,23 @@ describe('individual rules', () => {
     expect(report.summary.readyPercent).toBe(0);
   });
 });
+
+describe('arabic report', () => {
+  it('localizes labels, fixes, and details with identical statuses', () => {
+    const enReport = runReadiness(GAPPY_SAMPLE, FULL_PROCESS);
+    const arReport = runReadiness(GAPPY_SAMPLE, FULL_PROCESS, 'ar');
+    expect(arReport.summary).toEqual(enReport.summary);
+    expect(arReport.checks.map(c => c.status)).toEqual(enReport.checks.map(c => c.status));
+    const buyer = arReport.checks.find(c => c.id === 'buyer-details');
+    expect(buyer?.label).toContain('المشتري');
+    expect(buyer?.detail).toContain('peppolId');
+    expect(buyer?.fix).toContain('Peppol');
+  });
+
+  it('keeps JSON field names untranslated inside arabic details', () => {
+    const report = runReadiness({}, {}, 'ar');
+    const seller = report.checks.find(c => c.id === 'seller-details');
+    expect(seller?.detail).toContain('trn');
+    expect(seller?.detail).toContain('الناقصة');
+  });
+});

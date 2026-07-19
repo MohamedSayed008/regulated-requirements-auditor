@@ -6,31 +6,36 @@ import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { CorpusPanels } from '@/components/CorpusPanels';
+import { type Lang, translations } from '@/lib/i18n';
 
 export const metadata: Metadata = {
   title: 'Requirements',
   description:
     'The corpora: regulations parsed into citable requirement units, English and Arabic.',
-  alternates: { canonical: '/requirements' },
+  alternates: {
+    canonical: '/requirements',
+    languages: { 'en-US': '/requirements', ar: '/ar/requirements', 'x-default': '/requirements' },
+  },
 };
 
-export default function RequirementsPage() {
+export default function RequirementsPage({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].requirements;
   return (
-    <Page>
-      <PageHeader eyebrow="The corpora" title="Requirements">
-        Each corpus is a regulation parsed into citable requirement units. Every answer and every
-        audit finding in this demo points back to one of the units below.
+    <Page lang={lang}>
+      <PageHeader eyebrow={t.eyebrow} title={t.title} lang={lang}>
+        {t.lede}
       </PageHeader>
-      <ColorLegend />
+      <ColorLegend lang={lang} />
       <Reveal delay={160}>
         <CorpusPanels
+          label={t.corpusLabel}
           options={CORPUS_LIST.map(c => ({
             id: c.id,
-            shortName: `${c.shortName} · ${c.units.length} units`,
+            shortName: `${c.shortName} · ${t.unitsBadge(c.units.length)}`,
           }))}
           panels={CORPUS_LIST.map(corpus => ({
             id: corpus.id,
-            content: <CorpusSection corpus={corpus} />,
+            content: <CorpusSection corpus={corpus} lang={lang} />,
           }))}
         />
       </Reveal>
@@ -38,13 +43,14 @@ export default function RequirementsPage() {
   );
 }
 
-function ColorLegend() {
-  // Decodes the left-rule colour on each UnitCard. Kept in the same priority
+function ColorLegend({ lang }: { lang: Lang }) {
+  const t = translations[lang].requirements;
+  // Decodes the side-rule colour on each UnitCard. Kept in the same priority
   // order as UnitCard: editorial caveat wins over testable, plain otherwise.
   const items = [
-    { color: 'law.solid', label: 'Editorial caveat' },
-    { color: 'accent.solid', label: 'Testable against code' },
-    { color: 'border.default', label: 'Reference only' },
+    { color: 'law.solid', label: t.legendEditorial },
+    { color: 'accent.solid', label: t.legendTestable },
+    { color: 'border.default', label: t.legendReference },
   ];
   return (
     <HStack gap="5" rowGap="2" flexWrap="wrap" mb="8">
@@ -55,7 +61,7 @@ function ColorLegend() {
         textTransform="uppercase"
         color="fg.subtle"
       >
-        Left rule
+        {t.legendTitle}
       </Text>
       {items.map(item => (
         <HStack key={item.label} gap="2.5">
@@ -69,7 +75,8 @@ function ColorLegend() {
   );
 }
 
-function CorpusSection({ corpus }: { corpus: Corpus }) {
+function CorpusSection({ corpus, lang }: { corpus: Corpus; lang: Lang }) {
+  const t = translations[lang].requirements;
   const testable = corpus.units.filter(u => u.testable).length;
   const bySource = new Map<string, RequirementUnit[]>();
   for (const unit of corpus.units) {
@@ -79,15 +86,15 @@ function CorpusSection({ corpus }: { corpus: Corpus }) {
   return (
     <Box as="section">
       <Text fontSize="sm" color="fg.subtle" mb="4">
-        {corpus.units.length} units, {testable} testable against code
-        {corpus.bilingual ? ' · bilingual (English / العربية)' : ''}
+        {t.unitsLine(corpus.units.length, testable)}
+        {corpus.bilingual ? t.bilingualSuffix : ''}
       </Text>
       <Stack gap="3" mb="8">
         <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
           <Text fontSize="xs" color="fg.subtle">
-            {corpus.disclaimer.en}
+            {lang === 'ar' ? (corpus.disclaimer.ar ?? corpus.disclaimer.en) : corpus.disclaimer.en}
           </Text>
-          {corpus.disclaimer.ar && (
+          {lang === 'en' && corpus.disclaimer.ar && (
             <Text fontSize="xs" color="fg.subtle" dir="rtl" lang="ar" mt="1" fontFamily="arabic">
               {corpus.disclaimer.ar}
             </Text>
@@ -103,13 +110,27 @@ function CorpusSection({ corpus }: { corpus: Corpus }) {
       </Stack>
 
       {corpus.documents.map(doc => (
-        <DocumentSection key={doc.slug} doc={doc} units={bySource.get(doc.slug) ?? []} />
+        <DocumentSection
+          key={doc.slug}
+          doc={doc}
+          units={bySource.get(doc.slug) ?? []}
+          lang={lang}
+        />
       ))}
     </Box>
   );
 }
 
-function DocumentSection({ doc, units }: { doc: CorpusDocument; units: RequirementUnit[] }) {
+function DocumentSection({
+  doc,
+  units,
+  lang,
+}: {
+  doc: CorpusDocument;
+  units: RequirementUnit[];
+  lang: Lang;
+}) {
+  const t = translations[lang].requirements;
   return (
     <Box as="section" aria-labelledby={doc.slug} mb="14">
       <HStack
@@ -122,30 +143,42 @@ function DocumentSection({ doc, units }: { doc: CorpusDocument; units: Requireme
         pb="3.5"
       >
         <Heading id={doc.slug} as="h2" fontFamily="heading" fontSize="xl">
-          {doc.titleEn}
+          {lang === 'ar' ? (doc.titleAr ?? doc.titleEn) : doc.titleEn}
         </Heading>
         <Text fontSize="sm" color="fg.subtle">
-          {doc.amendedBy ? `as amended by ${doc.amendedBy} · ` : ''}
-          <Link href={doc.officialSourceEn} color="accent.fg" rel="noopener noreferrer">
-            official source
+          {doc.amendedBy ? `${t.amendedByPrefix} ${doc.amendedBy} · ` : ''}
+          <Link
+            href={
+              lang === 'ar' ? (doc.officialSourceAr ?? doc.officialSourceEn) : doc.officialSourceEn
+            }
+            color="accent.fg"
+            rel="noopener noreferrer"
+          >
+            {t.officialSource}
           </Link>
         </Text>
       </HStack>
-      {doc.titleAr && (
+      {lang === 'en' && doc.titleAr && (
         <Text fontSize="sm" color="fg.subtle" mt="2" dir="rtl" lang="ar" fontFamily="arabic">
           {doc.titleAr}
         </Text>
       )}
+      {lang === 'ar' && doc.titleAr && (
+        <Text fontSize="sm" color="fg.subtle" mt="2" dir="ltr" lang="en">
+          {doc.titleEn}
+        </Text>
+      )}
       <Stack gap="4" mt="6">
         {units.map(unit => (
-          <UnitCard key={unit.id} unit={unit} />
+          <UnitCard key={unit.id} unit={unit} lang={lang} />
         ))}
       </Stack>
     </Box>
   );
 }
 
-function UnitCard({ unit }: { unit: RequirementUnit }) {
+function UnitCard({ unit, lang }: { unit: RequirementUnit; lang: Lang }) {
+  const t = translations[lang].requirements;
   // Left rule encodes the unit's nature: gold marks an editorial caveat, teal a
   // testable unit, plain line otherwise.
   const rule = unit.editorialNote ? 'law.solid' : unit.testable ? 'accent.solid' : 'border.default';
@@ -161,7 +194,7 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
       rounded="xl"
       p="5"
       transition="transform 0.25s"
-      _hover={{ transform: 'translateX(3px)' }}
+      _hover={{ transform: lang === 'ar' ? 'translateX(-3px)' : 'translateX(3px)' }}
     >
       <HStack gap="2.5" flexWrap="wrap">
         <Box
@@ -181,19 +214,27 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
         </Text>
         {unit.testable && (
           <Badge colorPalette="teal" variant="subtle" rounded="full">
-            testable
+            {t.testable}
           </Badge>
         )}
         {unit.amendedBy && (
           <Badge colorPalette="orange" variant="subtle" rounded="full">
-            amended by {unit.amendedBy}
+            {t.amendedBy(unit.amendedBy)}
           </Badge>
         )}
       </HStack>
-      <Text mt="3.5" fontSize="sm" lineHeight="1.7" color="fg.default" whiteSpace="pre-line">
-        {unit.textEn}
+      <Text
+        mt="3.5"
+        fontSize={lang === 'ar' && unit.textAr ? 'md' : 'sm'}
+        lineHeight={lang === 'ar' && unit.textAr ? '1.9' : '1.7'}
+        color="fg.default"
+        whiteSpace="pre-line"
+        dir={lang === 'ar' && unit.textAr ? 'rtl' : 'ltr'}
+        fontFamily={lang === 'ar' && unit.textAr ? 'arabic' : undefined}
+      >
+        {lang === 'ar' ? (unit.textAr ?? unit.textEn) : unit.textEn}
       </Text>
-      {unit.textAr && (
+      {lang === 'en' && unit.textAr && (
         <Text
           mt="3.5"
           fontSize="md"
@@ -221,7 +262,7 @@ function UnitCard({ unit }: { unit: RequirementUnit }) {
           py="2.5"
         >
           <Text fontSize="xs" color="law.fg">
-            Editorial note: {unit.editorialNote}
+            {t.editorialNote} {unit.editorialNote}
           </Text>
         </Box>
       )}

@@ -4,6 +4,7 @@ import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { CORPUS_LIST } from '@/lib/corpora';
+import { type Lang, translations } from '@/lib/i18n';
 import { citedRequirementIds } from '@/lib/readiness';
 import { type ReadinessClause } from '@/components/ReadinessExport';
 import ReadinessClient from '@/app/readiness/ReadinessClient';
@@ -12,10 +13,14 @@ export const metadata: Metadata = {
   title: 'eInvoicing readiness',
   description:
     'Check an invoice against the UAE eInvoicing mandate: field-level validation with a citation to the exact ministerial requirement for every gap.',
-  alternates: { canonical: '/readiness' },
+  alternates: {
+    canonical: '/readiness',
+    languages: { 'en-US': '/readiness', ar: '/ar/readiness', 'x-default': '/readiness' },
+  },
 };
 
-export default function ReadinessPage() {
+export default function ReadinessPage({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].readiness;
   const einvoicing = CORPUS_LIST.find(c => c.id === 'uae-einvoicing');
   // Clause texts for the cited units only, so the client bundle stays small.
   const clauses: Record<string, ReadinessClause> = {};
@@ -25,14 +30,12 @@ export default function ReadinessPage() {
   }
 
   return (
-    <Page maxW="4xl">
-      <PageHeader eyebrow="Are you ready?" title="UAE eInvoicing readiness check" maxW="64ch">
-        Paste a sample invoice as JSON and answer four process questions. Every check is
-        deterministic and cites the exact ministerial requirement it validates, so each gap comes
-        with the clause to read and a concrete fix. Nothing you paste is sent to a model.
+    <Page maxW="4xl" lang={lang}>
+      <PageHeader eyebrow={t.eyebrow} title={t.title} maxW="64ch" lang={lang}>
+        {t.lede}
       </PageHeader>
       <Reveal delay={160}>
-        <ReadinessClient clauses={clauses} />
+        <ReadinessClient clauses={clauses} lang={lang} />
       </Reveal>
       {einvoicing && (
         <Box
@@ -44,8 +47,10 @@ export default function ReadinessPage() {
           p="4"
         >
           <Text fontSize="xs" color="fg.subtle">
-            {einvoicing.disclaimer.en} This checker is a demonstration, not tax advice; the
-            authoritative field list is the Ministry of Finance data dictionary.
+            {lang === 'ar'
+              ? (einvoicing.disclaimer.ar ?? einvoicing.disclaimer.en)
+              : einvoicing.disclaimer.en}{' '}
+            {t.disclaimerSuffix}
           </Text>
         </Box>
       )}

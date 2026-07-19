@@ -12,6 +12,7 @@ export const maxDuration = 120;
 const bodySchema = z.object({
   repoUrl: z.string().trim().min(1).max(300),
   corpusId: z.string().optional(),
+  lang: z.enum(['en', 'ar']).optional(),
 });
 
 const FETCH_ERROR_STATUS: Record<string, number> = {
@@ -60,7 +61,13 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   try {
     const target = `${fetched.owner}/${fetched.repo}`;
-    const run = await runAudit(new Anthropic(), fetched.files, target, parsed.data.corpusId);
+    const run = await runAudit(
+      new Anthropic(),
+      fetched.files,
+      target,
+      parsed.data.corpusId,
+      parsed.data.lang ?? 'en'
+    );
     logEvent({
       ts: new Date().toISOString(),
       actor: 'public',

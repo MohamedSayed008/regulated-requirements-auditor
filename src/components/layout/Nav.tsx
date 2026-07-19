@@ -18,17 +18,7 @@ import {
 import { MizanBeam } from '@/components/icons/MizanMark';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { SessionChip } from '@/components/ui/SessionChip';
-
-const NAV = [
-  { href: '/requirements', label: 'Requirements' },
-  { href: '/ask', label: 'Ask' },
-  { href: '/audit', label: 'Audit' },
-  { href: '/audit-repo', label: 'Audit a repo' },
-  { href: '/readiness', label: 'Readiness' },
-  { href: '/review', label: 'Review' },
-  { href: '/evals', label: 'Evals' },
-  { href: '/activity', label: 'Activity' },
-];
+import { isRtl, langFromPathname, localePath, stripLocale, translations } from '@/lib/i18n';
 
 function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -36,11 +26,18 @@ function isActive(pathname: string, href: string): boolean {
 
 export function Nav() {
   const pathname = usePathname();
+  const lang = langFromPathname(pathname);
+  const t = translations[lang].nav;
+  const basePath = stripLocale(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
+  const dir = isRtl(lang) ? 'rtl' : 'ltr';
+  // The language switcher swaps the locale prefix but keeps the route.
+  const otherLocaleHref = lang === 'ar' ? basePath : localePath('ar', basePath);
 
   return (
     <Box
       as="header"
+      dir={dir}
       position="sticky"
       top="0"
       zIndex="10"
@@ -52,7 +49,7 @@ export function Nav() {
       <Container maxW="6xl" py="3.5">
         <Flex align="center" gap={{ base: '3', md: '6' }}>
           <Box asChild flexShrink="0">
-            <NextLink href="/" aria-label="Mizan, home">
+            <NextLink href={localePath(lang, '/')} aria-label={t.home}>
               <HStack gap="2.5" align="center">
                 <Box
                   color="law.fg"
@@ -77,12 +74,12 @@ export function Nav() {
 
           <Box as="nav" aria-label="Primary" ms="auto" display={{ base: 'none', md: 'block' }}>
             <HStack gap="6">
-              {NAV.map(item => (
+              {t.items.map(item => (
                 <NavItem
                   key={item.href}
-                  href={item.href}
+                  href={localePath(lang, item.href)}
                   label={item.label}
-                  active={isActive(pathname, item.href)}
+                  active={isActive(basePath, item.href)}
                   orientation="horizontal"
                 />
               ))}
@@ -90,9 +87,27 @@ export function Nav() {
           </Box>
 
           <HStack gap="2" flexShrink="0" ms={{ base: 'auto', md: '0' }}>
-            <SessionChip />
+            <SessionChip lang={lang} />
 
-            <ThemeToggle />
+            <Box
+              asChild
+              fontSize="sm"
+              fontWeight="500"
+              color="fg.muted"
+              px="2"
+              py="1"
+              rounded="md"
+              flexShrink="0"
+              transition="color 0.2s"
+              _hover={{ color: 'fg.default' }}
+              fontFamily={lang === 'ar' ? 'body' : 'arabic'}
+            >
+              <NextLink href={otherLocaleHref} aria-label={t.langSwitchAria}>
+                {t.langSwitch}
+              </NextLink>
+            </Box>
+
+            <ThemeToggle lang={lang} />
 
             <Box
               asChild
@@ -107,7 +122,7 @@ export function Nav() {
               transition="background 0.2s"
               _hover={{ bg: 'law.solid' }}
             >
-              <NextLink href="/ask">Try it</NextLink>
+              <NextLink href={localePath(lang, '/ask')}>{t.tryIt}</NextLink>
             </Box>
 
             <Drawer.Root
@@ -118,7 +133,7 @@ export function Nav() {
             >
               <Drawer.Trigger asChild>
                 <IconButton
-                  aria-label="Open navigation menu"
+                  aria-label={t.openMenu}
                   variant="outline"
                   size="xs"
                   w="8"
@@ -138,20 +153,25 @@ export function Nav() {
               <Portal>
                 <Drawer.Backdrop />
                 <Drawer.Positioner>
-                  <Drawer.Content bg="bg.panel" borderStartWidth="1px" borderColor="border.default">
+                  <Drawer.Content
+                    dir={dir}
+                    bg="bg.panel"
+                    borderStartWidth="1px"
+                    borderColor="border.default"
+                  >
                     <Drawer.Header borderBottomWidth="1px" borderColor="border.default">
                       <Drawer.Title fontFamily="serif" fontWeight="600" color="fg.default">
-                        Menu
+                        {t.menu}
                       </Drawer.Title>
                     </Drawer.Header>
                     <Drawer.Body px="0" py="2">
                       <Stack gap="0">
-                        {NAV.map(item => (
+                        {t.items.map(item => (
                           <NavItem
                             key={item.href}
-                            href={item.href}
+                            href={localePath(lang, item.href)}
                             label={item.label}
-                            active={isActive(pathname, item.href)}
+                            active={isActive(basePath, item.href)}
                             orientation="vertical"
                             onNavigate={() => setMenuOpen(false)}
                           />
@@ -173,8 +193,11 @@ export function Nav() {
                         transition="background 0.2s"
                         _hover={{ bg: 'law.solid' }}
                       >
-                        <NextLink href="/ask" onClick={() => setMenuOpen(false)}>
-                          Try it
+                        <NextLink
+                          href={localePath(lang, '/ask')}
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {t.tryIt}
                         </NextLink>
                       </Box>
                     </Drawer.Footer>

@@ -5,36 +5,39 @@ import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { MetricBar } from '@/components/ui/MetricBar';
+import { type Lang, translations } from '@/lib/i18n';
 import reportsJson from '@/data/evals/reports.json';
 
 export const metadata: Metadata = {
   title: 'Evals',
   description:
     'The published eval report per corpus: groundedness, refusal correctness, injection resistance, and audit precision/recall.',
-  alternates: { canonical: '/evals' },
+  alternates: {
+    canonical: '/evals',
+    languages: { 'en-US': '/evals', ar: '/ar/evals', 'x-default': '/evals' },
+  },
 };
 
 const reports = evalReportSetSchema.parse(reportsJson);
 
-export default function EvalsPage() {
+export default function EvalsPage({ lang = 'en' }: { lang?: Lang }) {
+  const t = translations[lang].evals;
   return (
-    <Page>
-      <PageHeader eyebrow="Published evals" title="How reliable is it?" maxW="66ch">
-        Every claim this demo makes is measured here, per corpus. Graders are programmatic, so the
-        numbers are reproducible: groundedness, refusal correctness, injection resistance, and audit
-        precision/recall against a seeded ground truth. The misses are shown too.
+    <Page lang={lang}>
+      <PageHeader eyebrow={t.eyebrow} title={t.title} maxW="66ch" lang={lang}>
+        {t.lede}
       </PageHeader>
 
       {reports.length === 0 && (
         <Box borderWidth="1px" borderColor="law.line" bg="law.muted" rounded="lg" p="4">
           <Text fontSize="sm" color="law.fg">
-            The eval reports have not been generated yet.
+            {t.empty}
           </Text>
         </Box>
       )}
 
       {reports.map(entry => (
-        <CorpusReportSection key={entry.corpusId} entry={entry} />
+        <CorpusReportSection key={entry.corpusId} entry={entry} lang={lang} />
       ))}
     </Page>
   );
@@ -44,7 +47,8 @@ function pct(passed: number, total: number): number {
   return total === 0 ? 0 : passed / total;
 }
 
-function CorpusReportSection({ entry }: { entry: CorpusReport }) {
+function CorpusReportSection({ entry, lang }: { entry: CorpusReport; lang: Lang }) {
+  const t = translations[lang].evals;
   const { auditScore, suites, usage } = entry.report;
   return (
     <Box as="section" mb="16">
@@ -57,7 +61,7 @@ function CorpusReportSection({ entry }: { entry: CorpusReport }) {
             {entry.report.model}
           </Badge>
           <Text fontSize="xs" color="fg.subtle">
-            generated {new Date(entry.report.ranAt).toISOString().slice(0, 10)} &middot; $
+            {t.generated} {new Date(entry.report.ranAt).toISOString().slice(0, 10)} &middot; $
             {usage.estimatedCostUsd}
           </Text>
         </HStack>
@@ -69,14 +73,18 @@ function CorpusReportSection({ entry }: { entry: CorpusReport }) {
             <MetricCard
               key={s.name}
               value={`${Math.round(pct(s.passed, s.total) * 100)}%`}
-              label={`${s.name} · ${s.passed}/${s.total}`}
+              label={t.suiteLabel(s.name, s.passed, s.total)}
               bar={pct(s.passed, s.total)}
               tone="teal"
             />
           ))}
           <MetricCard
-            value={`${auditScore.precision.toFixed(2)} / ${auditScore.recall.toFixed(2)}`}
-            label={`Precision / recall · ${auditScore.detectedViolations}/${auditScore.seededViolations} seeded, ${auditScore.falsePositives} FP`}
+            value={t.precisionRecall(auditScore.precision.toFixed(2), auditScore.recall.toFixed(2))}
+            label={t.precisionLabel(
+              auditScore.detectedViolations,
+              auditScore.seededViolations,
+              auditScore.falsePositives
+            )}
             bar={auditScore.precision}
             tone="gold"
           />
@@ -95,8 +103,7 @@ function CorpusReportSection({ entry }: { entry: CorpusReport }) {
             mb="6"
           >
             <Text fontSize="sm" color="law.fg" lineHeight="1.6">
-              The false positive here is a legitimate extra finding raised on a genuinely
-              non-compliant file: scored honestly rather than suppressed.
+              {t.fpNote}
             </Text>
           </Box>
         </Reveal>
@@ -105,7 +112,7 @@ function CorpusReportSection({ entry }: { entry: CorpusReport }) {
       <Stack gap="4">
         {suites.map((s, i) => (
           <Reveal key={s.name} delay={Math.min(i, 3) * 60}>
-            <SuiteBlock suite={s} />
+            <SuiteBlock suite={s} lang={lang} />
           </Reveal>
         ))}
       </Stack>
@@ -137,7 +144,8 @@ function MetricCard({
   );
 }
 
-function SuiteBlock({ suite }: { suite: SuiteResult }) {
+function SuiteBlock({ suite, lang }: { suite: SuiteResult; lang: Lang }) {
+  const t = translations[lang].evals;
   return (
     <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="2xl" p="5">
       <HStack justify="space-between" mb="3.5" flexWrap="wrap">
@@ -149,14 +157,14 @@ function SuiteBlock({ suite }: { suite: SuiteResult }) {
           variant="subtle"
           rounded="full"
         >
-          {suite.passed}/{suite.total} passed
+          {t.passedBadge(suite.passed, suite.total)}
         </Badge>
       </HStack>
       <Stack gap="2">
         {suite.cases.map(c => (
           <HStack key={c.id} gap="3" fontSize="xs" flexWrap="wrap">
             <Badge colorPalette={c.pass ? 'green' : 'red'} variant="subtle" rounded="full">
-              {c.pass ? 'pass' : 'fail'}
+              {c.pass ? t.casePass : t.caseFail}
             </Badge>
             <Text fontFamily="heading" color="fg.subtle">
               {c.id}

@@ -3,6 +3,7 @@
 import { type FormEvent, useRef, useState } from 'react';
 import { Box, Button, HStack, Input, Link, Stack, Text } from '@chakra-ui/react';
 import { type CorpusOption, CorpusToggle } from '@/components/CorpusToggle';
+import { type Lang, localePath, translations } from '@/lib/i18n';
 
 type Segment =
   { kind: 'text'; text: string } | { kind: 'citation'; unitId: string; citedText: string };
@@ -18,25 +19,19 @@ function stripMarkdownMarkers(text: string): string {
 
 type Status = 'idle' | 'streaming' | 'done' | 'error';
 
-const ERROR_COPY: Record<string, string> = {
-  demo_disabled:
-    'The live demo is paused right now (budget cap). Cached runs and the corpus remain available.',
-  not_configured: 'The demo backend is not configured yet.',
-  rate_limited: 'Rate limit reached. Please try again in a while.',
-  upstream_rate_limited: 'The model is busy. Please try again shortly.',
-  invalid_question: 'Questions need to be between 8 and 500 characters.',
-  default: 'Something went wrong. Please try again.',
-};
-
 export default function AskClient({
   corpusOptions,
   defaultCorpusId,
   initialQuestion = '',
+  lang = 'en',
 }: {
   corpusOptions: CorpusOption[];
   defaultCorpusId: string;
   initialQuestion?: string;
+  lang?: Lang;
 }) {
+  const t = translations[lang].ask;
+  const tCorpus = translations[lang].requirements.corpusLabel;
   const [question, setQuestion] = useState(initialQuestion);
   const [corpusId, setCorpusId] = useState(defaultCorpusId);
   const [segments, setSegments] = useState<Segment[]>([]);
@@ -59,7 +54,7 @@ export default function AskClient({
       const response = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ question: trimmed, corpusId }),
+        body: JSON.stringify({ question: trimmed, corpusId, lang }),
         signal: controller.signal,
       });
 
@@ -114,10 +109,15 @@ export default function AskClient({
   }
 
   return (
-    <Box as="section" aria-label="Ask a question">
+    <Box as="section" aria-label={t.sectionAria}>
       {corpusOptions.length > 1 && (
         <Box mb="4">
-          <CorpusToggle options={corpusOptions} value={corpusId} onChange={setCorpusId} />
+          <CorpusToggle
+            options={corpusOptions}
+            value={corpusId}
+            onChange={setCorpusId}
+            label={tCorpus}
+          />
         </Box>
       )}
       <form onSubmit={handleSubmit}>
@@ -137,9 +137,9 @@ export default function AskClient({
           <Input
             value={question}
             onChange={e => setQuestion(e.target.value)}
-            placeholder="e.g. How much notice is needed before a rent increase?"
+            placeholder={t.placeholder}
             maxLength={500}
-            aria-label="Your question about the regulation"
+            aria-label={t.inputAria}
             variant="outline"
             border="none"
             bg="transparent"
@@ -161,13 +161,12 @@ export default function AskClient({
             px="6"
             rounded="lg"
           >
-            {status === 'streaming' ? 'Answering' : 'Ask'}
+            {status === 'streaming' ? t.submitting : t.submit}
           </Button>
         </Stack>
       </form>
       <Text mt="3" fontSize="xs" color="fg.subtle">
-        AI-generated answer. Verify every claim against the cited requirement units before relying
-        on it.
+        {t.aiNote}
       </Text>
 
       {status === 'streaming' && segments.length === 0 && (
@@ -189,7 +188,7 @@ export default function AskClient({
             _motionReduce={{ animation: 'none' }}
           />
           <Text fontSize="sm" color="fg.muted">
-            Reading the corpus and grounding the answer
+            {t.streaming}
           </Text>
         </HStack>
       )}
@@ -206,7 +205,7 @@ export default function AskClient({
           py="4"
         >
           <Text fontSize="sm" color="warn.fg">
-            {ERROR_COPY[errorKey] ?? ERROR_COPY.default}
+            {t.errors[errorKey] ?? t.errors.default}
           </Text>
         </Box>
       )}
@@ -231,7 +230,7 @@ export default function AskClient({
             ) : (
               <Link
                 key={i}
-                href={`/requirements#${segment.unitId}`}
+                href={`${localePath(lang, '/requirements')}#${segment.unitId}`}
                 title={segment.citedText}
                 mx="1"
                 display="inline-flex"

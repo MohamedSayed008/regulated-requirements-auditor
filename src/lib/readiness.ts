@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { type Lang } from '@/lib/i18n';
+import { type ReadinessDetailStrings, READINESS_STRINGS } from '@/lib/readiness-strings';
 
 /**
  * eInvoicing readiness engine (v5, Track B product slice).
@@ -11,7 +13,8 @@ import { z } from 'zod';
  *
  * The invoice input is untrusted JSON; checks read it defensively (a field of
  * the wrong type counts as missing) so any paste produces a report instead of
- * a validation stack trace.
+ * a validation stack trace. Report language follows the `lang` argument; the
+ * strings live in readiness-strings.ts (English and Arabic).
  */
 
 export type CheckStatus = 'pass' | 'fail' | 'not_assessed';
@@ -115,7 +118,8 @@ function missingList(source: Record<string, unknown>, fields: [string, 'str' | '
 }
 
 // ---------------------------------------------------------------------------
-// Checks. Each is keyed to one requirement unit id from the corpus.
+// Checks. Each is keyed to one requirement unit id from the corpus; labels,
+// fixes, and detail wording come from READINESS_STRINGS per language.
 
 interface CheckOutcome {
   status: CheckStatus;
@@ -125,10 +129,8 @@ interface CheckOutcome {
 interface CheckDefinition {
   id: string;
   requirementId: string;
-  label: string;
   severity: ReadinessSeverity;
-  fix: string;
-  run: (invoice: unknown, process: ProcessAnswers) => CheckOutcome;
+  run: (invoice: unknown, process: ProcessAnswers, d: ReadinessDetailStrings) => CheckOutcome;
 }
 
 const LINE_FIELDS: [string, 'str' | 'num'][] = [
@@ -154,29 +156,22 @@ const CHECKS: CheckDefinition[] = [
   {
     id: 'structured-format',
     requirementId: 'MOF-EINV/REQ-1',
-    label: 'Invoices issued as structured data, not PDF or image',
     severity: 'critical',
-    fix: 'Issue invoices as structured machine-readable data through your billing system. A PDF, scan, image, or emailed invoice is not an eInvoice under the mandate.',
-    run: (_invoice, process) => {
+    run: (_invoice, process, d) => {
       if (process.format === undefined) {
-        return { status: 'not_assessed', detail: 'Issuance format not provided.' };
+        return { status: 'not_assessed', detail: d.formatNotProvided };
       }
       if (process.format === 'structured') {
-        return { status: 'pass', detail: 'Invoices are issued as structured data.' };
+        return { status: 'pass', detail: d.formatPass };
       }
-      return {
-        status: 'fail',
-        detail: `Invoices are issued as ${process.format}, which the mandate does not recognise as an eInvoice.`,
-      };
+      return { status: 'fail', detail: d.formatFail(process.format) };
     },
   },
   {
     id: 'seller-details',
     requirementId: 'MOF-FIELDS-2026/REQ-1',
-    label: 'Seller name, address, and TRN',
     severity: 'critical',
-    fix: 'Add the seller name, address, and 15-digit Tax Registration Number to every invoice; the first 10 digits form the seller participant identifier.',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const seller = section(invoice, 'seller');
       const missing = missingList(seller, [
         ['name', 'str'],
@@ -184,25 +179,20 @@ const CHECKS: CheckDefinition[] = [
         ['trn', 'str'],
       ]);
       if (missing.length > 0) {
-        return { status: 'fail', detail: `Missing seller field(s): ${missing.join(', ')}.` };
+        return { status: 'fail', detail: d.missingSellerFields(missing) };
       }
       const trn = str(seller, 'trn');
       if (trn && !isTrn(trn)) {
-        return {
-          status: 'fail',
-          detail: `Seller TRN "${trn}" is not a 15-digit Tax Registration Number.`,
-        };
+        return { status: 'fail', detail: d.sellerTrnInvalid(trn) };
       }
-      return { status: 'pass', detail: 'Seller name, address, and TRN present and well-formed.' };
+      return { status: 'pass', detail: d.sellerPass };
     },
   },
   {
     id: 'buyer-details',
     requirementId: 'MOF-FIELDS-2026/REQ-2',
-    label: 'Buyer name, address, TRN, and Peppol identifier',
     severity: 'critical',
-    fix: 'Capture the buyer name, address, TRN (where the buyer is tax-registered), and the buyer Peppol participant identifier used for routing.',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const buyer = section(invoice, 'buyer');
       const missing = missingList(buyer, [
         ['name', 'str'],
@@ -211,105 +201,82 @@ const CHECKS: CheckDefinition[] = [
       ]);
       const trn = str(buyer, 'trn');
       if (trn !== undefined && !isTrn(trn)) {
-        return {
-          status: 'fail',
-          detail: `Buyer TRN "${trn}" is not a 15-digit Tax Registration Number.`,
-        };
+        return { status: 'fail', detail: d.buyerTrnInvalid(trn) };
       }
       if (missing.length > 0) {
-        return { status: 'fail', detail: `Missing buyer field(s): ${missing.join(', ')}.` };
+        return { status: 'fail', detail: d.missingBuyerFields(missing) };
       }
-      return {
-        status: 'pass',
-        detail:
-          trn === undefined
-            ? 'Buyer details present (no TRN given: acceptable only if the buyer is not tax-registered).'
-            : 'Buyer name, address, TRN, and Peppol identifier present.',
-      };
+      return { status: 'pass', detail: trn === undefined ? d.buyerPassNoTrn : d.buyerPass };
     },
   },
   {
     id: 'invoice-identification',
     requirementId: 'MOF-FIELDS-2026/REQ-3',
-    label: 'Unique invoice number and issue date',
     severity: 'critical',
-    fix: 'Give every invoice a unique invoice number and an issue date (YYYY-MM-DD).',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const details = section(invoice, 'invoice');
       const missing = missingList(details, [
         ['number', 'str'],
         ['issueDate', 'str'],
       ]);
       if (missing.length > 0) {
-        return { status: 'fail', detail: `Missing invoice field(s): ${missing.join(', ')}.` };
+        return { status: 'fail', detail: d.missingInvoiceFields(missing) };
       }
       const issueDate = str(details, 'issueDate');
       if (issueDate && !isIsoDate(issueDate)) {
-        return { status: 'fail', detail: `Issue date "${issueDate}" is not a valid date.` };
+        return { status: 'fail', detail: d.issueDateInvalid(issueDate) };
       }
-      return { status: 'pass', detail: 'Invoice number and issue date present.' };
+      return { status: 'pass', detail: d.invoiceIdPass };
     },
   },
   {
     id: 'currency',
     requirementId: 'MOF-FIELDS-2026/REQ-4',
-    label: 'Currency code, with tax total in AED',
     severity: 'high',
-    fix: 'State the invoice currency as a 3-letter code, and when invoicing in a foreign currency also provide the total tax amount in AED.',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const details = section(invoice, 'invoice');
       const currency = str(details, 'currencyCode');
       if (currency === undefined) {
-        return { status: 'fail', detail: 'Missing invoice currency code.' };
+        return { status: 'fail', detail: d.currencyMissing };
       }
       if (!/^[A-Z]{3}$/.test(currency)) {
-        return {
-          status: 'fail',
-          detail: `Currency code "${currency}" is not a 3-letter ISO code.`,
-        };
+        return { status: 'fail', detail: d.currencyNotIso(currency) };
       }
       if (currency !== 'AED' && num(section(invoice, 'totals'), 'vatTotalAed') === undefined) {
-        return {
-          status: 'fail',
-          detail: `Invoice is in ${currency} but the tax total in AED (totals.vatTotalAed) is missing.`,
-        };
+        return { status: 'fail', detail: d.currencyMissingAedTotal(currency) };
       }
-      return { status: 'pass', detail: `Currency ${currency}, tax total available in AED.` };
+      return { status: 'pass', detail: d.currencyPass(currency) };
     },
   },
   {
     id: 'line-items',
     requirementId: 'MOF-FIELDS-2026/REQ-5',
-    label: 'Line items: description, quantity, UoM, price, net, tax category, VAT rate',
     severity: 'critical',
-    fix: 'Provide every line with description, quantity, unit of measure, unit price, line net amount, tax category code, and VAT rate.',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const lines = rows(invoice, 'lines');
       if (lines.length === 0) {
-        return { status: 'fail', detail: 'No line items found.' };
+        return { status: 'fail', detail: d.noLineItems };
       }
       const problems: string[] = [];
       lines.forEach((line, index) => {
         const record = isRecord(line) ? line : {};
         const missing = missingList(record, LINE_FIELDS);
-        if (missing.length > 0) problems.push(`line ${index + 1}: ${missing.join(', ')}`);
+        if (missing.length > 0) problems.push(d.lineMissing(index + 1, missing));
       });
       if (problems.length > 0) {
-        return { status: 'fail', detail: `Missing line fields. ${problems.join('; ')}.` };
+        return { status: 'fail', detail: d.lineProblems(problems) };
       }
-      return { status: 'pass', detail: `All ${lines.length} line item(s) carry the seven fields.` };
+      return { status: 'pass', detail: d.linesPass(lines.length) };
     },
   },
   {
     id: 'tax-breakdown-totals',
     requirementId: 'MOF-FIELDS-2026/REQ-6',
-    label: 'VAT breakdown per category and consistent document totals',
     severity: 'high',
-    fix: 'Include a VAT breakdown per tax category (category, taxable amount, rate, VAT amount), line-level VAT in AED for foreign-currency invoices, and document totals that add up.',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const breakdown = rows(invoice, 'taxBreakdown');
       if (breakdown.length === 0) {
-        return { status: 'fail', detail: 'No VAT tax breakdown found.' };
+        return { status: 'fail', detail: d.noTaxBreakdown };
       }
       const badRows: string[] = [];
       breakdown.forEach((row, index) => {
@@ -320,10 +287,10 @@ const CHECKS: CheckDefinition[] = [
           ['vatRate', 'num'],
           ['vatAmount', 'num'],
         ]);
-        if (missing.length > 0) badRows.push(`breakdown ${index + 1}: ${missing.join(', ')}`);
+        if (missing.length > 0) badRows.push(d.breakdownRowMissing(index + 1, missing));
       });
       if (badRows.length > 0) {
-        return { status: 'fail', detail: `Incomplete tax breakdown. ${badRows.join('; ')}.` };
+        return { status: 'fail', detail: d.breakdownIncomplete(badRows) };
       }
 
       const totals = section(invoice, 'totals');
@@ -333,7 +300,7 @@ const CHECKS: CheckDefinition[] = [
         ['payableTotal', 'num'],
       ]);
       if (missingTotals.length > 0) {
-        return { status: 'fail', detail: `Missing total(s): ${missingTotals.join(', ')}.` };
+        return { status: 'fail', detail: d.missingTotals(missingTotals) };
       }
 
       const currency = str(section(invoice, 'invoice'), 'currencyCode');
@@ -343,10 +310,7 @@ const CHECKS: CheckDefinition[] = [
           .filter(({ line }) => num(isRecord(line) ? line : {}, 'vatAmountAed') === undefined)
           .map(({ index }) => index + 1);
         if (linesMissingAed.length > 0) {
-          return {
-            status: 'fail',
-            detail: `Invoice is in ${currency} but line(s) ${linesMissingAed.join(', ')} lack the line-level VAT amount in AED (vatAmountAed).`,
-          };
+          return { status: 'fail', detail: d.linesMissingAed(currency, linesMissingAed) };
         }
       }
 
@@ -363,117 +327,104 @@ const CHECKS: CheckDefinition[] = [
       const payableTotal = num(totals, 'payableTotal') ?? 0;
       const mismatches: string[] = [];
       if (!moneyEquals(lineNetSum, lineNetTotal)) {
-        mismatches.push(
-          `sum of line nets ${lineNetSum.toFixed(2)} ≠ lineNetTotal ${lineNetTotal.toFixed(2)}`
-        );
+        mismatches.push(d.mismatchLineNet(lineNetSum.toFixed(2), lineNetTotal.toFixed(2)));
       }
       if (!moneyEquals(vatSum, vatTotal)) {
-        mismatches.push(
-          `sum of VAT amounts ${vatSum.toFixed(2)} ≠ vatTotal ${vatTotal.toFixed(2)}`
-        );
+        mismatches.push(d.mismatchVat(vatSum.toFixed(2), vatTotal.toFixed(2)));
       }
       if (!moneyEquals(lineNetTotal + vatTotal, payableTotal)) {
         mismatches.push(
-          `lineNetTotal + vatTotal ${(lineNetTotal + vatTotal).toFixed(2)} ≠ payableTotal ${payableTotal.toFixed(2)}`
+          d.mismatchPayable((lineNetTotal + vatTotal).toFixed(2), payableTotal.toFixed(2))
         );
       }
       if (mismatches.length > 0) {
-        return { status: 'fail', detail: `Totals do not add up: ${mismatches.join('; ')}.` };
+        return { status: 'fail', detail: d.totalsMismatch(mismatches) };
       }
-      return { status: 'pass', detail: 'Tax breakdown complete and totals consistent.' };
+      return { status: 'pass', detail: d.totalsPass };
     },
   },
   {
     id: 'issuance-timing',
     requirementId: 'MD243-2025/REQ-6',
-    label: 'Issued within 14 days of the business transaction',
     severity: 'medium',
-    fix: 'Issue and transmit the eInvoice within 14 days of the date of the business transaction (the earlier of transaction date or payment received).',
-    run: invoice => {
+    run: (invoice, _process, d) => {
       const details = section(invoice, 'invoice');
       const issueDate = str(details, 'issueDate');
       const transactionDate = str(details, 'transactionDate');
       if (!issueDate || !transactionDate || !isIsoDate(issueDate) || !isIsoDate(transactionDate)) {
-        return {
-          status: 'not_assessed',
-          detail: 'Needs both issueDate and transactionDate to assess the 14-day window.',
-        };
+        return { status: 'not_assessed', detail: d.timingNeedsDates };
       }
       const days = Math.round(
         (Date.parse(issueDate) - Date.parse(transactionDate)) / (24 * 60 * 60 * 1000)
       );
       if (days > 14) {
-        return {
-          status: 'fail',
-          detail: `Issued ${days} days after the business transaction (limit is 14).`,
-        };
+        return { status: 'fail', detail: d.timingFail(days) };
       }
-      return { status: 'pass', detail: `Issued ${days} day(s) after the business transaction.` };
+      return { status: 'pass', detail: d.timingPass(days) };
     },
   },
   {
     id: 'credit-notes',
     requirementId: 'MD243-2025/REQ-2',
-    label: 'Electronic credit notes for cancellations and corrections',
     severity: 'medium',
-    fix: 'Make sure your system can issue an electronic credit note through the same channel whenever an invoice is cancelled, adjusted, or corrected.',
-    run: (_invoice, process) => {
+    run: (_invoice, process, d) => {
       if (process.canIssueCreditNotes === undefined) {
-        return { status: 'not_assessed', detail: 'Credit-note capability not provided.' };
+        return { status: 'not_assessed', detail: d.creditNotesNotProvided };
       }
       if (process.canIssueCreditNotes) {
-        return { status: 'pass', detail: 'System can issue electronic credit notes.' };
+        return { status: 'pass', detail: d.creditNotesPass };
       }
-      return { status: 'fail', detail: 'System cannot issue electronic credit notes.' };
+      return { status: 'fail', detail: d.creditNotesFail };
     },
   },
   {
     id: 'asp-appointed',
     requirementId: 'MD243-2025/REQ-3',
-    label: 'Accredited Service Provider appointed',
     severity: 'high',
-    fix: "Appoint an Accredited Service Provider from the Ministry's published list; invoices must flow through an ASP under the 5-corner model.",
-    run: (_invoice, process) => {
+    run: (_invoice, process, d) => {
       if (process.aspAppointed === undefined) {
-        return { status: 'not_assessed', detail: 'ASP appointment not provided.' };
+        return { status: 'not_assessed', detail: d.aspNotProvided };
       }
       if (process.aspAppointed) {
-        return { status: 'pass', detail: 'An Accredited Service Provider is appointed.' };
+        return { status: 'pass', detail: d.aspPass };
       }
-      return { status: 'fail', detail: 'No Accredited Service Provider appointed yet.' };
+      return { status: 'fail', detail: d.aspFail };
     },
   },
   {
     id: 'data-residency',
     requirementId: 'MD243-2025/REQ-10',
-    label: 'Invoice data stored in the UAE and accessible to the FTA',
     severity: 'high',
-    fix: 'Store eInvoices, credit notes, and associated data within the UAE for the Tax Procedures Law retention period, accessible to the Federal Tax Authority.',
-    run: (_invoice, process) => {
+    run: (_invoice, process, d) => {
       if (process.storageInUae === undefined) {
-        return { status: 'not_assessed', detail: 'Storage location not provided.' };
+        return { status: 'not_assessed', detail: d.residencyNotProvided };
       }
       if (process.storageInUae) {
-        return { status: 'pass', detail: 'Invoice data is stored within the UAE.' };
+        return { status: 'pass', detail: d.residencyPass };
       }
-      return { status: 'fail', detail: 'Invoice data is not stored within the UAE.' };
+      return { status: 'fail', detail: d.residencyFail };
     },
   },
 ];
 
 // ---------------------------------------------------------------------------
 
-export function runReadiness(invoice: unknown, process: ProcessAnswers = {}): ReadinessReport {
+export function runReadiness(
+  invoice: unknown,
+  process: ProcessAnswers = {},
+  lang: Lang = 'en'
+): ReadinessReport {
+  const strings = READINESS_STRINGS[lang];
   const results: ReadinessCheckResult[] = CHECKS.map(check => {
-    const outcome = check.run(invoice, process);
+    const outcome = check.run(invoice, process, strings.d);
     return {
       id: check.id,
       requirementId: check.requirementId,
-      label: check.label,
+      label: strings.labels[check.id],
       severity: check.severity,
       status: outcome.status,
       detail: outcome.detail,
-      fix: check.fix,
+      fix: strings.fixes[check.id],
     };
   });
 
@@ -484,14 +435,14 @@ export function runReadiness(invoice: unknown, process: ProcessAnswers = {}): Re
   results.push({
     id: 'mandatory-fields',
     requirementId: 'MD243-2025/REQ-8',
-    label: 'All mandatory prescribed data fields present',
+    label: strings.labels['mandatory-fields'],
     severity: 'critical',
     status: failedFields.length > 0 ? 'fail' : 'pass',
     detail:
       failedFields.length > 0
-        ? `Not a valid eInvoice while field checks fail: ${failedFields.map(r => r.requirementId).join(', ')}.`
-        : 'All field-level checks pass.',
-    fix: 'Resolve every failing field-level check; Article 7 makes an invoice missing any mandatory field invalid.',
+        ? strings.d.umbrellaFail(failedFields.map(r => r.requirementId))
+        : strings.d.umbrellaPass,
+    fix: strings.fixes['mandatory-fields'],
   });
 
   const pass = results.filter(r => r.status === 'pass').length;

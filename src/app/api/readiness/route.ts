@@ -15,6 +15,7 @@ import { logEvent } from '@/lib/store';
 const bodySchema = z.object({
   invoice: z.unknown(),
   process: processAnswersSchema.optional(),
+  lang: z.enum(['en', 'ar']).optional(),
 });
 
 function json(body: unknown, status: number): Response {
@@ -44,7 +45,11 @@ export async function POST(req: NextRequest): Promise<Response> {
   const rate = await checkReadinessRateLimit(ip);
   if (!rate.ok) return json({ error: 'rate_limited' }, 429);
 
-  const report = runReadiness(parsed.data.invoice, parsed.data.process ?? {});
+  const report = runReadiness(
+    parsed.data.invoice,
+    parsed.data.process ?? {},
+    parsed.data.lang ?? 'en'
+  );
   logEvent({
     ts: new Date().toISOString(),
     actor: 'public',

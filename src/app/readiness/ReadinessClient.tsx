@@ -11,16 +11,9 @@ import {
 } from '@/lib/readiness';
 import { GAPPY_SAMPLE, PASSING_SAMPLE } from '@/lib/readiness-samples';
 import { ReadinessExport, type ReadinessClause } from '@/components/ReadinessExport';
+import { type Lang, localePath, translations } from '@/lib/i18n';
 
 type Status = 'idle' | 'running' | 'done' | 'error';
-
-const ERROR_COPY: Record<string, string> = {
-  invalid_json: 'That is not valid JSON. Paste the invoice as a JSON object.',
-  invalid_request: 'That request shape was not recognised.',
-  too_large: 'That invoice payload is too large for the demo.',
-  rate_limited: 'Rate limit reached. Please try again in a while.',
-  default: 'Something went wrong. Please try again.',
-};
 
 const STATUS_PALETTE: Record<CheckStatus, string> = {
   pass: 'green',
@@ -46,42 +39,26 @@ interface QuestionSpec {
   options: { value: string; label: string }[];
 }
 
-const QUESTIONS: QuestionSpec[] = [
-  {
-    key: 'format',
-    label: 'How are invoices issued today?',
-    options: [
-      { value: 'structured', label: 'Structured data' },
-      { value: 'pdf', label: 'PDF' },
-      { value: 'image', label: 'Scan / image' },
-      { value: 'email', label: 'Email' },
-    ],
-  },
-  {
-    key: 'aspAppointed',
-    label: 'Accredited Service Provider appointed?',
-    options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
-    ],
-  },
-  {
-    key: 'storageInUae',
-    label: 'Invoice data stored in the UAE?',
-    options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
-    ],
-  },
-  {
-    key: 'canIssueCreditNotes',
-    label: 'Can your system issue electronic credit notes?',
-    options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
-    ],
-  },
-];
+function buildQuestions(lang: Lang): QuestionSpec[] {
+  const q = translations[lang].readiness.questions;
+  const yesNo = [
+    { value: 'yes', label: q.yes },
+    { value: 'no', label: q.no },
+  ];
+  return [
+    {
+      key: 'format',
+      label: q.format,
+      options: ['structured', 'pdf', 'image', 'email'].map(value => ({
+        value,
+        label: q.formatOptions[value],
+      })),
+    },
+    { key: 'aspAppointed', label: q.aspAppointed, options: yesNo },
+    { key: 'storageInUae', label: q.storageInUae, options: yesNo },
+    { key: 'canIssueCreditNotes', label: q.canIssueCreditNotes, options: yesNo },
+  ];
+}
 
 function toProcessAnswers(raw: Record<string, string | undefined>): ProcessAnswers {
   const bool = (value: string | undefined) => (value === undefined ? undefined : value === 'yes');
@@ -93,7 +70,15 @@ function toProcessAnswers(raw: Record<string, string | undefined>): ProcessAnswe
   };
 }
 
-export default function ReadinessClient({ clauses }: { clauses: Record<string, ReadinessClause> }) {
+export default function ReadinessClient({
+  clauses,
+  lang = 'en',
+}: {
+  clauses: Record<string, ReadinessClause>;
+  lang?: Lang;
+}) {
+  const t = translations[lang].readiness;
+  const questions = buildQuestions(lang);
   const [invoiceText, setInvoiceText] = useState('');
   const [answers, setAnswers] = useState<Record<string, string | undefined>>({});
   const [report, setReport] = useState<ReadinessReport | null>(null);
@@ -113,7 +98,7 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
     try {
       invoice = JSON.parse(invoiceText);
     } catch {
-      setErrorText(ERROR_COPY.invalid_json);
+      setErrorText(t.errors.invalid_json);
       setStatus('error');
       return;
     }
@@ -123,12 +108,12 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
       const response = await fetch('/api/readiness', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ invoice, process: toProcessAnswers(answers) }),
+        body: JSON.stringify({ invoice, process: toProcessAnswers(answers), lang }),
       });
       const body = await response.json().catch(() => ({ error: 'default' }));
       if (!response.ok) {
         const key = typeof body.error === 'string' ? body.error : 'default';
-        setErrorText(ERROR_COPY[key] ?? ERROR_COPY.default);
+        setErrorText(t.errors[key] ?? t.errors.default);
         setStatus('error');
         return;
       }
@@ -136,7 +121,7 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
       setRunDate(new Date().toISOString().slice(0, 10));
       setStatus('done');
     } catch {
-      setErrorText(ERROR_COPY.default);
+      setErrorText(t.errors.default);
       setStatus('error');
     }
   }
@@ -146,7 +131,7 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
       <Box>
         <HStack justify="space-between" flexWrap="wrap" gap="2" mb="2.5">
           <Text fontFamily="heading" fontSize="xs" letterSpacing="0.1em" color="fg.subtle">
-            INVOICE JSON
+            {t.invoiceLabel}
           </Text>
           <HStack gap="2">
             <Button
@@ -157,7 +142,7 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
               _hover={{ color: 'fg.default', borderColor: 'accent.solid' }}
               onClick={() => loadSample(PASSING_SAMPLE)}
             >
-              Load compliant sample
+              {t.loadPassing}
             </Button>
             <Button
               size="xs"
@@ -167,14 +152,15 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
               _hover={{ color: 'fg.default', borderColor: 'warn.fg' }}
               onClick={() => loadSample(GAPPY_SAMPLE)}
             >
-              Load gappy sample
+              {t.loadGappy}
             </Button>
           </HStack>
         </HStack>
         <Textarea
           value={invoiceText}
           onChange={e => setInvoiceText(e.target.value)}
-          placeholder='Paste an invoice as JSON, e.g. { "seller": { "name": "...", "trn": "..." }, "lines": [...] }, or load a sample.'
+          placeholder={t.placeholder}
+          dir="ltr"
           fontFamily="heading"
           fontSize="xs"
           minH="72"
@@ -187,9 +173,9 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
 
       <Stack gap="3.5">
         <Text fontFamily="heading" fontSize="xs" letterSpacing="0.1em" color="fg.subtle">
-          PROCESS FACTS (OPTIONAL, UNANSWERED = NOT ASSESSED)
+          {t.processLabel}
         </Text>
-        {QUESTIONS.map(question => (
+        {questions.map(question => (
           <HStack key={question.key} gap="3" flexWrap="wrap">
             <Text fontSize="sm" color="fg.muted" minW="72">
               {question.label}
@@ -233,7 +219,7 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
           fontWeight="600"
           _hover={{ bg: 'law.solid' }}
         >
-          Check readiness
+          {t.submit}
         </Button>
       </Box>
 
@@ -245,7 +231,7 @@ export default function ReadinessClient({ clauses }: { clauses: Record<string, R
         </Box>
       )}
 
-      {report && <ReportView report={report} clauses={clauses} runDate={runDate} />}
+      {report && <ReportView report={report} clauses={clauses} runDate={runDate} lang={lang} />}
     </Stack>
   );
 }
@@ -254,23 +240,26 @@ function ReportView({
   report,
   clauses,
   runDate,
+  lang,
 }: {
   report: ReadinessReport;
   clauses: Record<string, ReadinessClause>;
   runDate: string;
+  lang: Lang;
 }) {
+  const t = translations[lang].readiness;
   return (
     <Stack gap="6" borderTopWidth="1px" borderColor="border.default" pt="8">
       <Grid
         templateColumns={{ base: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' }}
         gap="3"
       >
-        <ScoreCell value={`${report.summary.readyPercent}%`} label="ready" accent="law.fg" />
-        <ScoreCell value={String(report.summary.pass)} label="checks pass" accent="success.fg" />
-        <ScoreCell value={String(report.summary.fail)} label="checks fail" accent="warn.fg" />
+        <ScoreCell value={`${report.summary.readyPercent}%`} label={t.scoreReady} accent="law.fg" />
+        <ScoreCell value={String(report.summary.pass)} label={t.scorePass} accent="success.fg" />
+        <ScoreCell value={String(report.summary.fail)} label={t.scoreFail} accent="warn.fg" />
         <ScoreCell
           value={String(report.summary.notAssessed)}
-          label="not assessed"
+          label={t.scoreNotAssessed}
           accent="fg.subtle"
         />
       </Grid>
@@ -278,7 +267,7 @@ function ReportView({
       {report.fixes.length > 0 && (
         <Box>
           <Text fontFamily="heading" fontSize="xs" letterSpacing="0.1em" color="fg.subtle" mb="3">
-            WHAT TO FIX FIRST
+            {t.fixFirst}
           </Text>
           <Stack gap="2.5">
             {report.fixes.map((fix, index) => (
@@ -315,7 +304,12 @@ function ReportView({
         </Text>
         <Stack gap="3">
           {report.checks.map(check => (
-            <CheckCard key={check.id} check={check} clause={clauses[check.requirementId]} />
+            <CheckCard
+              key={check.id}
+              check={check}
+              clause={clauses[check.requirementId]}
+              lang={lang}
+            />
           ))}
         </Stack>
       </Box>
@@ -328,10 +322,13 @@ function ReportView({
 function CheckCard({
   check,
   clause,
+  lang,
 }: {
   check: ReadinessReport['checks'][number];
   clause: ReadinessClause | undefined;
+  lang: Lang;
 }) {
+  const t = translations[lang].readiness;
   const failed = check.status === 'fail';
   return (
     <Box
@@ -360,7 +357,7 @@ function CheckCard({
           color="accent.fg"
           _hover={{ textDecoration: 'underline' }}
         >
-          <NextLink href={`/requirements#${check.requirementId}`}>
+          <NextLink href={`${localePath(lang, '/requirements')}#${check.requirementId}`}>
             {check.requirementId}
             {clause ? ` · ${clause.articleRef}` : ''}
           </NextLink>
@@ -371,7 +368,7 @@ function CheckCard({
       </Text>
       {failed && (
         <Text mt="1.5" fontSize="sm" color="warn.fg">
-          Fix: {check.fix}
+          {t.fixPrefix} {check.fix}
         </Text>
       )}
     </Box>

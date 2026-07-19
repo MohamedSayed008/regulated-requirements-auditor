@@ -16,9 +16,11 @@ import { type CorpusOption, CorpusToggle } from '@/components/CorpusToggle';
 export function CorpusPanels({
   options,
   panels,
+  label,
 }: {
   options: CorpusOption[];
   panels: { id: string; content: ReactNode }[];
+  label?: string;
 }) {
   const [activeId, setActiveId] = useState(options[0]?.id ?? '');
 
@@ -43,7 +45,7 @@ export function CorpusPanels({
   return (
     <Box>
       <Box mb="8">
-        <CorpusToggle options={options} value={activeId} onChange={setActiveId} />
+        <CorpusToggle options={options} value={activeId} onChange={setActiveId} label={label} />
       </Box>
       {panels.map(panel => (
         <Box
