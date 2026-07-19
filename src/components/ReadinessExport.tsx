@@ -73,6 +73,10 @@ function download(filename: string, mime: string, contents: string): void {
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
+  // Files always open away from the app: browsers that honour the download
+  // attribute save directly; any that navigate do it in a new tab.
+  link.target = '_blank';
+  link.rel = 'noopener';
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -181,6 +185,8 @@ export function ReadinessExport(props: ReadinessExportProps) {
       const link = document.createElement('a');
       link.href = url;
       link.download = `mizan-readiness-${props.runDate}.html`;
+      link.target = '_blank';
+      link.rel = 'noopener';
       document.body.appendChild(link);
       link.click();
       link.remove();
