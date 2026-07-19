@@ -33,7 +33,10 @@ export default async function AskPage({
       </PageHeader>
       <Reveal delay={160}>
         <AskClient
-          corpusOptions={CORPUS_LIST.map(c => ({ id: c.id, shortName: c.shortName }))}
+          corpusOptions={CORPUS_LIST.map(c => ({
+            id: c.id,
+            shortName: lang === 'ar' ? c.shortNameAr : c.shortName,
+          }))}
           defaultCorpusId={DEFAULT_CORPUS_ID}
           initialQuestion={typeof q === 'string' ? q.slice(0, 500) : ''}
           lang={lang}

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { type ReactNode } from 'react';
 import NextLink from 'next/link';
 import { Badge, Box, Button, Grid, HStack, Stack, Text } from '@chakra-ui/react';
-import { auditRunSchema } from '@/lib/findings';
+import { type FindingProseAr, applyProseOverlay, auditRunSchema } from '@/lib/findings';
 import { SEVERITY_ORDER } from '@/lib/severity';
 import { Page } from '@/components/ui/shell';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -14,6 +14,7 @@ import { AuditTrace } from '@/components/AuditTrace';
 import { requirementById } from '@/lib/requirement-lookup';
 import { type Lang, localePath, translations } from '@/lib/i18n';
 import runJson from '@/data/audit/latest-run.json';
+import arProse from '@/data/audit/latest-run-ar.json';
 
 export const metadata: Metadata = {
   title: 'Audit',
@@ -42,6 +43,11 @@ for (const finding of run.findings) {
 
 export default function AuditPage({ lang = 'en' }: { lang?: Lang }) {
   const t = translations[lang].audit;
+  // The replayed run's finding prose is hand-translated for the Arabic side.
+  const localizedFindings =
+    lang === 'ar'
+      ? applyProseOverlay(findings, arProse as Record<string, FindingProseAr>)
+      : findings;
   return (
     <Page lang={lang}>
       <PageHeader eyebrow={t.eyebrow} title={t.title} lang={lang}>
@@ -59,7 +65,7 @@ export default function AuditPage({ lang = 'en' }: { lang?: Lang }) {
           >
             <NextLink href={localePath(lang, '/review')}>{t.openQueue}</NextLink>
           </Button>
-          <AuditExport run={run} clauses={clauses} corpusLabel={t.corpusLabel} />
+          <AuditExport run={run} clauses={clauses} corpusLabel={t.corpusLabel} lang={lang} />
         </HStack>
       </Reveal>
 
@@ -96,7 +102,7 @@ export default function AuditPage({ lang = 'en' }: { lang?: Lang }) {
       </Reveal>
 
       <Stack gap="4">
-        {findings.map((finding, i) => (
+        {localizedFindings.map((finding, i) => (
           <Reveal key={finding.id} delay={Math.min(i, 4) * 60}>
             <FindingCard finding={finding} lang={lang} />
           </Reveal>

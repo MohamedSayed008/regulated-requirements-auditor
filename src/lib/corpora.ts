@@ -20,7 +20,9 @@ import einvoicingDocs from '@/data/corpus/einvoicing/documents.json';
 export interface Corpus {
   id: string;
   name: string;
+  nameAr: string;
   shortName: string;
+  shortNameAr: string;
   blurb: string;
   /** Named in the model's system prompts to scope answers and audits. */
   scopeForPrompt: string;
@@ -28,13 +30,16 @@ export interface Corpus {
   units: RequirementUnit[];
   disclaimer: { en: string; ar?: string };
   currencyNote?: string;
+  currencyNoteAr?: string;
   bilingual: boolean;
 }
 
 const dubaiTenancy: Corpus = {
   id: 'dubai-tenancy',
   name: 'Dubai tenancy law',
+  nameAr: 'قانون إيجارات دبي',
   shortName: 'Dubai tenancy',
+  shortNameAr: 'إيجارات دبي',
   blurb:
     'Law No. (26) of 2007 as amended by Law No. (33) of 2008, and Decree No. (43) of 2013 on rent increases.',
   scopeForPrompt:
@@ -43,13 +48,16 @@ const dubaiTenancy: Corpus = {
   units: [...parseCorpus(law26), ...parseCorpus(decree43)],
   disclaimer: CORPUS_DISCLAIMER,
   currencyNote: CORPUS_CURRENCY.note,
+  currencyNoteAr: CORPUS_CURRENCY.noteAr,
   bilingual: true,
 };
 
 const uaeEinvoicing: Corpus = {
   id: 'uae-einvoicing',
   name: 'UAE eInvoicing mandate',
+  nameAr: 'تفويض الفوترة الإلكترونية في الإمارات',
   shortName: 'UAE eInvoicing',
+  shortNameAr: 'الفوترة الإلكترونية',
   blurb:
     'Ministerial Decisions 243 and 244 of 2025, the mandatory invoice fields, and Cabinet Decision 106 of 2025 on penalties.',
   scopeForPrompt:

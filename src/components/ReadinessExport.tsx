@@ -2,6 +2,7 @@
 
 import { Button, HStack } from '@chakra-ui/react';
 import { type ReadinessReport } from '@/lib/readiness';
+import { type Lang } from '@/lib/i18n';
 
 /**
  * Client-side export of a readiness report: a CSV of the checks and a
@@ -20,6 +21,8 @@ interface ReadinessExportProps {
   clauses: Record<string, ReadinessClause>;
   /** YYYY-MM-DD shown on the report; passed in so render stays deterministic. */
   runDate: string;
+  /** Button labels only; the exported document itself stays English. */
+  lang?: Lang;
 }
 
 const STATUS_INK: Record<string, string> = {
@@ -188,7 +191,7 @@ export function ReadinessExport(props: ReadinessExportProps) {
   return (
     <HStack gap="3" flexWrap="wrap">
       <Button onClick={onPdf} bg="accent.solid" color="white" _hover={{ bg: 'teal.600' }} size="sm">
-        Save as PDF
+        {props.lang === 'ar' ? 'حفظ PDF' : 'Save as PDF'}
       </Button>
       <Button
         size="sm"
@@ -204,7 +207,7 @@ export function ReadinessExport(props: ReadinessExportProps) {
           )
         }
       >
-        Download CSV
+        {props.lang === 'ar' ? 'تنزيل CSV' : 'Download CSV'}
       </Button>
     </HStack>
   );

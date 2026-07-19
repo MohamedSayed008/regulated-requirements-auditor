@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { CORPUS_LIST } from '@/lib/corpora';
 import { type Lang, translations } from '@/lib/i18n';
+import { formatArticleRef } from '@/lib/i18n-data';
 import { citedRequirementIds } from '@/lib/readiness';
 import { type ReadinessClause } from '@/components/ReadinessExport';
 import ReadinessClient from '@/app/readiness/ReadinessClient';
@@ -26,7 +27,8 @@ export default function ReadinessPage({ lang = 'en' }: { lang?: Lang }) {
   const clauses: Record<string, ReadinessClause> = {};
   for (const id of citedRequirementIds()) {
     const unit = einvoicing?.units.find(u => u.id === id);
-    if (unit) clauses[id] = { articleRef: unit.articleRef, textEn: unit.textEn };
+    if (unit)
+      clauses[id] = { articleRef: formatArticleRef(unit.articleRef, lang), textEn: unit.textEn };
   }
 
   return (

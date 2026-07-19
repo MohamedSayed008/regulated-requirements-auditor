@@ -2,6 +2,7 @@
 
 import { Button, HStack } from '@chakra-ui/react';
 import { type AuditRun } from '@/lib/findings';
+import { type Lang } from '@/lib/i18n';
 
 /**
  * Client-side export of a replayed audit run: a CSV of the findings and a
@@ -20,6 +21,8 @@ interface AuditExportProps {
   run: AuditRun;
   clauses: Record<string, ClauseText>;
   corpusLabel: string;
+  /** Button labels only; the exported document itself stays English. */
+  lang?: Lang;
 }
 
 const SEVERITY_INK: Record<string, string> = {
@@ -387,7 +390,7 @@ export function AuditExport(props: AuditExportProps) {
   return (
     <HStack gap="3" flexWrap="wrap">
       <Button onClick={onPdf} bg="accent.solid" color="white" _hover={{ bg: 'teal.600' }} size="sm">
-        Save as PDF
+        {props.lang === 'ar' ? 'حفظ PDF' : 'Save as PDF'}
       </Button>
       <Button
         onClick={onCsv}
@@ -397,7 +400,7 @@ export function AuditExport(props: AuditExportProps) {
         _hover={{ borderColor: 'accent.solid', color: 'accent.fg' }}
         size="sm"
       >
-        Export CSV
+        {props.lang === 'ar' ? 'تنزيل CSV' : 'Export CSV'}
       </Button>
     </HStack>
   );

@@ -69,7 +69,7 @@ const en = {
   },
   footer: {
     disclaimer:
-      'Demonstration only, not legal advice. Reproduces official public legal texts; where Arabic and English conflict, the Arabic prevails. Built by Mohamed Sayed.',
+      'Demonstration only, not legal advice. Reproduces official public legal texts; where Arabic and English conflict, the Arabic prevails. Built by Mohamed Attwa.',
   },
   theme: {
     toLight: 'Switch to light mode',
@@ -423,7 +423,7 @@ const ar: Dictionary = {
   },
   footer: {
     disclaimer:
-      'عرض توضيحي فقط وليس استشارة قانونية. يستنسخ نصوصاً قانونية رسمية منشورة؛ وعند التعارض بين العربية والإنجليزية يسود النص العربي. من تطوير محمد سيد.',
+      'عرض توضيحي فقط وليس استشارة قانونية. يستنسخ نصوصاً قانونية رسمية منشورة؛ وعند التعارض بين العربية والإنجليزية يسود النص العربي. من تطوير محمد عطوة.',
   },
   theme: {
     toLight: 'التبديل إلى الوضع الفاتح',

@@ -314,7 +314,7 @@ function ReportView({
         </Stack>
       </Box>
 
-      <ReadinessExport report={report} clauses={clauses} runDate={runDate} />
+      <ReadinessExport report={report} clauses={clauses} runDate={runDate} lang={lang} />
     </Stack>
   );
 }

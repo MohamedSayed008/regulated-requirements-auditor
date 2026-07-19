@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { CorpusPanels } from '@/components/CorpusPanels';
 import { type Lang, translations } from '@/lib/i18n';
+import { formatArticleRef, formatEditorialNote, formatTag } from '@/lib/i18n-data';
 
 export const metadata: Metadata = {
   title: 'Requirements',
@@ -31,7 +32,7 @@ export default function RequirementsPage({ lang = 'en' }: { lang?: Lang }) {
           label={t.corpusLabel}
           options={CORPUS_LIST.map(c => ({
             id: c.id,
-            shortName: `${c.shortName} · ${t.unitsBadge(c.units.length)}`,
+            shortName: `${lang === 'ar' ? c.shortNameAr : c.shortName} · ${t.unitsBadge(c.units.length)}`,
           }))}
           panels={CORPUS_LIST.map(corpus => ({
             id: corpus.id,
@@ -103,7 +104,7 @@ function CorpusSection({ corpus, lang }: { corpus: Corpus; lang: Lang }) {
         {corpus.currencyNote && (
           <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="lg" p="4">
             <Text fontSize="xs" color="fg.subtle">
-              {corpus.currencyNote}
+              {lang === 'ar' ? (corpus.currencyNoteAr ?? corpus.currencyNote) : corpus.currencyNote}
             </Text>
           </Box>
         )}
@@ -210,7 +211,7 @@ function UnitCard({ unit, lang }: { unit: RequirementUnit; lang: Lang }) {
           {unit.id}
         </Box>
         <Text fontSize="sm" fontWeight="medium" color="fg.default">
-          {unit.articleRef}
+          {formatArticleRef(unit.articleRef, lang)}
         </Text>
         {unit.testable && (
           <Badge colorPalette="teal" variant="subtle" rounded="full">
@@ -262,7 +263,7 @@ function UnitCard({ unit, lang }: { unit: RequirementUnit; lang: Lang }) {
           py="2.5"
         >
           <Text fontSize="xs" color="law.fg">
-            {t.editorialNote} {unit.editorialNote}
+            {t.editorialNote} {formatEditorialNote(unit.id, unit.editorialNote, lang)}
           </Text>
         </Box>
       )}
@@ -278,7 +279,7 @@ function UnitCard({ unit, lang }: { unit: RequirementUnit; lang: Lang }) {
               fontSize="xs"
               color="fg.subtle"
             >
-              {tag}
+              {formatTag(tag, lang)}
             </Box>
           ))}
         </HStack>

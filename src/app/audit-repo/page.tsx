@@ -25,7 +25,10 @@ export default function AuditRepoPage({ lang = 'en' }: { lang?: Lang }) {
       </PageHeader>
       <Reveal delay={160}>
         <AuditRepoClient
-          corpusOptions={CORPUS_LIST.map(c => ({ id: c.id, shortName: c.shortName }))}
+          corpusOptions={CORPUS_LIST.map(c => ({
+            id: c.id,
+            shortName: lang === 'ar' ? c.shortNameAr : c.shortName,
+          }))}
           defaultCorpusId={DEFAULT_CORPUS_ID}
           lang={lang}
         />

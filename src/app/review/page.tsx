@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { auditRunSchema } from '@/lib/findings';
+import { type FindingProseAr, applyProseOverlay, auditRunSchema } from '@/lib/findings';
 import { SEVERITY_ORDER } from '@/lib/severity';
 import { SESSION_COOKIE } from '@/lib/session';
 import { resolveRole } from '@/lib/auth';
@@ -11,6 +11,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { type Lang, translations } from '@/lib/i18n';
 import ReviewClient from '@/app/review/ReviewClient';
 import runJson from '@/data/audit/latest-run.json';
+import arProse from '@/data/audit/latest-run-ar.json';
 
 export const metadata: Metadata = {
   title: 'Review queue',
@@ -46,7 +47,11 @@ export default async function ReviewPage({ lang = 'en' }: { lang?: Lang }) {
       </PageHeader>
       <Reveal delay={160}>
         <ReviewClient
-          initialFindings={findings}
+          initialFindings={
+            lang === 'ar'
+              ? applyProseOverlay(findings, arProse as Record<string, FindingProseAr>)
+              : findings
+          }
           runTarget={run.target}
           role={role}
           persisted={persisted}

@@ -6,6 +6,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { MetricBar } from '@/components/ui/MetricBar';
 import { type Lang, translations } from '@/lib/i18n';
+import { formatEvalDetail, formatSuiteName } from '@/lib/i18n-data';
+import { CORPUS_LIST } from '@/lib/corpora';
 import reportsJson from '@/data/evals/reports.json';
 
 export const metadata: Metadata = {
@@ -55,7 +57,9 @@ function CorpusReportSection({ entry, lang }: { entry: CorpusReport; lang: Lang 
       <Reveal>
         <HStack gap="3" align="baseline" flexWrap="wrap" mb="5">
           <Heading as="h2" fontFamily="heading" fontSize="xl">
-            {entry.corpusName}
+            {lang === 'ar'
+              ? (CORPUS_LIST.find(c => c.id === entry.corpusId)?.nameAr ?? entry.corpusName)
+              : entry.corpusName}
           </Heading>
           <Badge colorPalette="teal" variant="subtle" fontFamily="heading" rounded="full">
             {entry.report.model}
@@ -73,7 +77,7 @@ function CorpusReportSection({ entry, lang }: { entry: CorpusReport; lang: Lang 
             <MetricCard
               key={s.name}
               value={`${Math.round(pct(s.passed, s.total) * 100)}%`}
-              label={t.suiteLabel(s.name, s.passed, s.total)}
+              label={t.suiteLabel(formatSuiteName(s.name, lang), s.passed, s.total)}
               bar={pct(s.passed, s.total)}
               tone="teal"
             />
@@ -150,7 +154,7 @@ function SuiteBlock({ suite, lang }: { suite: SuiteResult; lang: Lang }) {
     <Box borderWidth="1px" borderColor="border.default" bg="bg.panel" rounded="2xl" p="5">
       <HStack justify="space-between" mb="3.5" flexWrap="wrap">
         <Text fontWeight="500" color="fg.default">
-          {suite.name}
+          {formatSuiteName(suite.name, lang)}
         </Text>
         <Badge
           colorPalette={suite.passed === suite.total ? 'green' : 'orange'}
@@ -169,7 +173,7 @@ function SuiteBlock({ suite, lang }: { suite: SuiteResult; lang: Lang }) {
             <Text fontFamily="heading" color="fg.subtle">
               {c.id}
             </Text>
-            <Text color="fg.muted">{c.detail}</Text>
+            <Text color="fg.muted">{formatEvalDetail(c.detail, lang)}</Text>
           </HStack>
         ))}
       </Stack>

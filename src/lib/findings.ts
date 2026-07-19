@@ -27,6 +27,28 @@ export const proposedFindingSchema = z.object({
 
 export type ProposedFinding = z.infer<typeof proposedFindingSchema>;
 
+/** Arabic prose overlay for a cached run's findings, keyed by finding id. */
+export interface FindingProseAr {
+  summary: string;
+  evidence: string;
+  recommendedAction: string;
+}
+
+/**
+ * Replaces a finding's prose fields from a hand-translated overlay when the
+ * locale is Arabic. Ids, paths, lines, and code excerpts stay untouched, so
+ * citations and exports keep working.
+ */
+export function applyProseOverlay<T extends { id: string }>(
+  findings: (T & { summary: string; evidence: string; recommendedAction: string })[],
+  overlay: Record<string, FindingProseAr>
+): (T & { summary: string; evidence: string; recommendedAction: string })[] {
+  return findings.map(finding => {
+    const prose = overlay[finding.id];
+    return prose ? { ...finding, ...prose } : finding;
+  });
+}
+
 /** The persisted/reviewable finding: a proposed finding plus an id and status. */
 export const findingSchema = proposedFindingSchema.extend({
   id: z.string(),

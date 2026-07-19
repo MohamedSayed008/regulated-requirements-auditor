@@ -3,6 +3,7 @@ import { type Finding } from '@/lib/findings';
 import { SEVERITY_PALETTE } from '@/lib/severity';
 import { requirementById } from '@/lib/requirement-lookup';
 import { type Lang, localePath, translations } from '@/lib/i18n';
+import { CodeExcerpt } from '@/components/CodeExcerpt';
 import { type ReactNode } from 'react';
 
 /**
@@ -113,22 +114,7 @@ export function FindingCard({
           >
             {t.code} &middot; {finding.filePath}:{lines}
           </Text>
-          <Box
-            as="pre"
-            dir="ltr"
-            bg="bg.canvas"
-            borderWidth="1px"
-            borderColor="border.default"
-            rounded="lg"
-            p="3"
-            fontFamily="heading"
-            fontSize="xs"
-            color="fg.default"
-            overflowX="auto"
-            whiteSpace="pre"
-          >
-            {finding.codeExcerpt}
-          </Box>
+          <CodeExcerpt code={finding.codeExcerpt} />
         </Box>
       </Grid>
 

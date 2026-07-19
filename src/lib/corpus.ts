@@ -66,6 +66,8 @@ export const CORPUS_DISCLAIMER = {
  */
 export const CORPUS_CURRENCY = {
   verifiedAt: '2026-07-11',
+  noteAr:
+    'تم التحقق من السريان في يوليو 2026: القانون رقم 26 لسنة 2007 نافذ معدلاً بالقانون رقم 33 لسنة 2008 فقط، والمرسوم رقم 43 لسنة 2013 نافذ دون تعديل. ومنذ يناير 2025 يوفر مؤشر دبي الذكي للإيجارات المتوسطات السوقية التي تقاس عليها شرائح زيادة الإيجار في المرسوم. لا تشمل هذه المدونة: الإيضاح التفسيري الصادر عن اللجنة العليا للتشريعات في مارس 2026 بشأن المادة 34 (إرشادي فقط دون تغيير في النص)، والقانون رقم 4 لسنة 2026 بشأن السكن المشترك (المتوقع نفاذه نحو سبتمبر 2026، ويخص السكن المشترك فقط).',
   note: 'Currency verified July 2026: Law No. 26 of 2007 is in force as amended only by Law No. 33 of 2008; Decree No. 43 of 2013 is in force unamended. Since January 2025 the DLD Smart Rental Index supplies the market averages that the decree’s rent-increase slabs are measured against. Not included in this corpus: the March 2026 Supreme Legislation Committee interpretive clarification of Article 34 (guidance only, no text change) and Law No. 4 of 2026 on shared housing (expected in force around September 2026, shared accommodation only).',
 } as const;
 

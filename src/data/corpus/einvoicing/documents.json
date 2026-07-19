@@ -2,27 +2,32 @@
   {
     "slug": "MD243-2025",
     "titleEn": "Ministerial Decision No. (243) of 2025 on the Electronic Invoicing System",
-    "officialSourceEn": "https://mof.gov.ae/wp-content/uploads/2025/09/Ministerial-Decision-no.-243-of-2025-on-the-Electronic-Invoicing-System.pdf"
+    "officialSourceEn": "https://mof.gov.ae/wp-content/uploads/2025/09/Ministerial-Decision-no.-243-of-2025-on-the-Electronic-Invoicing-System.pdf",
+    "titleAr": "قرار وزاري رقم (243) لسنة 2025 في شأن نظام الفوترة الإلكترونية"
   },
   {
     "slug": "MD244-2025",
     "titleEn": "Ministerial Decision No. (244) of 2025 on the Implementation of the Electronic Invoicing System (as amended by Ministerial Decision No. (66) of 2026)",
     "officialSourceEn": "https://tax.gov.ae/Datafolder/Files/Pdf/2026/legislation/Ministerial%20Decision%20No.%20244%20of%202025%20on%20The%20Implementation%20of%20the%20Electronic%20Invoicing%20System%20-%20publishing%20-%2007%202026.pdf",
-    "amendedBy": "Ministerial Decision No. (66) of 2026"
+    "amendedBy": "Ministerial Decision No. (66) of 2026",
+    "titleAr": "قرار وزاري رقم (244) لسنة 2025 في شأن تطبيق نظام الفوترة الإلكترونية (كما عُدل بالقرار الوزاري رقم 66 لسنة 2026)"
   },
   {
     "slug": "CD106-2025",
     "titleEn": "Cabinet Decision No. (106) of 2025 on the Violations and Administrative Penalties Resulting from Violation of the Legislation Regulating the Electronic Invoicing System",
-    "officialSourceEn": "https://mof.gov.ae/wp-content/uploads/2025/12/Cabinet-Decision-Violations-and-Penalties-eInvoicing-final-version-en-8.12.25.pdf"
+    "officialSourceEn": "https://mof.gov.ae/wp-content/uploads/2025/12/Cabinet-Decision-Violations-and-Penalties-eInvoicing-final-version-en-8.12.25.pdf",
+    "titleAr": "قرار مجلس الوزراء رقم (106) لسنة 2025 في شأن المخالفات والغرامات الإدارية المترتبة على مخالفة نظام الفوترة الإلكترونية"
   },
   {
     "slug": "MOF-FIELDS-2026",
     "titleEn": "UAE Electronic Invoice Mandatory Fields, Version 1.0 (23 February 2026), issued by the Ministry of Finance under Article 7 of Ministerial Decision No. (243) of 2025",
-    "officialSourceEn": "https://mof.gov.ae/wp-content/uploads/2026/02/UAE-Electronic-Invoice-mandatory-fields_V-1.0-23Feb2026.pdf"
+    "officialSourceEn": "https://mof.gov.ae/wp-content/uploads/2026/02/UAE-Electronic-Invoice-mandatory-fields_V-1.0-23Feb2026.pdf",
+    "titleAr": "الحقول الإلزامية للفاتورة الإلكترونية في الإمارات، الإصدار 1.0 (23 فبراير 2026)، الصادرة عن وزارة المالية بموجب المادة 7 من القرار الوزاري 243 لسنة 2025"
   },
   {
     "slug": "MOF-EINV",
     "titleEn": "UAE Ministry of Finance eInvoicing Programme (Electronic Invoicing System overview, PINT AE and the 5-corner DCTCE model)",
-    "officialSourceEn": "https://mof.gov.ae/en/about-us/initiatives/einvoicing/"
+    "officialSourceEn": "https://mof.gov.ae/en/about-us/initiatives/einvoicing/",
+    "titleAr": "برنامج الفوترة الإلكترونية لوزارة المالية الإماراتية (نظرة عامة على النظام، PINT AE ونموذج الأركان الخمسة DCTCE)"
   }
 ]
