@@ -159,14 +159,11 @@ function DocumentSection({
           </Link>
         </Text>
       </HStack>
+      {/* The English page cross-references the authentic Arabic title (it
+          prevails on conflict); the Arabic page needs no English echo. */}
       {lang === 'en' && doc.titleAr && (
         <Text fontSize="sm" color="fg.subtle" mt="2" dir="rtl" lang="ar" fontFamily="arabic">
           {doc.titleAr}
-        </Text>
-      )}
-      {lang === 'ar' && doc.titleAr && (
-        <Text fontSize="sm" color="fg.subtle" mt="2" dir="ltr" lang="en">
-          {doc.titleEn}
         </Text>
       )}
       <Stack gap="4" mt="6">
